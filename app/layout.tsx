@@ -1,4 +1,9 @@
-import './globals.css'
+'use client';
+
+import { EstimtestCore, defineCustomElements } from 'estimtest-react';
+import './globals.css';
+
+defineCustomElements();
 
 export default function RootLayout({
   children,
@@ -12,7 +17,20 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body>
+        {children}
+        <EstimtestCore
+          config={JSON.stringify({
+            tests: [
+              {
+                name: 'Large Font Size',
+                fontSize: 24,
+              }
+            ],
+          })}
+          active={true}
+        />
+      </body>
     </html>
   )
 }
