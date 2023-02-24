@@ -9,7 +9,7 @@ import { EstimtestConfig } from "./lib/config";
 export namespace Components {
     interface EstimtestCore {
         "active"?: boolean;
-        "config"?: string | EstimtestConfig;
+        "config"?: EstimtestConfig;
     }
 }
 declare global {
@@ -26,7 +26,7 @@ declare global {
 declare namespace LocalJSX {
     interface EstimtestCore {
         "active"?: boolean;
-        "config"?: string | EstimtestConfig;
+        "config"?: EstimtestConfig;
     }
     interface IntrinsicElements {
         "estimtest-core": EstimtestCore;

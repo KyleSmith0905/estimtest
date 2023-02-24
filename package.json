@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node ./packages/estimtest-cli"
+    "build:core": "cd ./packages/estimtest-core && npm run build",
+    "build:react": "cd ./packages/estimtest-react && npm run build",
+    "dev:react": "npm run build:core && npm run build:react"
   },
   "workspaces": [
     "packages/*"

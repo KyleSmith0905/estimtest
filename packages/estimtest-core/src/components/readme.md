@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type                        | Default     |
-| -------- | --------- | ----------- | --------------------------- | ----------- |
-| `active` | `active`  |             | `boolean`                   | `true`      |
-| `config` | `config`  |             | `EstimtestConfig \| string` | `undefined` |
+| Property | Attribute | Description | Type              | Default     |
+| -------- | --------- | ----------- | ----------------- | ----------- |
+| `active` | `active`  |             | `boolean`         | `true`      |
+| `config` | --        |             | `EstimtestConfig` | `undefined` |
 
 
 ----------------------------------------------
