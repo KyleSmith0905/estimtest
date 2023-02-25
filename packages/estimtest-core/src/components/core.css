@@ -48,12 +48,12 @@
 .will-animate-blur {
   opacity: 0;
   filter: blur(15px);
-  pointer-events: none;
-  transition: filter ease 500ms, opacity ease 500ms;
+  pointer-events: none !important;
+  transition: filter ease 250ms, opacity ease 250ms;
 }
 
 .will-animate-blur.animate-blur {
-  pointer-events: all;
+  pointer-events: all !important;
   opacity: 1;
   filter: blur(0px);
 }

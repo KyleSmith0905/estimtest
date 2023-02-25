@@ -32,6 +32,9 @@ export class EstimtestCore {
 	@State()
 	activeTest?: EstimtestTest;
 
+  @State()
+  activeTestFeedback?: string;
+
 	@State()
 	testDetailsExpanded?: boolean;
 
