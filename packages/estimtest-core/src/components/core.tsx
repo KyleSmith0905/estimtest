@@ -42,7 +42,7 @@ export class EstimtestCore {
 	testDetailsDescription?: string;
 
 	@State()
-	testResults?: EstimtestTest[];
+	testResults?: EstimtestTest[] = [];
 
 	@State()
 	errors: Record<string, { message: string; visible: boolean }> = {};
@@ -58,11 +58,17 @@ export class EstimtestCore {
 		}
 	}
 
+	autoResizeTextarea(event) {
+		const target = event as HTMLDivElement;
+		target.style.setProperty('height', `${target.scrollHeight}px`);
+	}
+
 	promptBeginTests() {
 		this.status = 'prompted';
 	}
 
 	startTests() {
+		this.testResults = [];
 		this.updateConfig();
 		this.activeTest = {
 			index: 0,
@@ -76,12 +82,12 @@ export class EstimtestCore {
 	nextTest(results: 'fail' | 'pass') {
 		this.testResults.push({
 			results: results,
-			notes: '',
+			notes: this.activeTestFeedback,
 			...this.activeTest,
 		});
 
 		const nextIndex = this.activeTest.index + 1;
-		if (this.activeTest.index > this.activeConfig.tests.length) {
+		if (nextIndex >= this.activeConfig.tests.length) {
 			this.finishTests();
 		}
 
@@ -114,7 +120,6 @@ export class EstimtestCore {
       const writer = new HtmlRenderer();
       const parsed = reader.parse(this.activeTest.description);
       this.testDetailsDescription = writer.render(parsed);
-      console.log(this.testDetailsDescription);
     }
   }
 
@@ -197,10 +202,11 @@ export class EstimtestCore {
 										</button>
 									</div>
 									<div class='flex-row'>
-										<span
+										<textarea
 											role='input'
 											class='button fake-textarea'
 											contenteditable='true'
+											onChange={(event) => this.autoResizeTextarea(event)}
 										/>
 										<button
 											class='button'
@@ -234,8 +240,17 @@ export class EstimtestCore {
 					)}
 					{this.status === 'finished' && (
 						<div class='absolute-center box'>
-							<div class='flex-row'>
+							<div class='flex-column'>
 								<h2 class='title'>Estimtest Finished</h2>
+								<div class='results-grid'>
+									{this.testResults.map((result) => (
+										<Fragment>
+											<h3>{result.name}</h3>
+											<p style={{color: result.results === 'fail' ? '#f00' : '#0f0'}}>{result.results === 'fail' ? 'Fail' : 'Pass'}</p>
+											<p style={{opacity: result.notes ? '0.9' : '0.5'}}>{result.notes || 'No notes added'}</p>
+										</Fragment>
+									))}
+								</div>
 								<button class='button'>Start Another Test</button>
 							</div>
 						</div>

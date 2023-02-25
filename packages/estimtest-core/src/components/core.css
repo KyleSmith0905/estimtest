@@ -114,3 +114,10 @@
 .button:hover {
   border-color: hsl(0deg, 0%, 40%)
 }
+
+.results-grid {
+  grid-template-columns: 9rem 3rem 15rem;
+  display: grid;
+  gap: 0.5rem;
+  align-items: center;
+}
