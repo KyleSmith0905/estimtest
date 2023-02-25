@@ -8,6 +8,8 @@ interface EstimtestTest {
   results?: 'pass' | 'fail',
   notes?: string,
   fontSize?: number,
+  width?: number,
+  height?: number,
 }
 
 const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
