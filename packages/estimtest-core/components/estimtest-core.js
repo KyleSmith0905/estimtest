@@ -7,10 +7,16 @@ const defaultEstimtestConfig = {
   tests: [
     {
       name: 'Large Font Size',
-      description: 'Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser\'s font size. To accommodate these users, it is suggested you use `rem` instead of `px` for `font-size`.',
+      description: "Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested you use `rem` instead of `px` for `font-size`.",
       fontSize: 24,
-    }
-  ]
+    },
+    {
+      name: 'Mobile Screen Size',
+      description: 'Most people who surf the internet are on a mobile phone. It is important to accommodate small screen sizes to maintain a positive impression on users.',
+      width: 320,
+      height: 480,
+    },
+  ],
 };
 
 const resetFontSize = (config) => {
@@ -22,10 +28,24 @@ const activateFontSize = (test, config) => {
   container.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
+const activateHeight = (test, config) => {
+  const container = document.querySelector(config.selectors.container);
+  container.style.setProperty('height', `${test.height}px`);
+};
+
+const activateWidth = (test, config) => {
+  const container = document.querySelector(config.selectors.container);
+  container.style.setProperty('width', `${test.width}px`);
+};
+
 const performTest = (test, config) => {
   resetFontSize(config);
   if (test.fontSize)
     activateFontSize(test, config);
+  if (test.width)
+    activateWidth(test, config);
+  if (test.height)
+    activateHeight(test, config);
 };
 
 function isContainer(node) {
@@ -7978,7 +7998,7 @@ XmlRenderer.prototype.cr = cr;
 XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.will-animate-blur{opacity:0;-webkit-filter:blur(15px);filter:blur(15px);pointer-events:none !important;-webkit-transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:filter ease 250ms, opacity ease 250ms;transition:filter ease 250ms, opacity ease 250ms, -webkit-filter ease 250ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.fake-textarea{width:12rem;text-align:left}.square{width:var(--size);height:var(--size)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding:0.7rem 1.4rem;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0deg, 0%, 30%);background:linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0deg, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0deg, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0deg, 0%, 40%)}";
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.will-animate-blur{opacity:0;-webkit-filter:blur(15px);filter:blur(15px);pointer-events:none !important;-webkit-transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:filter ease 250ms, opacity ease 250ms;transition:filter ease 250ms, opacity ease 250ms, -webkit-filter ease 250ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.square{width:var(--size);height:var(--size)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding:0.7rem 1.4rem;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0deg, 0%, 30%);background:linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0deg, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0deg, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0deg, 0%, 40%)}.results-grid{grid-template-columns:9rem 3rem 15rem;display:grid;gap:0.5rem;-ms-flex-align:center;align-items:center}";
 
 const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement {
   constructor() {
@@ -7993,30 +8013,54 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
     this.activeTestFeedback = undefined;
     this.testDetailsExpanded = undefined;
     this.testDetailsDescription = undefined;
-    this.testResults = undefined;
+    this.testResults = [];
     this.errors = {};
   }
   watchConfigHandler() {
     this.updateConfig();
+  }
+  componentDidUpdate() {
+    if (this.status === 'active') {
+      this.autoResizeTextarea();
+    }
   }
   componentDidLoad() {
     if (this.active) {
       this.promptBeginTests();
     }
   }
+  autoResizeTextarea(event) {
+    if (event && 'target' in event) {
+      const target = event.target;
+      const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
+      const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
+      target.style.setProperty('height', '0px');
+      target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
+    }
+    else {
+      const targets = this.hostElement.shadowRoot.querySelectorAll('.auto-resize-textarea');
+      targets.forEach((target) => {
+        const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
+        const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
+        target.style.setProperty('height', '0px');
+        target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
+      });
+    }
+  }
   promptBeginTests() {
     this.status = 'prompted';
   }
   startTests() {
+    this.testResults = [];
     this.updateConfig();
     this.activeTest = Object.assign({ index: 0 }, this.activeConfig.tests[0]);
     this.status = 'active';
     performTest(this.activeTest, this.activeConfig);
   }
   nextTest(results) {
-    this.testResults.push(Object.assign({ results: results, notes: '' }, this.activeTest));
+    this.testResults.push(Object.assign({ results: results, notes: this.activeTestFeedback }, this.activeTest));
     const nextIndex = this.activeTest.index + 1;
-    if (this.activeTest.index > this.activeConfig.tests.length) {
+    if (nextIndex >= this.activeConfig.tests.length) {
       this.finishTests();
     }
     this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.tests[nextIndex]);
@@ -8039,7 +8083,6 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
       const writer = new HtmlRenderer();
       const parsed = reader.parse(this.activeTest.description);
       this.testDetailsDescription = writer.render(parsed);
-      console.log(this.testDetailsDescription);
     }
   }
   errorHandler(message) {
@@ -8060,8 +8103,9 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
       return h(Fragment, null);
     else if (this.status === 'inactive')
       return h(Fragment, null);
-    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element) => (h("div", { class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), this.status === 'prompted' && (h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-row' }, h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' }, h("title", null, "Estimtest, a manual testing library"), h("path", { fill: '#fff', d: 'M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z', color: '#000' })), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing")))), this.status === 'active' && (h(Fragment, null, h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, this.activeTest.name), h("p", { class: 'caption' }, this.activeTest.index + 1, "/", this.activeConfig.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h("svg", { style: { '--size': '1rem' }, class: { 'upside-down': this.testDetailsExpanded, 'square': true }, viewBox: '0 0 67.7 36' }, h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })))), h("div", { class: 'flex-row' }, h("span", { role: 'input', class: 'button fake-textarea', contenteditable: 'true' }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))), h("div", { class: { 'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded } }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, this.activeTest.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h("svg", { class: 'square', style: { '--size': '1rem' }, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 67.7 67.7" }, h("path", { fill: "none", stroke: "#fff", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "16.9", d: "m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5" })))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))))), this.status === 'finished' && (h("div", { class: 'absolute-center box' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("button", { class: 'button' }, "Start Another Test")))))));
+    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element) => (h("div", { class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), this.status === 'prompted' && (h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-row' }, h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' }, h("title", null, "Estimtest, a manual testing library"), h("path", { fill: '#fff', d: 'M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z', color: '#000' })), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing")))), this.status === 'active' && (h(Fragment, null, h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, this.activeTest.name), h("p", { class: 'caption' }, this.activeTest.index + 1, "/", this.activeConfig.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h("svg", { style: { '--size': '1rem' }, class: { 'upside-down': this.testDetailsExpanded, 'square': true }, viewBox: '0 0 67.7 36' }, h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', onChange: (event) => this.autoResizeTextarea(event), onInput: (event) => this.autoResizeTextarea(event) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))), h("div", { class: { 'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded } }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, this.activeTest.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h("svg", { class: 'square', style: { '--size': '1rem' }, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 67.7 67.7" }, h("path", { fill: "none", stroke: "#fff", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "16.9", d: "m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5" })))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))))), this.status === 'finished' && (h("div", { class: 'absolute-center box' }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'results-grid' }, this.testResults.map((result) => (h(Fragment, null, h("h3", null, result.name), h("p", { style: { color: result.results === 'fail' ? '#f00' : '#0f0' } }, result.results === 'fail' ? 'Fail' : 'Pass'), h("p", { style: { opacity: result.notes ? '0.9' : '0.5' } }, result.notes || 'No notes added'))))), h("button", { class: 'button' }, "Start Another Test")))))));
   }
+  get hostElement() { return this; }
   static get watchers() { return {
     "config": ["watchConfigHandler"]
   }; }

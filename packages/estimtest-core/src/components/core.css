@@ -58,11 +58,6 @@
   filter: blur(0px);
 }
 
-.fake-textarea {
-  width: 12rem;
-  text-align: left;
-}
-
 .square {
   width: var(--size);
   height: var(--size);

@@ -6,6 +6,7 @@ import {
 	Prop,
 	State,
 	Watch,
+	Element
 } from '@stencil/core';
 import { defaultEstimtestConfig, EstimtestConfig } from '../lib/config';
 import { EstimtestTest, performTest } from '../lib/tests';
@@ -47,9 +48,17 @@ export class EstimtestCore {
 	@State()
 	errors: Record<string, { message: string; visible: boolean }> = {};
 
+	@Element() hostElement: HTMLElement;
+
 	@Watch('config')
 	watchConfigHandler() {
 		this.updateConfig();
+	}
+
+	componentDidUpdate() {
+		if (this.status === 'active') {
+			this.autoResizeTextarea();
+		}
 	}
 
 	componentDidLoad() {
@@ -58,9 +67,23 @@ export class EstimtestCore {
 		}
 	}
 
-	autoResizeTextarea(event) {
-		const target = event as HTMLDivElement;
-		target.style.setProperty('height', `${target.scrollHeight}px`);
+	autoResizeTextarea(event?: any) {
+		if (event && 'target' in event) {
+			const target = event.target as HTMLTextAreaElement;
+			const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
+			const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
+			target.style.setProperty('height', '0px');
+			target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
+		}
+		else {
+			const targets = this.hostElement.shadowRoot.querySelectorAll('.auto-resize-textarea') as NodeListOf<HTMLTextAreaElement>;
+			targets.forEach((target) => {
+				const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
+				const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
+				target.style.setProperty('height', '0px');
+				target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
+			})
+		}
 	}
 
 	promptBeginTests() {
@@ -203,10 +226,9 @@ export class EstimtestCore {
 									</div>
 									<div class='flex-row'>
 										<textarea
-											role='input'
-											class='button fake-textarea'
-											contenteditable='true'
+											class='auto-resize-textarea button'
 											onChange={(event) => this.autoResizeTextarea(event)}
+											onInput={(event) => this.autoResizeTextarea(event)}
 										/>
 										<button
 											class='button'
