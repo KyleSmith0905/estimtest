@@ -1,5 +1,7 @@
 import { EstimtestConfig } from "../config";
 import { activateFontSize, resetFontSize } from "./fontSize";
+import { activateHeight } from "./height";
+import { activateWidth } from "./width";
 
 interface EstimtestTest {
   name: string,
@@ -16,6 +18,8 @@ const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
   resetFontSize(config);
   
   if (test.fontSize) activateFontSize(test, config);
+  if (test.width) activateWidth(test, config);
+  if (test.height) activateHeight(test, config);
 }
 
 export type { EstimtestTest };
