@@ -18,46 +18,46 @@ const EstimtestLogo: FunctionalComponent = () => {
 };
 
 const CloseIcon: FunctionalComponent = () => {
-  return (
-    <svg
-      class='square'
-      style={{ '--size': '1rem' }}
-      xmlns='http://www.w3.org/2000/svg'
-      viewBox='0 0 67.7 67.7'
-    >
-      <title>Close</title>
-      <path
-        fill='none'
-        stroke='#fff'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke-width='16.9'
-        d='m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5'
-      />
-    </svg>
-  )
+	return (
+		<svg
+			class='square'
+			style={{ '--size': '1rem' }}
+			xmlns='http://www.w3.org/2000/svg'
+			viewBox='0 0 67.7 67.7'
+		>
+			<title>Close</title>
+			<path
+				fill='none'
+				stroke='#fff'
+				stroke-linecap='round'
+				stroke-linejoin='round'
+				stroke-width='16.9'
+				d='m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5'
+			/>
+		</svg>
+	);
 };
 
 const ChevronIcon: FunctionalComponent<{direction: 'up' | 'down'}> = ({direction}) => {
-  return (
-    <svg
-      style={{ '--size': '1rem' }}
-      class={{
-        'upside-down': direction === 'down',
-        square: true,
-      }}
-      viewBox='0 0 67.7 36'
-    >
-      <path
-        fill='none'
-        stroke='#fff'
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        stroke-width='16.9'
-        d='m8.5 27.5 25.4-19 25.4 19'
-      />
-    </svg>
-  )
+	return (
+		<svg
+			style={{ '--size': '1rem' }}
+			class={{
+				'upside-down': direction === 'down',
+				square: true,
+			}}
+			viewBox='0 0 67.7 36'
+		>
+			<path
+				fill='none'
+				stroke='#fff'
+				stroke-linecap='round'
+				stroke-linejoin='round'
+				stroke-width='16.9'
+				d='m8.5 27.5 25.4-19 25.4 19'
+			/>
+		</svg>
+	);
 };
 
 export { EstimtestLogo, CloseIcon, ChevronIcon };
