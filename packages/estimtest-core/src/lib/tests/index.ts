@@ -1,7 +1,7 @@
 import { EstimtestConfig } from "../config";
-import { activateFontSize, resetFontSize } from "./fontSize";
-import { activateHeight, resetHeight } from "./height";
-import { activateWidth, resetWidth } from "./width";
+import { activateFontSize } from "./fontSize";
+import { activateHeight } from "./height";
+import { activateWidth } from "./width";
 
 interface EstimtestTest {
   name: string,
@@ -9,15 +9,15 @@ interface EstimtestTest {
   description: string,
   results?: 'pass' | 'fail',
   notes?: string,
+  // Test options
   fontSize?: number,
   width?: number,
   height?: number,
 }
 
 const resetTest = (config: EstimtestConfig) => {
-  resetFontSize(config);
-  resetWidth(config);
-  resetHeight(config);
+  const element = document.querySelector<HTMLElement>(config.selectors.container);
+  element.removeAttribute('style');
 }
 
 const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
