@@ -23,14 +23,14 @@ export class Estimtest {
 	/**
 	 * A selector for the app container. This is by default `body`. The selector should match a
 	 * sibling of this element that contains the entire app. Styles will be applied to this element,
-	 * this element should not have any inline styles. 
+	 * this element should not have any inline styles.
 	 */
 	@Prop() selectorsContainer = '';
 
 	/**
 	 * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and
 	 * `Mobile Screen Size` test. This field accepts an array of objects each with the properties:
-	 * 
+	 *
 	 * `name` A quick ~15 letters title summarizing the test\
 	 * `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\
 	 * `fontSize` The font size to set the page.\
@@ -141,7 +141,8 @@ export class Estimtest {
 		}
 		this.activeConfig = defaultEstimtestConfig;
 
-		if (this.selectorsContainer !== '') this.activeConfig.selectors.container = this.selectorsContainer;
+		if (this.selectorsContainer !== '')
+			this.activeConfig.selectors.container = this.selectorsContainer;
 		if (this.tests !== undefined) this.activeConfig.tests = this.tests;
 	}
 
@@ -188,86 +189,102 @@ export class Estimtest {
 							</div>
 						))}
 					</div>
-					{this.status === 'prompted' && (
-						<div class='absolute-bottom box'>
+					<div
+						class={{
+							'absolute-bottom box will-animate-blur': true,
+							'animate-blur': this.status === 'prompted',
+						}}
+					>
+						<div class='flex-row'>
+							<EstimtestLogo />
+							<button class='button' onClick={() => this.startTests()}>
+								Start Testing
+							</button>
+						</div>
+					</div>
+					<div
+						class={{
+							'absolute-bottom box will-animate-blur': true,
+							'animate-blur': this.status === 'active',
+						}}
+					>
+						<div class='flex-column'>
 							<div class='flex-row'>
-								<EstimtestLogo/>
-								<button class='button' onClick={() => this.startTests()}>
-									Start Testing
+								<p class='title'>{this.activeTest?.name ?? ''}</p>
+								<p class='caption'>
+									{this.activeTest?.index + 1}/{this.activeConfig?.tests.length}
+								</p>
+								<button onClick={() => this.toggleTestDetails()} class='button'>
+									<ChevronIcon
+										direction={this.expandedTestActive ? 'down' : 'up'}
+									/>
+								</button>
+							</div>
+							<div class='flex-row'>
+								<textarea
+									class='auto-resize-textarea button'
+									value={this.activeTest?.notes}
+									ref={(el) => (this.testFeedbackElement = el)}
+									onChange={(event) =>
+										(this.activeTest = {
+											...this.activeTest,
+											notes: getEventValue(event),
+										})
+									}
+									onInput={(event) =>
+										(this.activeTest = {
+											...this.activeTest,
+											notes: getEventValue(event),
+										})
+									}
+								/>
+								<button class='button' onClick={() => this.nextTest('pass')}>
+									Pass
+								</button>
+								<button class='button' onClick={() => this.nextTest('fail')}>
+									Fail
 								</button>
 							</div>
 						</div>
-					)}
-					{this.status === 'active' && (
-						<Fragment>
-							<div class='absolute-bottom box'>
-								<div class='flex-column'>
-									<div class='flex-row'>
-										<p class='title'>{this.activeTest.name}</p>
-										<p class='caption'>
-											{this.activeTest.index + 1}/
-											{this.activeConfig.tests.length}
-										</p>
-										<button
-											onClick={() => this.toggleTestDetails()}
-											class='button'
-										>
-											<ChevronIcon direction={this.expandedTestActive ? 'down' : 'up'}/>
-										</button>
-									</div>
-									<div class='flex-row'>
-										<textarea
-											class='auto-resize-textarea button'
-											value={this.activeTest.notes}
-											ref={(el) => this.testFeedbackElement = el}
-											onChange={(event) => this.activeTest = {...this.activeTest, notes: getEventValue(event)}}
-											onInput={(event) => this.activeTest = {...this.activeTest, notes: getEventValue(event)}}
-										/>
-										<button
-											class='button'
-											onClick={() => this.nextTest('pass')}
-										>
-											Pass
-										</button>
-										<button
-											class='button'
-											onClick={() => this.nextTest('fail')}
-										>
-											Fail
-										</button>
-									</div>
-								</div>
-							</div>
-						</Fragment>
-					)}
-					{this.status === 'finished' && (
-						<div class='absolute-center box'>
-							<div class='flex-column'>
-								<h2 class='title'>Estimtest Finished</h2>
-								<div class='flex-column results-grid'>
-									{this.testResults.map((result) => (
-										<div class={`flex-row full-width ${result.results}`}>
-											<h3 onClick={() => this.toggleTestDetails(result)} class='title clickable' style={{ width: '12rem' }}>
-												{result.name}
-											</h3>
-											<p
-												class='paragraph'
-												style={{ opacity: result.notes === undefined ? '0.9' : '0.5' }}
-											>
-												{result.notes === 'result.notes' ? result.notes : 'No notes added'}
-											</p>
-										</div>
-									))}
-								</div>
-								<button onClick={() => this.promptBeginTests()} class='button'>Start Another Test</button>
-							</div>
-						</div>
-					)}
+					</div>
 					<div
 						class={{
-							'absolute-center': true,
-							box: true,
-							'will-animate-blur': true,
+							'absolute-center box will-animate-blur': true,
+							'animate-blur': this.status === 'finished',
+						}}
+					>
+						<div class='flex-column'>
+							<h2 class='title'>Estimtest Finished</h2>
+							<div class='flex-column results-grid'>
+								{this.testResults.map((result) => (
+									<div class={`flex-row full-width ${result.results}`}>
+										<h3
+											onClick={() => this.toggleTestDetails(result)}
+											class='title clickable'
+										>
+											{result.name}
+										</h3>
+										<p
+											class='paragraph'
+											style={{
+												opacity: result.notes === undefined ? '0.5' : '0.9',
+											}}
+										>
+											{result.notes === undefined
+												? 'No notes added'
+												: result.notes}
+										</p>
+									</div>
+								))}
+							</div>
+							<button onClick={() => this.promptBeginTests()} class='button'>
+								Start Another Test
+							</button>
+						</div>
+					</div>
+					<div
+						class={{
+							'absolute-center box will-animate-blur': true,
 							'animate-blur': this.expandedTestActive,
 						}}
 					>
@@ -275,7 +292,7 @@ export class Estimtest {
 							<div class='flex-row'>
 								<h2 class='title'>{this.expandedTest?.name}</h2>
 								<button class='button' onClick={() => this.toggleTestDetails()}>
-									<CloseIcon/>
+									<CloseIcon />
 								</button>
 							</div>
 							<div class='paragraph' innerHTML={this.testDetailsDescription} />
