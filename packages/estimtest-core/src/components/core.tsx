@@ -19,7 +19,7 @@ import { HtmlRenderer, Parser } from 'commonmark';
 })
 export class EstimtestCore {
 	@Prop()
-	config?: EstimtestConfig;
+	config?: Partial<EstimtestConfig>;
 
 	@Prop()
 	active?: boolean = true;
@@ -245,19 +245,6 @@ export class EstimtestCore {
 									</div>
 								</div>
 							</div>
-              <div class={{'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded}}>
-                <div class='flex-column'>
-                  <div class='flex-row'>
-                    <h2 class='title'>{this.activeTest.name}</h2>
-                    <button class='button' onClick={() => this.toggleTestDetails()}>
-                      <svg class='square' style={{'--size': '1rem'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.7 67.7">
-                        <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="16.9" d="m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <div class='paragraph' innerHTML={this.testDetailsDescription}/>
-                </div>
-              </div>
 						</Fragment>
 					)}
 					{this.status === 'finished' && (
@@ -277,6 +264,19 @@ export class EstimtestCore {
 							</div>
 						</div>
 					)}
+					<div class={{'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded}}>
+						<div class='flex-column'>
+							<div class='flex-row'>
+								<h2 class='title'>{this.activeTest.name}</h2>
+								<button class='button' onClick={() => this.toggleTestDetails()}>
+									<svg class='square' style={{'--size': '1rem'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.7 67.7">
+										<path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="16.9" d="m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5"/>
+									</svg>
+								</button>
+							</div>
+							<div class='paragraph' innerHTML={this.testDetailsDescription}/>
+						</div>
+					</div>
 				</div>
 			</Host>
 		);
