@@ -56,11 +56,11 @@
 
 .clickable {
   cursor: pointer;
-  transform: scale(1);
-  transition: transform ease 250ms;
+  filter: drop-shadow(0rem 0rem 0rem hsl(0deg, 0%, 100%, 0.7));
+  transition: filter ease 250ms;
 
   &:hover {
-    transform: scale(1.05);
+    filter: drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem);
   }
 }
 
@@ -74,9 +74,9 @@
 /* Animation effects */
 .will-animate-blur {
   opacity: 0;
-  filter: blur(15px);
+  filter: blur(16px);
   pointer-events: none !important;
-  transition: filter ease 250ms, opacity ease 250ms;
+  transition: filter ease 300ms, opacity ease 300ms;
   
   &.animate-blur {
     pointer-events: all !important;
