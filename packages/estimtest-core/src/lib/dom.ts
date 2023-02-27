@@ -3,7 +3,6 @@ import { sleep } from './time'
 const autoResizeTextarea = async (element?: HTMLTextAreaElement) => {
   if (element instanceof HTMLElement) {
     // Wait an event loop until it's hydrated fully
-    console.log(element, element.scrollHeight === 0);
     if (element.scrollHeight === 0) await sleep();
 
     const paddingTop = parseFloat(
