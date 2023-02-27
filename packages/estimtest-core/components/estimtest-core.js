@@ -1,4 +1,4 @@
-import { proxyCustomElement, HTMLElement, h, Fragment, Host } from '@stencil/core/internal/client';
+import { h, proxyCustomElement, HTMLElement as HTMLElement$1, Fragment, Host } from '@stencil/core/internal/client';
 
 const defaultEstimtestConfig = {
   selectors: {
@@ -7,7 +7,7 @@ const defaultEstimtestConfig = {
   tests: [
     {
       name: 'Large Font Size',
-      description: "Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested you use `rem` instead of `px` for `font-size`.",
+      description: "Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.",
       fontSize: 24,
     },
     {
@@ -28,23 +28,48 @@ const activateFontSize = (test, config) => {
   container.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
+const resetHeight = (config) => {
+  const container = document.querySelector(config.selectors.container);
+  container.style.removeProperty('min-height');
+  container.style.removeProperty('max-height');
+  container.style.removeProperty('overflow');
+  container.style.removeProperty('box-shadow');
+};
 const activateHeight = (test, config) => {
   const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('height', `${test.height}px`);
+  container.style.setProperty('min-height', `${test.height}px`);
+  container.style.setProperty('max-height', `${test.height}px`);
+  container.style.setProperty('overflow', 'scroll');
+  container.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(50vw, 50vh) hsl(0deg, 0%, 10%)');
 };
 
+const resetWidth = (config) => {
+  const container = document.querySelector(config.selectors.container);
+  container.style.removeProperty('min-width');
+  container.style.removeProperty('max-width');
+  container.style.removeProperty('overflow');
+  container.style.removeProperty('box-shadow');
+};
 const activateWidth = (test, config) => {
   const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('width', `${test.width}px`);
+  container.style.setProperty('min-width', `${test.width}px`);
+  container.style.setProperty('max-width', `${test.width}px`);
+  container.style.setProperty('overflow', 'scroll');
+  container.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(50vw, 50vh) hsl(0deg, 0%, 10%)');
 };
 
-const performTest = (test, config) => {
+const resetTest = (config) => {
   resetFontSize(config);
-  if (test.fontSize)
+  resetWidth(config);
+  resetHeight(config);
+};
+const performTest = (test, config) => {
+  resetTest(config);
+  if (test.fontSize !== undefined)
     activateFontSize(test, config);
-  if (test.width)
+  if (test.width !== undefined)
     activateWidth(test, config);
-  if (test.height)
+  if (test.height !== undefined)
     activateHeight(test, config);
 };
 
@@ -7998,20 +8023,64 @@ XmlRenderer.prototype.cr = cr;
 XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.will-animate-blur{opacity:0;-webkit-filter:blur(15px);filter:blur(15px);pointer-events:none !important;-webkit-transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:filter ease 250ms, opacity ease 250ms;transition:filter ease 250ms, opacity ease 250ms, -webkit-filter ease 250ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.square{width:var(--size);height:var(--size)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding:0.7rem 1.4rem;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0deg, 0%, 30%);background:linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0deg 0% 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0deg, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0deg, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0deg, 0%, 40%)}.results-grid{grid-template-columns:9rem 3rem 15rem;display:grid;gap:0.5rem;-ms-flex-align:center;align-items:center}";
+const sleep = async (milliseconds = 0) => {
+  return new Promise((resolve) => setTimeout(() => resolve(), milliseconds));
+};
 
-const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement {
+const autoResizeTextarea = async (element) => {
+  if (element instanceof HTMLElement) {
+    // Wait an event loop until it's hydrated fully
+    console.log(element, element.scrollHeight === 0);
+    if (element.scrollHeight === 0)
+      await sleep();
+    const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
+    const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom.replace(/\p\x/g, ''));
+    element.style.setProperty('height', '0px');
+    element.style.setProperty('height', `${element.scrollHeight - paddingTop - paddingBottom}px`);
+  }
+};
+/**
+ * Retrieves the value from input and change events.
+ */
+const getEventValue = (event) => {
+  const target = event.target;
+  return target.value;
+};
+
+const EstimtestLogo = () => {
+  return (h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' },
+    h("title", null, "Estimtest, a manual testing library"),
+    h("path", { fill: '#fff', d: 'M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z', color: '#000' })));
+};
+const CloseIcon = () => {
+  return (h("svg", { class: 'square', style: { '--size': '1rem' }, xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 67.7 67.7' },
+    h("title", null, "Close"),
+    h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5' })));
+};
+const ChevronIcon = ({ direction }) => {
+  return (h("svg", { style: { '--size': '1rem' }, class: {
+      'upside-down': direction === 'down',
+      square: true,
+    }, viewBox: '0 0 67.7 36' },
+    h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })));
+};
+
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-transform:scale(1);transform:scale(1);-webkit-transition:-webkit-transform ease 250ms;transition:-webkit-transform ease 250ms;transition:transform ease 250ms;transition:transform ease 250ms, -webkit-transform ease 250ms}.clickable:hover{-webkit-transform:scale(1.05);transform:scale(1.05)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(15px);filter:blur(15px);pointer-events:none !important;-webkit-transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:filter ease 250ms, opacity ease 250ms;transition:filter ease 250ms, opacity ease 250ms, -webkit-filter ease 250ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding:0.7rem 1.4rem;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}";
+
+const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.config = undefined;
+    this.selectorsContainer = '';
+    this.tests = undefined;
     this.active = true;
     this.status = 'inactive';
     this.activeConfig = defaultEstimtestConfig;
     this.activeTest = undefined;
-    this.activeTestFeedback = undefined;
-    this.testDetailsExpanded = undefined;
+    this.testFeedbackElement = undefined;
+    this.expandedTestActive = undefined;
+    this.expandedTest = undefined;
     this.testDetailsDescription = undefined;
     this.testResults = [];
     this.errors = {};
@@ -8019,35 +8088,18 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
   watchConfigHandler() {
     this.updateConfig();
   }
+  watchActiveTestHandler() {
+    autoResizeTextarea(this.testFeedbackElement);
+  }
   componentDidUpdate() {
-    if (this.status === 'active') {
-      this.autoResizeTextarea();
-    }
   }
   componentDidLoad() {
     if (this.active) {
       this.promptBeginTests();
     }
   }
-  autoResizeTextarea(event) {
-    if (event && 'target' in event) {
-      const target = event.target;
-      const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
-      const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
-      target.style.setProperty('height', '0px');
-      target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
-    }
-    else {
-      const targets = this.hostElement.shadowRoot.querySelectorAll('.auto-resize-textarea');
-      targets.forEach((target) => {
-        const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
-        const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
-        target.style.setProperty('height', '0px');
-        target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
-      });
-    }
-  }
   promptBeginTests() {
+    resetTest(this.activeConfig);
     this.status = 'prompted';
   }
   startTests() {
@@ -8058,7 +8110,8 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
     performTest(this.activeTest, this.activeConfig);
   }
   nextTest(results) {
-    this.testResults.push(Object.assign({ results: results, notes: this.activeTestFeedback }, this.activeTest));
+    this.testResults.push(Object.assign({ results: results, notes: this.activeTest.notes }, this.activeTest));
+    this.activeTest.notes = '';
     const nextIndex = this.activeTest.index + 1;
     if (nextIndex >= this.activeConfig.tests.length) {
       this.finishTests();
@@ -8074,14 +8127,19 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
     if (this.status === 'active') {
       this.errorHandler('The configuration file could not be changed during active testing.');
     }
-    this.activeConfig = Object.assign(Object.assign({}, defaultEstimtestConfig), this.config);
+    this.activeConfig = defaultEstimtestConfig;
+    if (this.selectorsContainer !== '')
+      this.activeConfig.selectors.container = this.selectorsContainer;
+    if (this.tests !== undefined)
+      this.activeConfig.tests = this.tests;
   }
-  toggleTestDetails() {
-    this.testDetailsExpanded = !this.testDetailsExpanded;
-    if (this.testDetailsExpanded) {
+  toggleTestDetails(test) {
+    this.expandedTestActive = !this.expandedTestActive;
+    if (this.expandedTestActive) {
+      this.expandedTest = test !== null && test !== void 0 ? test : this.activeTest;
       const reader = new Parser();
       const writer = new HtmlRenderer();
-      const parsed = reader.parse(this.activeTest.description);
+      const parsed = reader.parse(this.expandedTest.description);
       this.testDetailsDescription = writer.render(parsed);
     }
   }
@@ -8099,25 +8157,36 @@ const EstimtestCore$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEleme
     }, 5500);
   }
   render() {
+    var _a;
     if (!this.active)
       return h(Fragment, null);
     else if (this.status === 'inactive')
       return h(Fragment, null);
-    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element) => (h("div", { class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), this.status === 'prompted' && (h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-row' }, h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' }, h("title", null, "Estimtest, a manual testing library"), h("path", { fill: '#fff', d: 'M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z', color: '#000' })), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing")))), this.status === 'active' && (h(Fragment, null, h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, this.activeTest.name), h("p", { class: 'caption' }, this.activeTest.index + 1, "/", this.activeConfig.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h("svg", { style: { '--size': '1rem' }, class: { 'upside-down': this.testDetailsExpanded, 'square': true }, viewBox: '0 0 67.7 36' }, h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', onChange: (event) => this.autoResizeTextarea(event), onInput: (event) => this.autoResizeTextarea(event) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))), h("div", { class: { 'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded } }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, this.activeTest.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h("svg", { class: 'square', style: { '--size': '1rem' }, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 67.7 67.7" }, h("path", { fill: "none", stroke: "#fff", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "16.9", d: "m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5" })))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))))), this.status === 'finished' && (h("div", { class: 'absolute-center box' }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'results-grid' }, this.testResults.map((result) => (h(Fragment, null, h("h3", null, result.name), h("p", { style: { color: result.results === 'fail' ? '#f00' : '#0f0' } }, result.results === 'fail' ? 'Fail' : 'Pass'), h("p", { style: { opacity: result.notes ? '0.9' : '0.5' } }, result.notes || 'No notes added'))))), h("button", { class: 'button' }, "Start Another Test")))))));
+    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element, i) => (h("div", { key: i, class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), this.status === 'prompted' && (h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-row' }, h(EstimtestLogo, null), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing")))), this.status === 'active' && (h(Fragment, null, h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, this.activeTest.name), h("p", { class: 'caption' }, this.activeTest.index + 1, "/", this.activeConfig.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h(ChevronIcon, { direction: this.expandedTestActive ? 'down' : 'up' }))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', value: this.activeTest.notes, ref: (el) => this.testFeedbackElement = el, onChange: (event) => this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) }), onInput: (event) => this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) }) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))))), this.status === 'finished' && (h("div", { class: 'absolute-center box' }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'flex-column results-grid' }, this.testResults.map((result) => (h("div", { class: `flex-row full-width ${result.results}` }, h("h3", { onClick: () => this.toggleTestDetails(result), class: 'title clickable', style: { width: '12rem' } }, result.name), h("p", { class: 'paragraph', style: { opacity: result.notes === undefined ? '0.9' : '0.5' } }, result.notes === 'result.notes' ? result.notes : 'No notes added'))))), h("button", { onClick: () => this.promptBeginTests(), class: 'button' }, "Start Another Test")))), h("div", { class: {
+        'absolute-center': true,
+        box: true,
+        'will-animate-blur': true,
+        'animate-blur': this.expandedTestActive,
+      } }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, (_a = this.expandedTest) === null || _a === void 0 ? void 0 : _a.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h(CloseIcon, null))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))))));
   }
   get hostElement() { return this; }
   static get watchers() { return {
-    "config": ["watchConfigHandler"]
+    "selectorsContainer": ["watchConfigHandler"],
+    "tests": ["watchConfigHandler"],
+    "activeTest": ["watchActiveTestHandler"],
+    "testFeedbackElement": ["watchActiveTestHandler"]
   }; }
   static get style() { return coreCss; }
 }, [1, "estimtest-core", {
-    "config": [16],
+    "selectorsContainer": [1, "selectors-container"],
+    "tests": [16],
     "active": [4],
     "status": [32],
     "activeConfig": [32],
     "activeTest": [32],
-    "activeTestFeedback": [32],
-    "testDetailsExpanded": [32],
+    "testFeedbackElement": [32],
+    "expandedTestActive": [32],
+    "expandedTest": [32],
     "testDetailsDescription": [32],
     "testResults": [32],
     "errors": [32]
@@ -8130,13 +8199,13 @@ function defineCustomElement$1() {
   components.forEach(tagName => { switch (tagName) {
     case "estimtest-core":
       if (!customElements.get(tagName)) {
-        customElements.define(tagName, EstimtestCore$1);
+        customElements.define(tagName, Estimtest);
       }
       break;
   } });
 }
 
-const EstimtestCore = EstimtestCore$1;
+const EstimtestCore = Estimtest;
 const defineCustomElement = defineCustomElement$1;
 
 export { EstimtestCore, defineCustomElement };

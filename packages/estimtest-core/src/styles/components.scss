@@ -1,0 +1,46 @@
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0rem;
+}
+
+.caption {
+  font-size: 1.1rem;
+  opacity: 0.6;
+  margin: 0rem;
+}
+
+.paragraph {
+  margin: 0rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  text-align: left;
+}
+
+.box {
+  width: fit-content;
+  padding: 0.7rem 1.4rem;
+  border-radius: 1rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: hsl(0deg, 0%, 30%);
+  background: linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));
+  box-shadow: 0rem 0rem 1rem 0rem hsl(0deg 0% 15%);
+  pointer-events: all;
+}
+
+.button {
+  display: flex;
+  padding: 0.5rem 1rem;
+  border-style: solid;
+  border-color: hsl(0deg, 0%, 20%);
+  border-width: 1px;
+  border-radius: 1rem;
+  background: hsl(0deg, 0%, 10%);
+  font-size: 0.9rem;
+  cursor: pointer;
+  
+  &:hover {
+    border-color: hsl(0deg, 0%, 40%)
+  }
+}

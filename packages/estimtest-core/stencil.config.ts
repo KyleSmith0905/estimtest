@@ -1,9 +1,15 @@
 import { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
+import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'estimtest-core',
   taskQueue: 'async',
+  plugins: [
+    sass({
+      injectGlobalPaths: ['./src/styles/index.scss'],
+    })
+  ],
   outputTargets: [
     reactOutputTarget({
       componentCorePackage: 'estimtest-core',

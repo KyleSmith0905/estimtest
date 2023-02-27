@@ -6,58 +6,80 @@ import {
 	Prop,
 	State,
 	Watch,
-	Element
+	Element,
 } from '@stencil/core';
 import { defaultEstimtestConfig, EstimtestConfig } from '../lib/config';
-import { EstimtestTest, performTest } from '../lib/tests';
+import { EstimtestTest, performTest, resetTest } from '../lib/tests';
 import { HtmlRenderer, Parser } from 'commonmark';
+import { autoResizeTextarea, getEventValue } from '../lib/dom';
+import { ChevronIcon, CloseIcon, EstimtestLogo } from './icons';
 
 @Component({
 	tag: 'estimtest-core',
-	styleUrl: 'core.css',
+	styleUrl: 'core.scss',
 	shadow: true,
 })
-export class EstimtestCore {
-	@Prop()
-	config?: Partial<EstimtestConfig>;
+export class Estimtest {
+	/**
+	 * A selector for the app container. This is by default `body`. The selector should match a
+	 * sibling of this element that contains the entire app. Styles will be applied to this element,
+	 * this element should not have any inline styles. 
+	 */
+	@Prop() selectorsContainer = '';
 
-	@Prop()
-	active?: boolean = true;
+	/**
+	 * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and
+	 * `Mobile Screen Size` test. This field accepts an array of objects each with the properties:
+	 * 
+	 * `name` A quick ~15 letters title summarizing the test\
+	 * `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\
+	 * `fontSize` The font size to set the page.\
+	 * `width` The width to set the page.\
+	 * `height` The height to set the page.
+	 */
+	@Prop() tests?: EstimtestConfig['tests'];
 
-	@State()
-	status: 'inactive' | 'prompted' | 'active' | 'finished' = 'inactive';
+	/**
+	 * Whether to show the testing prompt on the bottom of the screen. Set this value to `false` to
+	 * no longer see the estimtest bar.
+	 */
+	@Prop() active?: boolean = true;
 
-	@State()
-	activeConfig?: EstimtestConfig = defaultEstimtestConfig;
+	@State() status: 'inactive' | 'prompted' | 'active' | 'finished' = 'inactive';
 
-	@State()
-	activeTest?: EstimtestTest;
+	// The config that is currently in effect
+	@State() activeConfig?: EstimtestConfig = defaultEstimtestConfig;
 
-  @State()
-  activeTestFeedback?: string;
+	@State() activeTest?: EstimtestTest;
 
-	@State()
-	testDetailsExpanded?: boolean;
+	@State() testFeedbackElement?: HTMLTextAreaElement;
 
-	@State()
-	testDetailsDescription?: string;
+	@State() expandedTestActive?: boolean;
 
-	@State()
-	testResults?: EstimtestTest[] = [];
+	@State() expandedTest?: EstimtestTest;
 
-	@State()
-	errors: Record<string, { message: string; visible: boolean }> = {};
+	@State() testDetailsDescription?: string;
 
-	@Element() hostElement: HTMLElement;
+	@State() testResults?: EstimtestTest[] = [];
 
-	@Watch('config')
+	@State() errors: Record<string, { message: string; visible: boolean }> = {};
+
+	@Element() hostElement: HTMLEstimtestCoreElement;
+
+	@Watch('selectorsContainer')
+	@Watch('tests')
 	watchConfigHandler() {
 		this.updateConfig();
 	}
 
+	@Watch('activeTest')
+	@Watch('testFeedbackElement')
+	watchActiveTestHandler() {
+		autoResizeTextarea(this.testFeedbackElement);
+	}
+
 	componentDidUpdate() {
 		if (this.status === 'active') {
-			this.autoResizeTextarea();
 		}
 	}
 
@@ -67,30 +89,12 @@ export class EstimtestCore {
 		}
 	}
 
-	autoResizeTextarea(event?: any) {
-		if (event && 'target' in event) {
-			const target = event.target as HTMLTextAreaElement;
-			const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
-			const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
-			target.style.setProperty('height', '0px');
-			target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
-		}
-		else {
-			const targets = this.hostElement.shadowRoot.querySelectorAll('.auto-resize-textarea') as NodeListOf<HTMLTextAreaElement>;
-			targets.forEach((target) => {
-				const paddingTop = parseFloat(getComputedStyle(target).paddingTop.replace(/\p\x/g, ''));
-				const paddingBottom = parseFloat(getComputedStyle(target).paddingBottom.replace(/\p\x/g, ''));
-				target.style.setProperty('height', '0px');
-				target.style.setProperty('height', `${target.scrollHeight - paddingTop - paddingBottom}px`);
-			})
-		}
-	}
-
-	promptBeginTests() {
+	private promptBeginTests() {
+		resetTest(this.activeConfig);
 		this.status = 'prompted';
 	}
 
-	startTests() {
+	private startTests() {
 		this.testResults = [];
 		this.updateConfig();
 		this.activeTest = {
@@ -102,12 +106,14 @@ export class EstimtestCore {
 		performTest(this.activeTest, this.activeConfig);
 	}
 
-	nextTest(results: 'fail' | 'pass') {
+	private nextTest(results: 'fail' | 'pass') {
 		this.testResults.push({
 			results: results,
-			notes: this.activeTestFeedback,
+			notes: this.activeTest.notes,
 			...this.activeTest,
 		});
+
+		this.activeTest.notes = '';
 
 		const nextIndex = this.activeTest.index + 1;
 		if (nextIndex >= this.activeConfig.tests.length) {
@@ -122,31 +128,36 @@ export class EstimtestCore {
 		performTest(this.activeTest, this.activeConfig);
 	}
 
-	finishTests() {
+	private finishTests() {
 		this.status = 'finished';
 	}
 
-	updateConfig() {
+	private updateConfig() {
 		// Warn user that the estimtest config could not be changed during testing.
 		if (this.status === 'active') {
 			this.errorHandler(
 				'The configuration file could not be changed during active testing.'
 			);
 		}
-		this.activeConfig = { ...defaultEstimtestConfig, ...this.config };
+		this.activeConfig = defaultEstimtestConfig;
+
+		if (this.selectorsContainer !== '') this.activeConfig.selectors.container = this.selectorsContainer;
+		if (this.tests !== undefined) this.activeConfig.tests = this.tests;
 	}
 
-  toggleTestDetails() {
-    this.testDetailsExpanded = !this.testDetailsExpanded;
-    if (this.testDetailsExpanded) {
-      const reader = new Parser();
-      const writer = new HtmlRenderer();
-      const parsed = reader.parse(this.activeTest.description);
-      this.testDetailsDescription = writer.render(parsed);
-    }
-  }
+	private toggleTestDetails(test?: EstimtestTest) {
+		this.expandedTestActive = !this.expandedTestActive;
+		if (this.expandedTestActive) {
+			this.expandedTest = test ?? this.activeTest;
 
-	errorHandler(message: string) {
+			const reader = new Parser();
+			const writer = new HtmlRenderer();
+			const parsed = reader.parse(this.expandedTest.description);
+			this.testDetailsDescription = writer.render(parsed);
+		}
+	}
+
+	private errorHandler(message: string) {
 		const errorId = Math.random().toString(16).slice(2);
 		this.errors[errorId] = {
 			message: message,
@@ -170,8 +181,8 @@ export class EstimtestCore {
 			<Host>
 				<div class='full-screen'>
 					<div>
-						{Object.values(this.errors).map((element) => (
-							<div class='absolute-top box'>
+						{Object.values(this.errors).map((element, i) => (
+							<div key={i} class='absolute-top box'>
 								<h2 class='title'>Error</h2>
 								<p>{element.message}</p>
 							</div>
@@ -180,18 +191,7 @@ export class EstimtestCore {
 					{this.status === 'prompted' && (
 						<div class='absolute-bottom box'>
 							<div class='flex-row'>
-								<svg
-									class='square'
-									style={{ '--size': '1.7rem' }}
-									viewBox='0 0 110.07 135.47'
-								>
-									<title>Estimtest, a manual testing library</title>
-									<path
-										fill='#fff'
-										d='M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z'
-										color='#000'
-									/>
-								</svg>
+								<EstimtestLogo/>
 								<button class='button' onClick={() => this.startTests()}>
 									Start Testing
 								</button>
@@ -212,23 +212,16 @@ export class EstimtestCore {
 											onClick={() => this.toggleTestDetails()}
 											class='button'
 										>
-											<svg style={{'--size': '1rem'}} class={{'upside-down': this.testDetailsExpanded, 'square': true}} viewBox='0 0 67.7 36'>
-												<path
-													fill='none'
-													stroke='#fff'
-													stroke-linecap='round'
-													stroke-linejoin='round'
-													stroke-width='16.9'
-													d='m8.5 27.5 25.4-19 25.4 19'
-												/>
-											</svg>
+											<ChevronIcon direction={this.expandedTestActive ? 'down' : 'up'}/>
 										</button>
 									</div>
 									<div class='flex-row'>
 										<textarea
 											class='auto-resize-textarea button'
-											onChange={(event) => this.autoResizeTextarea(event)}
-											onInput={(event) => this.autoResizeTextarea(event)}
+											value={this.activeTest.notes}
+											ref={(el) => this.testFeedbackElement = el}
+											onChange={(event) => this.activeTest = {...this.activeTest, notes: getEventValue(event)}}
+											onInput={(event) => this.activeTest = {...this.activeTest, notes: getEventValue(event)}}
 										/>
 										<button
 											class='button'
@@ -251,30 +244,41 @@ export class EstimtestCore {
 						<div class='absolute-center box'>
 							<div class='flex-column'>
 								<h2 class='title'>Estimtest Finished</h2>
-								<div class='results-grid'>
+								<div class='flex-column results-grid'>
 									{this.testResults.map((result) => (
-										<Fragment>
-											<h3>{result.name}</h3>
-											<p style={{color: result.results === 'fail' ? '#f00' : '#0f0'}}>{result.results === 'fail' ? 'Fail' : 'Pass'}</p>
-											<p style={{opacity: result.notes ? '0.9' : '0.5'}}>{result.notes || 'No notes added'}</p>
-										</Fragment>
+										<div class={`flex-row full-width ${result.results}`}>
+											<h3 onClick={() => this.toggleTestDetails(result)} class='title clickable' style={{ width: '12rem' }}>
+												{result.name}
+											</h3>
+											<p
+												class='paragraph'
+												style={{ opacity: result.notes === undefined ? '0.9' : '0.5' }}
+											>
+												{result.notes === 'result.notes' ? result.notes : 'No notes added'}
+											</p>
+										</div>
 									))}
 								</div>
-								<button class='button'>Start Another Test</button>
+								<button onClick={() => this.promptBeginTests()} class='button'>Start Another Test</button>
 							</div>
 						</div>
 					)}
-					<div class={{'absolute-center': true, 'box': true, 'will-animate-blur': true, 'animate-blur': this.testDetailsExpanded}}>
+					<div
+						class={{
+							'absolute-center': true,
+							box: true,
+							'will-animate-blur': true,
+							'animate-blur': this.expandedTestActive,
+						}}
+					>
 						<div class='flex-column'>
 							<div class='flex-row'>
-								<h2 class='title'>{this.activeTest.name}</h2>
+								<h2 class='title'>{this.expandedTest?.name}</h2>
 								<button class='button' onClick={() => this.toggleTestDetails()}>
-									<svg class='square' style={{'--size': '1rem'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.7 67.7">
-										<path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="16.9" d="m8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5"/>
-									</svg>
+									<CloseIcon/>
 								</button>
 							</div>
-							<div class='paragraph' innerHTML={this.testDetailsDescription}/>
+							<div class='paragraph' innerHTML={this.testDetailsDescription} />
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
 /* EstimtestCore custom elements */
-export { EstimtestCore as EstimtestCore } from '../dist/types/components/core';
+export { Estimtest as EstimtestCore } from '../dist/types/components/core';
 
 /**
  * Used to manually set the base path where assets can be found.

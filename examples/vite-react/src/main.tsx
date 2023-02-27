@@ -11,14 +11,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <App />
     <EstimtestCore
       active={true}
-      config={JSON.stringify({
-        tests: [
-          {
-            name: 'Large Font Size',
-            fontSize: 24,
-          }
-        ],
-      })}
+      selectorsContainer='.App'
       // full-screen is a css class defined in `index.css`
       className='full-screen'
     />

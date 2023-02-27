@@ -1,0 +1,86 @@
+.full-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0rem;
+  pointer-events: none;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.absolute-bottom {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.absolute-top {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.absolute-center {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.upside-down {
+  transform: rotateZ(180deg);
+}
+
+.square {
+  width: var(--size);
+  height: var(--size);
+}
+
+.clickable {
+  cursor: pointer;
+  transform: scale(1);
+  transition: transform ease 250ms;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* A helper for code that will manually resize the textarea */
+.auto-resize-textarea {
+  resize: none;
+  overflow: hidden;
+  height: 18px;
+}
+
+/* Animation effects */
+.will-animate-blur {
+  opacity: 0;
+  filter: blur(15px);
+  pointer-events: none !important;
+  transition: filter ease 250ms, opacity ease 250ms;
+  
+  &.animate-blur {
+    pointer-events: all !important;
+    opacity: 1;
+    filter: blur(0px);
+  }
+}

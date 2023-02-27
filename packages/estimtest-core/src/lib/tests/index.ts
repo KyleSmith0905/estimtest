@@ -1,7 +1,7 @@
 import { EstimtestConfig } from "../config";
 import { activateFontSize, resetFontSize } from "./fontSize";
-import { activateHeight } from "./height";
-import { activateWidth } from "./width";
+import { activateHeight, resetHeight } from "./height";
+import { activateWidth, resetWidth } from "./width";
 
 interface EstimtestTest {
   name: string,
@@ -14,13 +14,19 @@ interface EstimtestTest {
   height?: number,
 }
 
-const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
+const resetTest = (config: EstimtestConfig) => {
   resetFontSize(config);
+  resetWidth(config);
+  resetHeight(config);
+}
+
+const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
+  resetTest(config);
   
-  if (test.fontSize) activateFontSize(test, config);
-  if (test.width) activateWidth(test, config);
-  if (test.height) activateHeight(test, config);
+  if (test.fontSize !== undefined) activateFontSize(test, config);
+  if (test.width !== undefined) activateWidth(test, config);
+  if (test.height !== undefined) activateHeight(test, config);
 }
 
 export type { EstimtestTest };
-export { performTest };
+export { resetTest, performTest };

@@ -15,7 +15,7 @@ const defaultEstimtestConfig: EstimtestConfig = {
 		{
 			name: 'Large Font Size',
 			description:
-				"Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested you use `rem` instead of `px` for `font-size`.",
+				"Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.",
 			fontSize: 24,
 		},
 		{

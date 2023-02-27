@@ -1,0 +1,21 @@
+.results-grid {
+  gap: 0.2rem;
+  text-align: left;
+
+  > * {
+    padding: 0.3rem 1rem;
+    border-radius: 0.5rem;
+    border-style: solid;
+    border-width: 1px;
+  }
+
+  > .fail {
+    background-color: hsl(0deg, 100%, 50%, 0.1);
+    border-color: hsl(0deg, 100%, 50%)
+  }
+  
+  > .pass {
+    background-color: hsl(120deg, 100%, 30%, 0.1);
+    border-color: hsl(120deg, 100%, 30%)
+  }
+}
