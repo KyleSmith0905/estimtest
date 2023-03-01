@@ -11,7 +11,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <App />
     <EstimtestCore
       active={true}
-      selectorsContainer='.App'
       // full-screen is a css class defined in `index.css`
       className='full-screen'
     />
