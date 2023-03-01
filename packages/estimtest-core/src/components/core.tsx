@@ -21,13 +21,6 @@ import { ChevronIcon, CloseIcon, EstimtestLogo } from './icons';
 })
 export class Estimtest {
 	/**
-	 * A selector for the app container. This is by default `body`. The selector should match a
-	 * sibling of this element that contains the entire app. Styles will be applied to this element,
-	 * this element should not have any inline styles.
-	 */
-	@Prop() selectorsContainer = '';
-
-	/**
 	 * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and
 	 * `Mobile Screen Size` test. This field accepts an array of objects each with the properties:
 	 *
@@ -61,6 +54,8 @@ export class Estimtest {
 	@State() testDetailsDescription?: string;
 
 	@State() testResults?: EstimtestTest[] = [];
+	
+	@State() exportedResultsActive?: boolean;
 
 	@State() exportedResults?: string = '';
 
@@ -68,7 +63,6 @@ export class Estimtest {
 
 	@Element() hostElement: HTMLEstimtestCoreElement;
 
-	@Watch('selectorsContainer')
 	@Watch('tests')
 	watchConfigHandler() {
 		this.updateConfig();
@@ -92,7 +86,6 @@ export class Estimtest {
 	}
 
 	private promptBeginTests() {
-		resetTest(this.activeConfig);
 		this.status = 'prompted';
 	}
 
@@ -105,7 +98,7 @@ export class Estimtest {
 		};
 		this.status = 'active';
 
-		performTest(this.activeTest, this.activeConfig);
+		performTest(this.hostElement, this.activeTest);
 	}
 
 	private nextTest(results: 'fail' | 'pass') {
@@ -127,11 +120,12 @@ export class Estimtest {
 			...this.activeConfig.tests[nextIndex],
 		};
 
-		performTest(this.activeTest, this.activeConfig);
+		performTest(this.hostElement, this.activeTest);
 	}
 
 	private finishTests() {
 		this.status = 'finished';
+		resetTest(this.hostElement);
 	}
 
 	private updateConfig() {
@@ -143,8 +137,6 @@ export class Estimtest {
 		}
 		this.activeConfig = defaultEstimtestConfig;
 
-		if (this.selectorsContainer !== '')
-			this.activeConfig.selectors.container = this.selectorsContainer;
 		if (this.tests !== undefined) this.activeConfig.tests = this.tests;
 	}
 
@@ -162,6 +154,7 @@ export class Estimtest {
 
 	private exportResults() {
 		console.log(this.testResults);
+		this.exportedResultsActive = true;
 		this.exportedResults = JSON.stringify(this.testResults, null, 2);
 	}
 
@@ -322,14 +315,14 @@ export class Estimtest {
 					<div
 						class={{
 							'absolute-center box will-animate-blur': true,
-							'animate-blur': this.exportedResults !== '',
+							'animate-blur': this.exportedResultsActive,
 						}}
-						ref={conditionallySetInert(this.exportedResults !== '')}
+						ref={conditionallySetInert(this.exportedResultsActive)}
 					>
 						<div class='flex-column'>
 							<h2 class='title'>Exported Test Results</h2>
 							<p class='paragraph' innerHTML={this.exportedResults}></p>
-							<button onClick={() => this.exportedResults = ''} class='button'>
+							<button onClick={() => this.exportedResultsActive = false} class='button'>
 								Back
 							</button>
 						</div>

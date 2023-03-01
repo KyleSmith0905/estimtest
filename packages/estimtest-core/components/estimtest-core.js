@@ -1,9 +1,6 @@
 import { h, proxyCustomElement, HTMLElement as HTMLElement$1, Fragment, Host } from '@stencil/core/internal/client';
 
 const defaultEstimtestConfig = {
-  selectors: {
-    container: 'body',
-  },
   tests: [
     {
       name: 'Large Font Size',
@@ -37,46 +34,102 @@ Here is a list of useful shortcuts for Chromium.
   ],
 };
 
-const activateFontSize = (test, config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('font-size', `${test.fontSize}px`);
+const sleep = async (milliseconds = 0) => {
+  return new Promise((resolve) => setTimeout(() => resolve(), milliseconds));
 };
 
-const activateHeight = (test, config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('min-height', `${test.height}px`);
-  container.style.setProperty('max-height', `${test.height}px`);
-  container.style.setProperty('overflow', 'scroll');
-  container.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(50vw, 50vh) hsl(0deg, 0%, 10%)');
+const autoResizeTextarea = async (element) => {
+  if (element instanceof HTMLElement) {
+    // Wait an event loop until it's hydrated fully
+    if (element.scrollHeight === 0)
+      await sleep();
+    const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
+    const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom.replace(/\p\x/g, ''));
+    element.style.setProperty('height', '0px');
+    element.style.setProperty('height', `${element.scrollHeight - paddingTop - paddingBottom}px`);
+  }
+};
+/**
+ * Retrieves the value from input and change events.
+ */
+const getEventValue = (event) => {
+  const target = event.target;
+  return target.value;
+};
+const conditionallySetInert = (condition) => {
+  return (element) => {
+    if (!condition)
+      element.setAttribute('inert', 'inert');
+    else
+      element.removeAttribute('inert');
+  };
+};
+const transferChildren = (oldParent, newParent, filter) => {
+  oldParent === null || oldParent === void 0 ? void 0 : oldParent.childNodes.forEach((node) => {
+    if (filter(node))
+      return;
+    node.parentNode.removeChild(node);
+    newParent.appendChild(node);
+  });
 };
 
-const activateKeyboardOnly = (_, config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('pointer-events', 'none');
+const activateFontSize = (element, test) => {
+  element.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
-const activateWidth = (test, config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.setProperty('min-width', `${test.width}px`);
-  container.style.setProperty('max-width', `${test.width}px`);
-  container.style.setProperty('overflow', 'scroll');
-  container.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(50vw, 50vh) hsl(0deg, 0%, 10%)');
+const activateHeight = (element, test) => {
+  element.style.setProperty('min-height', `${test.height}px`);
+  element.style.setProperty('max-height', `${test.height}px`);
+  element.style.setProperty('overflow', 'scroll');
+  element.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(100vw, 100vh) hsl(0deg, 0%, 10%)');
+  element.style.setProperty('position', 'relative');
+  element.style.setProperty('margin', 'auto');
 };
 
-const resetTest = (config) => {
-  const element = document.querySelector(config.selectors.container);
-  element.removeAttribute('style');
+const activateKeyboardOnly = (element, _) => {
+  element.style.setProperty('pointer-events', 'none');
 };
-const performTest = (test, config) => {
-  resetTest(config);
+
+const activateWidth = (element, test) => {
+  element.style.setProperty('min-width', `${test.width}px`);
+  element.style.setProperty('max-width', `${test.width}px`);
+  element.style.setProperty('overflow', 'scroll');
+  element.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(100vw, 100vh) hsl(0deg, 0%, 10%)');
+  element.style.setProperty('position', 'relative');
+  element.style.setProperty('margin', 'auto');
+};
+
+const resetTest = (hostElement) => {
+  const parent = hostElement.parentElement;
+  let container1 = parent.querySelector(':scope > #estimtest-container-1');
+  let container2 = parent.querySelector(':scope > #estimtest-container-1 > #estimtest-container-2');
+  if (container2) {
+    transferChildren(container2, hostElement.parentElement, (node) => node.id.startsWith('estimtest'));
+    container1.remove();
+    container2.remove();
+  }
+};
+const performTest = (hostElement, test) => {
+  resetTest(hostElement);
+  // Create wrapper element
+  const container1 = document.createElement('div');
+  container1.id = 'estimtest-container-1';
+  hostElement.before(container1);
+  const container2 = document.createElement('div');
+  container2.id = 'estimtest-container-2';
+  container1.appendChild(container2);
+  const container3 = document.createElement('object');
+  container3.id = 'estimtest-container 3';
+  container2.appendChild(container3);
+  transferChildren(hostElement.parentElement, container3, (node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE');
   if (test.fontSize !== undefined)
-    activateFontSize(test, config);
+    activateFontSize(container2, test);
   if (test.width !== undefined)
-    activateWidth(test, config);
+    activateWidth(container2, test);
   if (test.height !== undefined)
-    activateHeight(test, config);
+    activateHeight(container2, test);
   if (test.keyboardOnly === true)
-    activateKeyboardOnly(test, config);
+    activateKeyboardOnly(container2);
 };
 
 function isContainer(node) {
@@ -8029,37 +8082,6 @@ XmlRenderer.prototype.cr = cr;
 XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
 
-const sleep = async (milliseconds = 0) => {
-  return new Promise((resolve) => setTimeout(() => resolve(), milliseconds));
-};
-
-const autoResizeTextarea = async (element) => {
-  if (element instanceof HTMLElement) {
-    // Wait an event loop until it's hydrated fully
-    if (element.scrollHeight === 0)
-      await sleep();
-    const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
-    const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom.replace(/\p\x/g, ''));
-    element.style.setProperty('height', '0px');
-    element.style.setProperty('height', `${element.scrollHeight - paddingTop - paddingBottom}px`);
-  }
-};
-/**
- * Retrieves the value from input and change events.
- */
-const getEventValue = (event) => {
-  const target = event.target;
-  return target.value;
-};
-const conditionallySetInert = (condition) => {
-  return (element) => {
-    if (!condition)
-      element.setAttribute('inert', 'inert');
-    else
-      element.removeAttribute('inert');
-  };
-};
-
 const EstimtestLogo = () => {
   return (h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' },
     h("title", null, "Estimtest, a manual testing library"),
@@ -8078,14 +8100,13 @@ const ChevronIcon = ({ direction }) => {
     h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })));
 };
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));-webkit-transition:-webkit-filter ease 250ms;transition:-webkit-filter ease 250ms;transition:filter ease 250ms;transition:filter ease 250ms, -webkit-filter ease 250ms}.clickable:hover{-webkit-filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem);filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(16px);filter:blur(16px);pointer-events:none !important;-webkit-transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:filter ease 300ms, opacity ease 300ms;transition:filter ease 300ms, opacity ease 300ms, -webkit-filter ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));-webkit-transition:-webkit-filter ease 250ms;transition:-webkit-filter ease 250ms;transition:filter ease 250ms;transition:filter ease 250ms, -webkit-filter ease 250ms}.clickable:hover{-webkit-filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem);filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(16px);filter:blur(16px);pointer-events:none !important;-webkit-transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:filter ease 300ms, opacity ease 300ms;transition:filter ease 300ms, opacity ease 300ms, -webkit-filter ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem;z-index:1000}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));color:hsl(0, 0%, 100%);-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);color:hsl(0, 0%, 100%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
 
 const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.selectorsContainer = '';
     this.tests = undefined;
     this.active = true;
     this.status = 'inactive';
@@ -8096,6 +8117,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.expandedTest = undefined;
     this.testDetailsDescription = undefined;
     this.testResults = [];
+    this.exportedResultsActive = undefined;
     this.exportedResults = '';
     this.errors = {};
   }
@@ -8113,7 +8135,6 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     }
   }
   promptBeginTests() {
-    resetTest(this.activeConfig);
     this.status = 'prompted';
   }
   startTests() {
@@ -8121,7 +8142,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.updateConfig();
     this.activeTest = Object.assign({ index: 0 }, this.activeConfig.tests[0]);
     this.status = 'active';
-    performTest(this.activeTest, this.activeConfig);
+    performTest(this.hostElement, this.activeTest);
   }
   nextTest(results) {
     this.testResults.push(Object.assign({ results: results, notes: this.activeTest.notes }, this.activeTest));
@@ -8131,10 +8152,11 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
       this.finishTests();
     }
     this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.tests[nextIndex]);
-    performTest(this.activeTest, this.activeConfig);
+    performTest(this.hostElement, this.activeTest);
   }
   finishTests() {
     this.status = 'finished';
+    resetTest(this.hostElement);
   }
   updateConfig() {
     // Warn user that the estimtest config could not be changed during testing.
@@ -8142,8 +8164,6 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
       this.errorHandler('The configuration file could not be changed during active testing.');
     }
     this.activeConfig = defaultEstimtestConfig;
-    if (this.selectorsContainer !== '')
-      this.activeConfig.selectors.container = this.selectorsContainer;
     if (this.tests !== undefined)
       this.activeConfig.tests = this.tests;
   }
@@ -8159,6 +8179,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   }
   exportResults() {
     console.log(this.testResults);
+    this.exportedResultsActive = true;
     this.exportedResults = JSON.stringify(this.testResults, null, 2);
   }
   errorHandler(message) {
@@ -8199,19 +8220,17 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
         'animate-blur': this.expandedTestActive,
       }, ref: conditionallySetInert(this.expandedTestActive) }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, (_f = this.expandedTest) === null || _f === void 0 ? void 0 : _f.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h(CloseIcon, null))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))), h("div", { class: {
         'absolute-center box will-animate-blur': true,
-        'animate-blur': this.exportedResults !== '',
-      }, ref: conditionallySetInert(this.exportedResults !== '') }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Exported Test Results"), h("p", { class: 'paragraph', innerHTML: this.exportedResults }), h("button", { onClick: () => this.exportedResults = '', class: 'button' }, "Export Results"))))));
+        'animate-blur': this.exportedResultsActive,
+      }, ref: conditionallySetInert(this.exportedResultsActive) }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Exported Test Results"), h("p", { class: 'paragraph', innerHTML: this.exportedResults }), h("button", { onClick: () => this.exportedResultsActive = false, class: 'button' }, "Back"))))));
   }
   get hostElement() { return this; }
   static get watchers() { return {
-    "selectorsContainer": ["watchConfigHandler"],
     "tests": ["watchConfigHandler"],
     "activeTest": ["watchActiveTestHandler"],
     "testFeedbackElement": ["watchActiveTestHandler"]
   }; }
   static get style() { return coreCss; }
 }, [1, "estimtest-core", {
-    "selectorsContainer": [1, "selectors-container"],
     "tests": [16],
     "active": [4],
     "status": [32],
@@ -8222,6 +8241,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     "expandedTest": [32],
     "testDetailsDescription": [32],
     "testResults": [32],
+    "exportedResultsActive": [32],
     "exportedResults": [32],
     "errors": [32]
   }]);
