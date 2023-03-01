@@ -71,7 +71,7 @@
   height: 18px;
 }
 
-/* Animation effects */
+/* Animation effects for true interactivity, use the `conditionallySetInert` element as well */
 .will-animate-blur {
   opacity: 0;
   filter: blur(16px);

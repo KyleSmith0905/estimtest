@@ -1,6 +1,7 @@
 import { EstimtestConfig } from '../config';
 import { activateFontSize } from './fontSize';
 import { activateHeight } from './height';
+import { activateKeyboardOnly } from './keyboardOnly';
 import { activateWidth } from './width';
 
 interface EstimtestTest {
@@ -13,6 +14,7 @@ interface EstimtestTest {
   fontSize?: number,
   width?: number,
   height?: number,
+  keyboardOnly?: boolean,
 }
 
 const resetTest = (config: EstimtestConfig) => {
@@ -26,6 +28,7 @@ const performTest = (test: EstimtestTest, config: EstimtestConfig) => {
 	if (test.fontSize !== undefined) activateFontSize(test, config);
 	if (test.width !== undefined) activateWidth(test, config);
 	if (test.height !== undefined) activateHeight(test, config);
+	if (test.keyboardOnly === true) activateKeyboardOnly(test, config);
 };
 
 export type { EstimtestTest };

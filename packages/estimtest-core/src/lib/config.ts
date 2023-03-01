@@ -4,7 +4,7 @@ interface EstimtestConfig {
 	selectors: {
 		container: string;
 	};
-	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'width' | 'height'>[];
+	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'width' | 'height' | 'keyboardOnly'>[];
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {
@@ -26,9 +26,21 @@ const defaultEstimtestConfig: EstimtestConfig = {
 		},
 		{
 			name: 'Keyboard Navigation',
-			description: 'Many users may use keyboard navigation because saves time by not switching between keyboard and mouse, it is a necessity to their',
-			width: 320,
-			height: 480,
+			description: `
+Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.\\
+Here is a list of useful shortcuts for Chromium.
+
+---
+**Browse clickable items moving forward**\\
+\`Tab\`\\
+**Browse clickable items moving backward**\\
+\`Shift + Tab\`\\
+**Scroll down a webpage, a screen at a time**\\
+\`Space\`\\
+**Scroll up a webpage, a screen at a time**\\
+\`Shift + Space\`
+			`,
+			keyboardOnly: true,
 		},
 	],
 };

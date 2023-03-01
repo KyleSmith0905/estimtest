@@ -11,7 +11,7 @@ import {
 import { defaultEstimtestConfig, EstimtestConfig } from '../lib/config';
 import { EstimtestTest, performTest, resetTest } from '../lib/tests';
 import { HtmlRenderer, Parser } from 'commonmark';
-import { autoResizeTextarea, getEventValue } from '../lib/dom';
+import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../lib/dom';
 import { ChevronIcon, CloseIcon, EstimtestLogo } from './icons';
 
 @Component({
@@ -61,6 +61,8 @@ export class Estimtest {
 	@State() testDetailsDescription?: string;
 
 	@State() testResults?: EstimtestTest[] = [];
+
+	@State() exportedResults?: string = '';
 
 	@State() errors: Record<string, { message: string; visible: boolean }> = {};
 
@@ -158,6 +160,11 @@ export class Estimtest {
 		}
 	}
 
+	private exportResults() {
+		console.log(this.testResults);
+		this.exportedResults = JSON.stringify(this.testResults, null, 2);
+	}
+
 	private errorHandler(message: string) {
 		const errorId = Math.random().toString(16).slice(2);
 		this.errors[errorId] = {
@@ -189,11 +196,13 @@ export class Estimtest {
 							</div>
 						))}
 					</div>
+					{/* A box that prompts the user for to begin the tests */}
 					<div
 						class={{
 							'absolute-bottom box will-animate-blur': true,
 							'animate-blur': this.status === 'prompted',
 						}}
+						ref={conditionallySetInert(this.status === 'prompted')}
 					>
 						<div class='flex-row'>
 							<EstimtestLogo />
@@ -202,11 +211,13 @@ export class Estimtest {
 							</button>
 						</div>
 					</div>
+					{/* A box that shows the currently active test status */}
 					<div
 						class={{
 							'absolute-bottom box will-animate-blur': true,
 							'animate-blur': this.status === 'active',
 						}}
+						ref={conditionallySetInert(this.status === 'active')}
 					>
 						<div class='flex-column'>
 							<div class='flex-row'>
@@ -247,11 +258,13 @@ export class Estimtest {
 							</div>
 						</div>
 					</div>
+					{/* A box that shows the test results */}
 					<div
 						class={{
 							'absolute-center box will-animate-blur': true,
 							'animate-blur': this.status === 'finished',
 						}}
+						ref={conditionallySetInert(this.status === 'finished')}
 					>
 						<div class='flex-column'>
 							<h2 class='title'>Estimtest Finished</h2>
@@ -277,16 +290,23 @@ export class Estimtest {
 									</div>
 								))}
 							</div>
-							<button onClick={() => this.promptBeginTests()} class='button'>
-								Start Another Test
-							</button>
+							<div class='flex-row'>
+								<button onClick={() => this.exportResults()} class='button'>
+									Export Results
+								</button>
+								<button onClick={() => this.promptBeginTests()} class='button'>
+									Start Another Test
+								</button>
+							</div>
 						</div>
 					</div>
+					{/* A box that contains additional info about the test */}
 					<div
 						class={{
 							'absolute-center box will-animate-blur': true,
 							'animate-blur': this.expandedTestActive,
 						}}
+						ref={conditionallySetInert(this.expandedTestActive)}
 					>
 						<div class='flex-column'>
 							<div class='flex-row'>
@@ -296,6 +316,22 @@ export class Estimtest {
 								</button>
 							</div>
 							<div class='paragraph' innerHTML={this.testDetailsDescription} />
+						</div>
+					</div>
+					{/* A box that contains a raw JSON of the text results */}
+					<div
+						class={{
+							'absolute-center box will-animate-blur': true,
+							'animate-blur': this.exportedResults !== '',
+						}}
+						ref={conditionallySetInert(this.exportedResults !== '')}
+					>
+						<div class='flex-column'>
+							<h2 class='title'>Exported Test Results</h2>
+							<p class='paragraph' innerHTML={this.exportedResults}></p>
+							<button onClick={() => this.exportedResults = ''} class='button'>
+								Back
+							</button>
 						</div>
 					</div>
 				</div>

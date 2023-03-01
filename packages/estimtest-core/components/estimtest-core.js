@@ -7,7 +7,7 @@ const defaultEstimtestConfig = {
   tests: [
     {
       name: 'Large Font Size',
-      description: "Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser's font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.",
+      description: 'Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser\'s font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.',
       fontSize: 24,
     },
     {
@@ -16,25 +16,32 @@ const defaultEstimtestConfig = {
       width: 320,
       height: 480,
     },
+    {
+      name: 'Keyboard Navigation',
+      description: `
+Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.\\
+Here is a list of useful shortcuts for Chromium.
+
+---
+**Browse clickable items moving forward**\\
+\`Tab\`\\
+**Browse clickable items moving backward**\\
+\`Shift + Tab\`\\
+**Scroll down a webpage, a screen at a time**\\
+\`Space\`\\
+**Scroll up a webpage, a screen at a time**\\
+\`Shift + Space\`
+			`,
+      keyboardOnly: true,
+    },
   ],
 };
 
-const resetFontSize = (config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.removeProperty('font-size');
-};
 const activateFontSize = (test, config) => {
   const container = document.querySelector(config.selectors.container);
   container.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
-const resetHeight = (config) => {
-  const container = document.querySelector(config.selectors.container);
-  container.style.removeProperty('min-height');
-  container.style.removeProperty('max-height');
-  container.style.removeProperty('overflow');
-  container.style.removeProperty('box-shadow');
-};
 const activateHeight = (test, config) => {
   const container = document.querySelector(config.selectors.container);
   container.style.setProperty('min-height', `${test.height}px`);
@@ -43,13 +50,11 @@ const activateHeight = (test, config) => {
   container.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(50vw, 50vh) hsl(0deg, 0%, 10%)');
 };
 
-const resetWidth = (config) => {
+const activateKeyboardOnly = (_, config) => {
   const container = document.querySelector(config.selectors.container);
-  container.style.removeProperty('min-width');
-  container.style.removeProperty('max-width');
-  container.style.removeProperty('overflow');
-  container.style.removeProperty('box-shadow');
+  container.style.setProperty('pointer-events', 'none');
 };
+
 const activateWidth = (test, config) => {
   const container = document.querySelector(config.selectors.container);
   container.style.setProperty('min-width', `${test.width}px`);
@@ -59,9 +64,8 @@ const activateWidth = (test, config) => {
 };
 
 const resetTest = (config) => {
-  resetFontSize(config);
-  resetWidth(config);
-  resetHeight(config);
+  const element = document.querySelector(config.selectors.container);
+  element.removeAttribute('style');
 };
 const performTest = (test, config) => {
   resetTest(config);
@@ -71,6 +75,8 @@ const performTest = (test, config) => {
     activateWidth(test, config);
   if (test.height !== undefined)
     activateHeight(test, config);
+  if (test.keyboardOnly === true)
+    activateKeyboardOnly(test, config);
 };
 
 function isContainer(node) {
@@ -8030,7 +8036,6 @@ const sleep = async (milliseconds = 0) => {
 const autoResizeTextarea = async (element) => {
   if (element instanceof HTMLElement) {
     // Wait an event loop until it's hydrated fully
-    console.log(element, element.scrollHeight === 0);
     if (element.scrollHeight === 0)
       await sleep();
     const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
@@ -8045,6 +8050,14 @@ const autoResizeTextarea = async (element) => {
 const getEventValue = (event) => {
   const target = event.target;
   return target.value;
+};
+const conditionallySetInert = (condition) => {
+  return (element) => {
+    if (!condition)
+      element.setAttribute('inert', 'inert');
+    else
+      element.removeAttribute('inert');
+  };
 };
 
 const EstimtestLogo = () => {
@@ -8065,7 +8078,7 @@ const ChevronIcon = ({ direction }) => {
     h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })));
 };
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-transform:scale(1);transform:scale(1);-webkit-transition:-webkit-transform ease 250ms;transition:-webkit-transform ease 250ms;transition:transform ease 250ms;transition:transform ease 250ms, -webkit-transform ease 250ms}.clickable:hover{-webkit-transform:scale(1.05);transform:scale(1.05)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(15px);filter:blur(15px);pointer-events:none !important;-webkit-transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:opacity ease 250ms, -webkit-filter ease 250ms;transition:filter ease 250ms, opacity ease 250ms;transition:filter ease 250ms, opacity ease 250ms, -webkit-filter ease 250ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;padding:0.7rem 1.4rem;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}";
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));-webkit-transition:-webkit-filter ease 250ms;transition:-webkit-filter ease 250ms;transition:filter ease 250ms;transition:filter ease 250ms, -webkit-filter ease 250ms}.clickable:hover{-webkit-filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem);filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(16px);filter:blur(16px);pointer-events:none !important;-webkit-transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:filter ease 300ms, opacity ease 300ms;transition:filter ease 300ms, opacity ease 300ms, -webkit-filter ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
 
 const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   constructor() {
@@ -8083,6 +8096,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.expandedTest = undefined;
     this.testDetailsDescription = undefined;
     this.testResults = [];
+    this.exportedResults = '';
     this.errors = {};
   }
   watchConfigHandler() {
@@ -8143,6 +8157,10 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
       this.testDetailsDescription = writer.render(parsed);
     }
   }
+  exportResults() {
+    console.log(this.testResults);
+    this.exportedResults = JSON.stringify(this.testResults, null, 2);
+  }
   errorHandler(message) {
     const errorId = Math.random().toString(16).slice(2);
     this.errors[errorId] = {
@@ -8157,17 +8175,32 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     }, 5500);
   }
   render() {
-    var _a;
+    var _a, _b, _c, _d, _e, _f;
     if (!this.active)
       return h(Fragment, null);
     else if (this.status === 'inactive')
       return h(Fragment, null);
-    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element, i) => (h("div", { key: i, class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), this.status === 'prompted' && (h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-row' }, h(EstimtestLogo, null), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing")))), this.status === 'active' && (h(Fragment, null, h("div", { class: 'absolute-bottom box' }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, this.activeTest.name), h("p", { class: 'caption' }, this.activeTest.index + 1, "/", this.activeConfig.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h(ChevronIcon, { direction: this.expandedTestActive ? 'down' : 'up' }))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', value: this.activeTest.notes, ref: (el) => this.testFeedbackElement = el, onChange: (event) => this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) }), onInput: (event) => this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) }) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))))), this.status === 'finished' && (h("div", { class: 'absolute-center box' }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'flex-column results-grid' }, this.testResults.map((result) => (h("div", { class: `flex-row full-width ${result.results}` }, h("h3", { onClick: () => this.toggleTestDetails(result), class: 'title clickable', style: { width: '12rem' } }, result.name), h("p", { class: 'paragraph', style: { opacity: result.notes === undefined ? '0.9' : '0.5' } }, result.notes === 'result.notes' ? result.notes : 'No notes added'))))), h("button", { onClick: () => this.promptBeginTests(), class: 'button' }, "Start Another Test")))), h("div", { class: {
-        'absolute-center': true,
-        box: true,
-        'will-animate-blur': true,
+    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element, i) => (h("div", { key: i, class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), h("div", { class: {
+        'absolute-bottom box will-animate-blur': true,
+        'animate-blur': this.status === 'prompted',
+      }, ref: conditionallySetInert(this.status === 'prompted') }, h("div", { class: 'flex-row' }, h(EstimtestLogo, null), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing"))), h("div", { class: {
+        'absolute-bottom box will-animate-blur': true,
+        'animate-blur': this.status === 'active',
+      }, ref: conditionallySetInert(this.status === 'active') }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, (_b = (_a = this.activeTest) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : ''), h("p", { class: 'caption' }, ((_c = this.activeTest) === null || _c === void 0 ? void 0 : _c.index) + 1, "/", (_d = this.activeConfig) === null || _d === void 0 ? void 0 :
+      _d.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h(ChevronIcon, { direction: this.expandedTestActive ? 'down' : 'up' }))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', value: (_e = this.activeTest) === null || _e === void 0 ? void 0 : _e.notes, ref: (el) => (this.testFeedbackElement = el), onChange: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })), onInput: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))), h("div", { class: {
+        'absolute-center box will-animate-blur': true,
+        'animate-blur': this.status === 'finished',
+      }, ref: conditionallySetInert(this.status === 'finished') }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'flex-column results-grid' }, this.testResults.map((result) => (h("div", { class: `flex-row full-width ${result.results}` }, h("h3", { onClick: () => this.toggleTestDetails(result), class: 'title clickable' }, result.name), h("p", { class: 'paragraph', style: {
+        opacity: result.notes === undefined ? '0.5' : '0.9',
+      } }, result.notes === undefined
+      ? 'No notes added'
+      : result.notes))))), h("div", { class: 'flex-row' }, h("button", { onClick: () => this.exportResults(), class: 'button' }, "Export Results"), h("button", { onClick: () => this.promptBeginTests(), class: 'button' }, "Start Another Test")))), h("div", { class: {
+        'absolute-center box will-animate-blur': true,
         'animate-blur': this.expandedTestActive,
-      } }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, (_a = this.expandedTest) === null || _a === void 0 ? void 0 : _a.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h(CloseIcon, null))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))))));
+      }, ref: conditionallySetInert(this.expandedTestActive) }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, (_f = this.expandedTest) === null || _f === void 0 ? void 0 : _f.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h(CloseIcon, null))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))), h("div", { class: {
+        'absolute-center box will-animate-blur': true,
+        'animate-blur': this.exportedResults !== '',
+      }, ref: conditionallySetInert(this.exportedResults !== '') }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Exported Test Results"), h("p", { class: 'paragraph', innerHTML: this.exportedResults }), h("button", { onClick: () => this.exportedResults = '', class: 'button' }, "Export Results"))))));
   }
   get hostElement() { return this; }
   static get watchers() { return {
@@ -8189,6 +8222,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     "expandedTest": [32],
     "testDetailsDescription": [32],
     "testResults": [32],
+    "exportedResults": [32],
     "errors": [32]
   }]);
 function defineCustomElement$1() {

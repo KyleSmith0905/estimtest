@@ -27,4 +27,11 @@ const getEventValue = (event: Event) => {
 	return target.value;
 };
 
-export {getEventValue, autoResizeTextarea};
+const conditionallySetInert = (condition: boolean) => {
+	return (element: HTMLElement) => {
+		if (!condition) element.setAttribute('inert', 'inert');
+		else element.removeAttribute('inert');
+	};
+};
+
+export {getEventValue, autoResizeTextarea, conditionallySetInert};

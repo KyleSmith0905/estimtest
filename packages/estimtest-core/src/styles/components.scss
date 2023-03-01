@@ -19,7 +19,10 @@
 
 .box {
   width: fit-content;
+  max-width: 90%;
+  max-height: calc(100% - 3rem);
   padding: 0.7rem 1.4rem;
+  overflow: hidden;
   border-radius: 1rem;
   border-style: solid;
   border-width: 1px;
