@@ -1,16 +1,10 @@
 import { EstimtestTest } from './tests';
 
 interface EstimtestConfig {
-	selectors: {
-		container: string;
-	};
 	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'width' | 'height' | 'keyboardOnly'>[];
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {
-	selectors: {
-		container: 'body',
-	},
 	tests: [
 		{
 			name: 'Large Font Size',

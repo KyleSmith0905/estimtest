@@ -2,6 +2,7 @@
   font-size: 1.2rem;
   font-weight: bold;
   margin: 0rem;
+  z-index: 1000;
 }
 
 .caption {
@@ -28,6 +29,7 @@
   border-width: 1px;
   border-color: hsl(0deg, 0%, 30%);
   background: linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));
+  color: hsl(0deg, 0%, 100%);
   box-shadow: 0rem 0rem 1rem 0rem hsl(0deg 0% 15%);
   pointer-events: all;
 }
@@ -40,6 +42,7 @@
   border-width: 1px;
   border-radius: 1rem;
   background: hsl(0deg, 0%, 10%);
+  color: hsl(0deg, 0%, 100%);
   font-size: 0.9rem;
   cursor: pointer;
   

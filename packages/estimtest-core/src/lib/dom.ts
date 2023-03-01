@@ -34,4 +34,16 @@ const conditionallySetInert = (condition: boolean) => {
 	};
 };
 
-export {getEventValue, autoResizeTextarea, conditionallySetInert};
+const transferChildren = (
+	oldParent: HTMLElement | ShadowRoot,
+	newParent: HTMLElement | ShadowRoot,
+	filter: (element: HTMLElement) => boolean
+) => {
+	oldParent?.childNodes.forEach((node: HTMLElement) => {
+		if (filter(node)) return;
+		node.parentNode.removeChild(node);
+		newParent.appendChild(node);
+	});
+};
+
+export {getEventValue, autoResizeTextarea, conditionallySetInert, transferChildren};
