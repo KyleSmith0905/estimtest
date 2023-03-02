@@ -1,0 +1,43 @@
+{
+  "name": "estimtest-angular",
+  "description": "Manually test your website under a variety of conditions.",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "ng build estimtest-angular"
+  },
+  "private": true,
+  "es2020": "dist/fesm2020/estimtest-angular.mjs",
+  "esm2020": "dist/esm2020/estimtest-angular.mjs",
+  "fesm2020": "dist/fesm2020/estimtest-angular.mjs",
+  "fesm2015": "dist/fesm2015/estimtest-angular.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "dependencies": {
+    "estimtest-core": "link:..\\estimtest-core",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.0",
+    "@angular/cli": "~15.2.0",
+    "@angular/common": "^15.2.0",
+    "@angular/compiler": "^15.2.0",
+    "@angular/compiler-cli": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "@angular/platform-browser": "^15.2.0",
+    "@angular/platform-browser-dynamic": "^15.2.0",
+    "@types/jasmine": "~4.3.0",
+    "jasmine-core": "~4.5.0",
+    "ng-packagr": "^15.2.2",
+    "rimraf": "^4.1.2",
+    "rxjs": "^7.8.0",
+    "typescript": "~4.9.4",
+    "zone.js": "~0.12.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "^15.2.0",
+    "rxjs": "^7.8.0",
+    "zone.js": "~0.12.0"
+  }
+}

@@ -8,10 +8,9 @@ const defaultEstimtestConfig = {
       fontSize: 24,
     },
     {
-      name: 'Mobile Screen Size',
-      description: 'Most people who surf the internet are on a mobile phone. It is important to accommodate small screen sizes to maintain a positive impression on users.',
-      width: 320,
-      height: 480,
+      name: 'Deuteranomaly Color Blind',
+      description: 'Deuteranomaly color blindness effects around 5% of men. People with Deuteranomaly often have difficulty distinguishing red and green colors.',
+      colorBlind: 'deuteranomaly',
     },
     {
       name: 'Keyboard Navigation',
@@ -73,63 +72,84 @@ const transferChildren = (oldParent, newParent, filter) => {
   });
 };
 
-const activateFontSize = (element, test) => {
-  element.style.setProperty('font-size', `${test.fontSize}px`);
+/**
+ * Idea and colorblindness values come from {@link https://github.com/hail2u/color-blindness-emulation}
+ */
+const activateColorBlind = (wrapper, test) => {
+  const commonColorblindness = {
+    protanopia: [[0.567, 0.433, 0], [0.558, 0.442, 0], [0, 0.242, 0.758]],
+    protanomaly: [[0.817, 0.183, 0], [0.333, 0.667, 0], [0, 0.125, 0.875]],
+    deuteranopia: [[0.625, 0.375, 0], [0.7, 0.3, 0], [0, 0.3, 0.7]],
+    deuteranomaly: [[0.8, 0.2, 0], [0.258, 0.742, 0], [0, 0.142, 0.858]],
+    tritanopia: [[0.95, 0.05, 0], [0, 0.433, 0.567], [0, 0.475, 0.525]],
+    tritanomaly: [[0.967, 0.033, 0], [0, 0.733, 0.267], [0, 0.183, 0.817]],
+    achromatopsia: [[0.299, 0.587, 0.114], [0.299, 0.587, 0.114], [0.299, 0.587, 0.114]],
+    achromatomaly: [[0.618, 0.320, 0.062], [0.163, 0.775, 0.062], [0.163, 0.320, 0.516]],
+  };
+  let matrix;
+  if (typeof test.colorBlind === 'string') {
+    matrix = commonColorblindness[test.colorBlind];
+  }
+  else {
+    matrix = test.colorBlind;
+  }
+  const colorBlindFilter = `\
+		<svg xmlns='http://www.w3.org/2000/svg'>\
+			<filter id='estimtest-filter-color-blind'>\
+				<feColorMatrix in='SourceGraphic' type='matrix' values='${matrix.map(e => `${e.join(' ')} 0 0`).join(' ')} 0 0 0 1 0'>\
+				</feColorMatrix>\
+			</filter>\
+		</svg>\
+	`;
+  wrapper.content.style.setProperty('filter', `url("data:image/svg+xml,${colorBlindFilter}#estimtest-filter-color-blind")`);
 };
 
-const activateHeight = (element, test) => {
-  element.style.setProperty('min-height', `${test.height}px`);
-  element.style.setProperty('max-height', `${test.height}px`);
-  element.style.setProperty('overflow', 'scroll');
-  element.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(100vw, 100vh) hsl(0deg, 0%, 10%)');
-  element.style.setProperty('position', 'relative');
-  element.style.setProperty('margin', 'auto');
+const activateFontSize = (wrapper, test) => {
+  wrapper.content.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
-const activateKeyboardOnly = (element, _) => {
-  element.style.setProperty('pointer-events', 'none');
-};
-
-const activateWidth = (element, test) => {
-  element.style.setProperty('min-width', `${test.width}px`);
-  element.style.setProperty('max-width', `${test.width}px`);
-  element.style.setProperty('overflow', 'scroll');
-  element.style.setProperty('box-shadow', '0rem 0rem 8rem 0rem hsl(0deg, 0%, 5%), 0rem 0rem 0rem max(100vw, 100vh) hsl(0deg, 0%, 10%)');
-  element.style.setProperty('position', 'relative');
-  element.style.setProperty('margin', 'auto');
+const activateKeyboardOnly = (wrapper, _) => {
+  wrapper.content.style.setProperty('pointer-events', 'none');
 };
 
 const resetTest = (hostElement) => {
   const parent = hostElement.parentElement;
-  let container1 = parent.querySelector(':scope > #estimtest-container-1');
-  let container2 = parent.querySelector(':scope > #estimtest-container-1 > #estimtest-container-2');
-  if (container2) {
-    transferChildren(container2, hostElement.parentElement, (node) => node.id.startsWith('estimtest'));
-    container1.remove();
-    container2.remove();
+  let container = parent.querySelector(':scope > #estimtest-container');
+  let content = parent.querySelector(':scope > #estimtest-container > #estimtest-content');
+  if (content) {
+    transferChildren(content, hostElement.parentElement, (node) => node.id.startsWith('estimtest'));
+    container.remove();
   }
 };
 const performTest = (hostElement, test) => {
   resetTest(hostElement);
   // Create wrapper element
-  const container1 = document.createElement('div');
-  container1.id = 'estimtest-container-1';
-  hostElement.before(container1);
-  const container2 = document.createElement('div');
-  container2.id = 'estimtest-container-2';
-  container1.appendChild(container2);
-  const container3 = document.createElement('object');
-  container3.id = 'estimtest-container 3';
-  container2.appendChild(container3);
-  transferChildren(hostElement.parentElement, container3, (node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE');
+  const container = document.createElement('div');
+  container.id = 'estimtest-container';
+  hostElement.before(container);
+  const content = document.createElement('div');
+  content.id = 'estimtest-content';
+  container.appendChild(content);
+  // Add svg filters too
+  const svgFilters = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgFilters.id = 'estimtest-svg-filters';
+  svgFilters.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  svgFilters.setAttribute('height', '0');
+  svgFilters.setAttribute('width', '0');
+  container.appendChild(svgFilters);
+  transferChildren(hostElement.parentElement, content, (node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE');
+  const elements = {
+    container: container,
+    content: content,
+    svgFilters: svgFilters,
+  };
+  console.log(test);
   if (test.fontSize !== undefined)
-    activateFontSize(container2, test);
-  if (test.width !== undefined)
-    activateWidth(container2, test);
-  if (test.height !== undefined)
-    activateHeight(container2, test);
+    activateFontSize(elements, test);
   if (test.keyboardOnly === true)
-    activateKeyboardOnly(container2);
+    activateKeyboardOnly(elements);
+  if (test.colorBlind !== undefined)
+    activateColorBlind(elements, test);
 };
 
 function isContainer(node) {
