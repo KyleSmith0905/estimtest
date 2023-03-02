@@ -1,7 +1,7 @@
 import { EstimtestTest } from './tests';
 
 interface EstimtestConfig {
-	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'width' | 'height' | 'keyboardOnly'>[];
+	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'colorBlind' | 'keyboardOnly'>[];
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {
@@ -13,10 +13,14 @@ const defaultEstimtestConfig: EstimtestConfig = {
 			fontSize: 24,
 		},
 		{
-			name: 'Mobile Screen Size',
-			description: 'Most people who surf the internet are on a mobile phone. It is important to accommodate small screen sizes to maintain a positive impression on users.',
-			width: 320,
-			height: 480,
+			name: 'Deuteranomaly Color Blind',
+			description: 'Deuteranomaly color blindness effects around 5% of men. People with Deuteranomaly often have difficulty distinguishing red and green colors.',
+			colorBlind: 'deuteranomaly',
+		},
+		{
+			name: 'Deuteranomaly Color Blind',
+			description: 'Deuteranomaly color blindness effects around 5% of men. People with Deuteranomaly often have difficulty distinguishing red and green colors.',
+			colorBlind: 'deuteranomaly',
 		},
 		{
 			name: 'Keyboard Navigation',

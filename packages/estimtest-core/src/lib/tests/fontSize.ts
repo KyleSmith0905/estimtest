@@ -1,7 +1,7 @@
-import { EstimtestTest } from '.';
+import { EstimtestTest, EstimtestWrapper } from '.';
 
-const activateFontSize = (element: HTMLElement, test: EstimtestTest) => {
-	element.style.setProperty('font-size', `${test.fontSize}px`);
+const activateFontSize = (wrapper: EstimtestWrapper, test: EstimtestTest) => {
+	wrapper.content.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
 export { activateFontSize };

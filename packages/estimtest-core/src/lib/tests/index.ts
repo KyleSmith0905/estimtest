@@ -1,8 +1,14 @@
 import { transferChildren } from '../dom';
+import { activateColorBlind } from './colorBlind';
 import { activateFontSize } from './fontSize';
-import { activateHeight } from './height';
 import { activateKeyboardOnly } from './keyboardOnly';
-import { activateWidth } from './width';
+
+type ColorBlindMatrix = [[number, number, number], [number, number, number], [number, number, number]];
+type ColorBlind = (
+	'protanopia' | 'protanomaly' |	'deuteranopia' | 'deuteranomaly'
+	| 'tritanopia' |	'tritanomaly' | 'achromatopsia' | 'achromatomaly'
+	| ColorBlindMatrix
+)
 
 interface EstimtestTest {
   name: string,
@@ -12,25 +18,28 @@ interface EstimtestTest {
   notes?: string,
   // Test options
   fontSize?: number,
-  width?: number,
-  height?: number,
+  colorBlind?: ColorBlind,
   keyboardOnly?: boolean,
+}
+
+interface EstimtestWrapper {
+  container: HTMLDivElement,
+  content: HTMLDivElement,
 }
 
 const resetTest = (hostElement: HTMLElement) => {
 	const parent = hostElement.parentElement;
-	let container1 = parent.querySelector(':scope > #estimtest-container-1');
-	let container2 = parent.querySelector<HTMLElement>(':scope > #estimtest-container-1 > #estimtest-container-2');
+	let container = parent.querySelector(':scope > #estimtest-container');
+	let content = parent.querySelector<HTMLElement>(':scope > #estimtest-container > #estimtest-content');
 
-	if (container2) {
+	if (content) {
 		transferChildren(
-			container2,
+			content,
 			hostElement.parentElement,
 			(node) => node.id.startsWith('estimtest'),
 		);
     
-		container1.remove();
-		container2.remove();
+		container.remove();
 	}
 };
 
@@ -38,28 +47,30 @@ const performTest = (hostElement: HTMLElement, test: EstimtestTest) => {
 	resetTest(hostElement);
 
 	// Create wrapper element
-	const container1 = document.createElement('div');
-	container1.id = 'estimtest-container-1';
-	hostElement.before(container1);
-	const container2 = document.createElement('div');
-	container2.id = 'estimtest-container-2';
-	container1.appendChild(container2);
-
-	const container3 = document.createElement('object');
-	container3.id = 'estimtest-container 3';
-	container2.appendChild(container3);
+	const container = document.createElement('div');
+	container.id = 'estimtest-container';
+	hostElement.before(container);
+	const content = document.createElement('div');
+	content.id = 'estimtest-content';
+	container.appendChild(content);
 
 	transferChildren(
 		hostElement.parentElement,
-		container3,
+		content,
 		(node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE',
 	);
 
-	if (test.fontSize !== undefined) activateFontSize(container2, test);
-	if (test.width !== undefined) activateWidth(container2, test);
-	if (test.height !== undefined) activateHeight(container2, test);
-	if (test.keyboardOnly === true) activateKeyboardOnly(container2, test);
+	const elements: EstimtestWrapper = {
+		container: container,
+		content: content,
+	};
+
+	console.log(test);
+
+	if (test.fontSize !== undefined) activateFontSize(elements, test);
+	if (test.keyboardOnly === true) activateKeyboardOnly(elements, test);
+	if (test.colorBlind !== undefined) activateColorBlind(elements, test);
 };
 
-export type { EstimtestTest };
+export type { EstimtestTest, EstimtestWrapper, ColorBlind, ColorBlindMatrix };
 export { resetTest, performTest };

@@ -1,7 +1,7 @@
-import { EstimtestTest } from '.';
+import { EstimtestTest, EstimtestWrapper } from '.';
 
-const activateKeyboardOnly = (element: HTMLElement, _: EstimtestTest) => {
-	element.style.setProperty('pointer-events', 'none');
+const activateKeyboardOnly = (wrapper: EstimtestWrapper, _: EstimtestTest) => {
+	wrapper.content.style.setProperty('pointer-events', 'none');
 };
 
 export { activateKeyboardOnly };
