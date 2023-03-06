@@ -1,5 +1,3 @@
-'use client';
-
 import { EstimtestCore, defineCustomElements } from 'estimtest-react';
 import './globals.css';
 
@@ -19,17 +17,13 @@ export default function RootLayout({
       <head />
       <body>
         {children}
-        <EstimtestCore
-          config={JSON.stringify({
-            tests: [
-              {
-                name: 'Large Font Size',
-                fontSize: 24,
-              }
-            ],
-          })}
-          active={true}
-        />
+        {window && 
+          <EstimtestCore
+            active={true}
+            // full-screen is a css class defined in `index.css`
+            className='full-screen'
+          />
+        }
       </body>
     </html>
   )

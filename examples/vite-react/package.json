@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:estimtest": "vite --mode estimtest",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
