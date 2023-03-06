@@ -5,12 +5,15 @@ const autoResizeTextarea = async (element?: HTMLTextAreaElement) => {
 		// Wait an event loop until it's hydrated fully
 		if (element.scrollHeight === 0) await sleep();
 
+		// Account for padding on the textarea
 		const paddingTop = parseFloat(
 			getComputedStyle(element).paddingTop.replace(/\p\x/g, '')
 		);
 		const paddingBottom = parseFloat(
 			getComputedStyle(element).paddingBottom.replace(/\p\x/g, '')
 		);
+
+		// Resets scroll height to zero to have text dictate it
 		element.style.setProperty('height', '0px');
 		element.style.setProperty(
 			'height',

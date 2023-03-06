@@ -7,12 +7,13 @@ import {
 	State,
 	Watch,
 	Element,
+	Method,
 } from '@stencil/core';
-import { defaultEstimtestConfig, EstimtestConfig } from '../lib/config';
-import { EstimtestTest, performTest, resetTest } from '../lib/tests';
+import { defaultEstimtestConfig, EstimtestConfig } from '../../lib/config';
+import { EstimtestTest, performTest, resetTest } from '../../lib/experiments';
 import { HtmlRenderer, Parser } from 'commonmark';
-import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../lib/dom';
-import { ChevronIcon, CloseIcon, EstimtestLogo } from './icons';
+import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../../lib/dom';
+import { ChevronIcon, CloseIcon, EstimtestLogo } from '../icons';
 
 @Component({
 	tag: 'estimtest-core',
@@ -21,8 +22,9 @@ import { ChevronIcon, CloseIcon, EstimtestLogo } from './icons';
 })
 export class Estimtest {
 	/**
-	 * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and
-	 * `Mobile Screen Size` test. This field accepts an array of objects each with the properties:
+	 * The experiments to be performed on the app. This is set by default to perform a
+	 * `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each
+	 * with the properties:
 	 *
 	 * `name` A quick ~15 letters title summarizing the test\
 	 * `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\
@@ -30,7 +32,7 @@ export class Estimtest {
 	 * `width` The width to set the page.\
 	 * `height` The height to set the page.
 	 */
-	@Prop() tests?: EstimtestConfig['tests'];
+	@Prop() experiments?: EstimtestConfig['experiments'];
 
 	/**
 	 * Whether to show the testing prompt on the bottom of the screen. Set this value to `false` to
@@ -44,8 +46,6 @@ export class Estimtest {
 	@State() activeConfig?: EstimtestConfig = defaultEstimtestConfig;
 
 	@State() activeTest?: EstimtestTest;
-
-	@State() testFeedbackElement?: HTMLTextAreaElement;
 
 	@State() expandedTestActive?: boolean;
 
@@ -63,45 +63,57 @@ export class Estimtest {
 
 	@Element() hostElement: HTMLEstimtestCoreElement;
 
-	@Watch('tests')
+	private testFeedbackElement?: HTMLTextAreaElement;
+
+	@Watch('experiments')
 	watchConfigHandler() {
 		this.updateConfig();
 	}
 
 	@Watch('activeTest')
-	@Watch('testFeedbackElement')
 	watchActiveTestHandler() {
 		autoResizeTextarea(this.testFeedbackElement);
 	}
 
-	componentDidUpdate() {
-		if (this.status === 'active') {
-		}
-	}
-
-	componentDidLoad() {
+	componentWillLoad() {
 		if (this.active) {
-			this.promptBeginTests();
+			this.promptBeginExperiments();
 		}
 	}
 
-	private promptBeginTests() {
+	/**
+	 * Provides the prompt to begin or restart experiments. This activates and resets the experiments
+	 * as well.
+	 */
+	@Method()
+	public async promptBeginExperiments() {
+		resetTest(this.hostElement);
 		this.status = 'prompted';
 	}
 
-	private startTests() {
+	/**
+	 * Starts the experiments using the config sent to this method.
+	 * This does not need to be manually implemented, the UI elements perform the same event.
+	 */
+	@Method()
+	public async startExperiments(config?: EstimtestConfig) {
 		this.testResults = [];
-		this.updateConfig();
+		this.updateConfig(config);
 		this.activeTest = {
 			index: 0,
-			...this.activeConfig.tests[0],
+			...this.activeConfig.experiments[0],
 		};
 		this.status = 'active';
 
 		performTest(this.hostElement, this.activeTest);
 	}
 
-	private nextTest(results: 'fail' | 'pass') {
+	/**
+	 * Progress to the next test in the config.
+	 * This does not need to be manually implemented, the UI elements perform the same event.
+	 */
+	@Method()
+	public async nextExperiment(results: 'fail' | 'pass') {
 		this.testResults.push({
 			results: results,
 			notes: this.activeTest.notes,
@@ -110,37 +122,43 @@ export class Estimtest {
 
 		this.activeTest.notes = '';
 
+
 		const nextIndex = this.activeTest.index + 1;
-		if (nextIndex >= this.activeConfig.tests.length) {
-			this.finishTests();
+		if (nextIndex >= this.activeConfig.experiments.length) {
+			this.finishExperiments();
 		}
 
 		this.activeTest = {
 			index: nextIndex,
-			...this.activeConfig.tests[nextIndex],
+			...this.activeConfig.experiments[nextIndex],
 		};
 
 		performTest(this.hostElement, this.activeTest);
 	}
 
-	private finishTests() {
+	private finishExperiments() {
 		this.status = 'finished';
 		resetTest(this.hostElement);
 	}
 
-	private updateConfig() {
+	private updateConfig(config?: EstimtestConfig) {
 		// Warn user that the estimtest config could not be changed during testing.
 		if (this.status === 'active') {
 			this.errorHandler(
 				'The configuration file could not be changed during active testing.'
 			);
 		}
-		this.activeConfig = defaultEstimtestConfig;
-
-		if (this.tests !== undefined) this.activeConfig.tests = this.tests;
+		else if (config) {
+			this.activeConfig = config;
+		}
+		else {
+			this.activeConfig = defaultEstimtestConfig;
+	
+			if (this.experiments !== undefined) this.activeConfig.experiments = this.experiments;
+		}
 	}
 
-	private toggleTestDetails(test?: EstimtestTest) {
+	private async toggleTestDetails(test?: EstimtestTest) {
 		this.expandedTestActive = !this.expandedTestActive;
 		if (this.expandedTestActive) {
 			this.expandedTest = test ?? this.activeTest;
@@ -153,7 +171,6 @@ export class Estimtest {
 	}
 
 	private exportResults() {
-		console.log(this.testResults);
 		this.exportedResultsActive = true;
 		this.exportedResults = JSON.stringify(this.testResults, null, 2);
 	}
@@ -189,8 +206,9 @@ export class Estimtest {
 							</div>
 						))}
 					</div>
-					{/* A box that prompts the user for to begin the tests */}
+					{/* A box that prompts the user for to begin the experiments */}
 					<div
+						data-test="prompt-box"
 						class={{
 							'absolute-bottom box will-animate-blur': true,
 							'animate-blur': this.status === 'prompted',
@@ -199,13 +217,14 @@ export class Estimtest {
 					>
 						<div class='flex-row'>
 							<EstimtestLogo />
-							<button class='button' onClick={() => this.startTests()}>
+							<button class='button' onClick={() => this.startExperiments()}>
 								Start Testing
 							</button>
 						</div>
 					</div>
 					{/* A box that shows the currently active test status */}
 					<div
+						data-test="test-box"
 						class={{
 							'absolute-bottom box will-animate-blur': true,
 							'animate-blur': this.status === 'active',
@@ -216,7 +235,7 @@ export class Estimtest {
 							<div class='flex-row'>
 								<p class='title'>{this.activeTest?.name ?? ''}</p>
 								<p class='caption'>
-									{this.activeTest?.index + 1}/{this.activeConfig?.tests.length}
+									{this.activeTest?.index + 1}/{this.activeConfig?.experiments.length}
 								</p>
 								<button onClick={() => this.toggleTestDetails()} class='button'>
 									<ChevronIcon
@@ -228,7 +247,7 @@ export class Estimtest {
 								<textarea
 									class='auto-resize-textarea button'
 									value={this.activeTest?.notes}
-									ref={(el) => (this.testFeedbackElement = el)}
+									ref={(el) => this.testFeedbackElement = el}
 									onChange={(event) =>
 										(this.activeTest = {
 											...this.activeTest,
@@ -242,10 +261,10 @@ export class Estimtest {
 										})
 									}
 								/>
-								<button class='button' onClick={() => this.nextTest('pass')}>
+								<button class='button' onClick={() => this.nextExperiment('pass')}>
 									Pass
 								</button>
-								<button class='button' onClick={() => this.nextTest('fail')}>
+								<button class='button' onClick={() => this.nextExperiment('fail')}>
 									Fail
 								</button>
 							</div>
@@ -253,6 +272,7 @@ export class Estimtest {
 					</div>
 					{/* A box that shows the test results */}
 					<div
+						data-test="finish-box"
 						class={{
 							'absolute-center box will-animate-blur': true,
 							'animate-blur': this.status === 'finished',
@@ -287,7 +307,7 @@ export class Estimtest {
 								<button onClick={() => this.exportResults()} class='button'>
 									Export Results
 								</button>
-								<button onClick={() => this.promptBeginTests()} class='button'>
+								<button onClick={() => this.promptBeginExperiments()} class='button'>
 									Start Another Test
 								</button>
 							</div>
@@ -295,6 +315,7 @@ export class Estimtest {
 					</div>
 					{/* A box that contains additional info about the test */}
 					<div
+						data-test="details-box"
 						class={{
 							'absolute-center box will-animate-blur': true,
 							'animate-blur': this.expandedTestActive,

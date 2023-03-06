@@ -36,7 +36,7 @@ const resetTest = (hostElement: HTMLElement) => {
 		transferChildren(
 			content,
 			hostElement.parentElement,
-			(node) => node.id.startsWith('estimtest'),
+			(node) => node.id?.startsWith('estimtest'),
 		);
     
 		container.remove();
@@ -57,15 +57,13 @@ const performTest = (hostElement: HTMLElement, test: EstimtestTest) => {
 	transferChildren(
 		hostElement.parentElement,
 		content,
-		(node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE',
+		(node) => node.id?.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE',
 	);
 
 	const elements: EstimtestWrapper = {
 		container: container,
 		content: content,
 	};
-
-	console.log(test);
 
 	if (test.fontSize !== undefined) activateFontSize(elements, test);
 	if (test.keyboardOnly === true) activateKeyboardOnly(elements, test);

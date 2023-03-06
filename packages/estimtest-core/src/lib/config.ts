@@ -1,21 +1,16 @@
-import { EstimtestTest } from './tests';
+import { EstimtestTest } from './experiments';
 
 interface EstimtestConfig {
-	tests: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'colorBlind' | 'keyboardOnly'>[];
+	experiments: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'colorBlind' | 'keyboardOnly'>[];
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {
-	tests: [
+	experiments: [
 		{
 			name: 'Large Font Size',
 			description:
 				'Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser\'s font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.',
 			fontSize: 24,
-		},
-		{
-			name: 'Deuteranomaly Color Blind',
-			description: 'Deuteranomaly color blindness effects around 5% of men. People with Deuteranomaly often have difficulty distinguishing red and green colors.',
-			colorBlind: 'deuteranomaly',
 		},
 		{
 			name: 'Deuteranomaly Color Blind',

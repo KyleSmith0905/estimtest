@@ -13,9 +13,21 @@ export namespace Components {
          */
         "active"?: boolean;
         /**
-          * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each with the properties:  `name` A quick ~15 letters title summarizing the test\ `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\ `fontSize` The font size to set the page.\ `width` The width to set the page.\ `height` The height to set the page.
+          * The experiments to be performed on the app. This is set by default to perform a `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each with the properties:  `name` A quick ~15 letters title summarizing the test\ `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\ `fontSize` The font size to set the page.\ `width` The width to set the page.\ `height` The height to set the page.
          */
-        "tests"?: EstimtestConfig['tests'];
+        "experiments"?: EstimtestConfig['experiments'];
+        /**
+          * Progress to the next test in the config. This does not need to be manually implemented, the UI elements perform the same event.
+         */
+        "nextExperiment": (results: 'fail' | 'pass') => Promise<void>;
+        /**
+          * Provides the prompt to begin or restart experiments. This activates and resets the experiments as well.
+         */
+        "promptBeginExperiments": () => Promise<void>;
+        /**
+          * Starts the experiments using the config sent to this method. This does not need to be manually implemented, the UI elements perform the same event.
+         */
+        "startExperiments": (config?: EstimtestConfig) => Promise<void>;
     }
 }
 declare global {
@@ -36,9 +48,9 @@ declare namespace LocalJSX {
          */
         "active"?: boolean;
         /**
-          * The tests to be performed on the app. This is set by default to perform a `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each with the properties:  `name` A quick ~15 letters title summarizing the test\ `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\ `fontSize` The font size to set the page.\ `width` The width to set the page.\ `height` The height to set the page.
+          * The experiments to be performed on the app. This is set by default to perform a `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each with the properties:  `name` A quick ~15 letters title summarizing the test\ `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\ `fontSize` The font size to set the page.\ `width` The width to set the page.\ `height` The height to set the page.
          */
-        "tests"?: EstimtestConfig['tests'];
+        "experiments"?: EstimtestConfig['experiments'];
     }
     interface IntrinsicElements {
         "estimtest-core": EstimtestCore;
