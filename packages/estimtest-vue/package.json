@@ -1,0 +1,23 @@
+{
+  "name": "estimtest-vue",
+  "description": "Manually test your website under a variety of conditions.",
+  "version": "1.0.0",
+  "author": "KyleSmith0905",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "npm run tsc",
+    "tsc": "tsc -p ."
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "estimtest-core": "link:..\\estimtest-core"
+  },
+  "devDependencies": {
+    "vue": "^3.2.47"
+  }
+}
