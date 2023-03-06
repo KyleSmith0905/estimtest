@@ -6,6 +6,7 @@ specifiers:
   '@stencil/core': ^2.22.2
   '@stencil/react-output-target': ^0.3.1
   '@stencil/sass': 3.0.0-0
+  '@stencil/vue-output-target': ^0.7.0
   '@types/commonmark': ^0.27.5
   '@types/jest': ^27.5.1
   '@types/node': ^18.14.0
@@ -33,6 +34,7 @@ devDependencies:
   '@stencil/angular-output-target': 0.5.0_@stencil+core@2.22.2
   '@stencil/core': 2.22.2
   '@stencil/react-output-target': 0.3.1_@stencil+core@2.22.2
+  '@stencil/vue-output-target': 0.7.0_@stencil+core@2.22.2
   '@types/jest': 27.5.1
   '@types/node': 18.14.5
   eslint: 8.35.0
@@ -733,6 +735,14 @@ packages:
     dependencies:
       '@stencil/core': 2.22.2
     dev: false
+
+  /@stencil/vue-output-target/0.7.0_@stencil+core@2.22.2:
+    resolution: {integrity: sha512-iPEgnT2z6HsfWVRWVZk5C1AaMZnbJjB+c/hvtWoO7B3aErTJB8Up6oFk/t3IRsr12aNuZ4fUra0FEDx9WweH0Q==}
+    peerDependencies:
+      '@stencil/core': ^2.9.0 || ^3.0.0-beta.0
+    dependencies:
+      '@stencil/core': 2.22.2
+    dev: true
 
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}

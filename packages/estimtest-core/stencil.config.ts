@@ -1,6 +1,7 @@
 import { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
 import { angularOutputTarget } from '@stencil/angular-output-target';
+import { vueOutputTarget } from '@stencil/vue-output-target';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
@@ -20,6 +21,10 @@ export const config: Config = {
 			componentCorePackage: 'estimtest-core',
 			directivesProxyFile: '../estimtest-angular/src/directives/components.ts',
 			directivesArrayFile: '../estimtest-angular/src/directives/index.ts',
+		}),
+		vueOutputTarget({
+			componentCorePackage: 'estimtest-core',
+			proxiesFile: '../estimtest-vue/src/components.ts',
 		}),
 		{
 			type: 'dist-custom-elements',

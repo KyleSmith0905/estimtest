@@ -124,7 +124,6 @@ const resetTest = (hostElement) => {
   }
 };
 const performTest = (hostElement, test) => {
-  console.log('perform test');
   resetTest(hostElement);
   // Create wrapper element
   const container = document.createElement('div');
@@ -141,12 +140,10 @@ const performTest = (hostElement, test) => {
   if (test.fontSize !== undefined)
     activateFontSize(elements, test);
   if (test.keyboardOnly === true)
-    activateKeyboardOnly(elements, test);
+    activateKeyboardOnly(elements);
   if (test.colorBlind !== undefined)
     activateColorBlind(elements, test);
 };
-
-"use strict";
 
 function isContainer(node) {
     switch (node._type) {
@@ -475,9 +472,6 @@ Node.prototype.walker = function() {
 
  */
 
-'use strict';
-
-
 var encodeCache = {};
 
 
@@ -516,14 +510,14 @@ function getEncodeCache(exclude) {
 //  - exclude      - list of characters to ignore (in addition to a-zA-Z0-9)
 //  - keepEscaped  - don't encode '%' in a correct escape sequence (default: true)
 //
-function encode$2(string, exclude, keepEscaped) {
+function encode$1(string, exclude, keepEscaped) {
   var i, l, code, nextCode, cache,
       result = '';
 
   if (typeof exclude !== 'string') {
     // encode(string, keepEscaped)
     keepEscaped  = exclude;
-    exclude = encode$2.defaultChars;
+    exclude = encode$1.defaultChars;
   }
 
   if (typeof keepEscaped === 'undefined') {
@@ -567,49 +561,22 @@ function encode$2(string, exclude, keepEscaped) {
   return result;
 }
 
-encode$2.defaultChars   = ";/?:@&=+$,-_.!~*'()#";
-encode$2.componentChars = "-_.!~*'()";
+encode$1.defaultChars   = ";/?:@&=+$,-_.!~*'()#";
+encode$1.componentChars = "-_.!~*'()";
 
 
-var encode_1 = encode$2;
+var encode_1 = encode$1;
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function getDefaultExportFromCjs (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
 
 function createCommonjsModule(fn, basedir, module) {
 	return module = {
 		path: basedir,
 		exports: {},
 		require: function (path, base) {
-			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+			return commonjsRequire();
 		}
 	}, fn(module, module.exports), module.exports;
-}
-
-function getDefaultExportFromNamespaceIfPresent (n) {
-	return n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;
-}
-
-function getDefaultExportFromNamespaceIfNotNamed (n) {
-	return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
-}
-
-function getAugmentedNamespace(n) {
-	if (n.__esModule) return n;
-	var a = Object.defineProperty({}, '__esModule', {value: true});
-	Object.keys(n).forEach(function (k) {
-		var d = Object.getOwnPropertyDescriptor(n, k);
-		Object.defineProperty(a, k, d.get ? d : {
-			enumerable: true,
-			get: function () {
-				return n[k];
-			}
-		});
-	});
-	return a;
 }
 
 function commonjsRequire () {
@@ -5127,7 +5094,6 @@ const require$$0 = {
 };
 
 var decode_codepoint = createCommonjsModule(function (module, exports) {
-"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5153,10 +5119,7 @@ function decodeCodePoint(codePoint) {
 exports.default = decodeCodePoint;
 });
 
-const decode_codepoint$1 = /*@__PURE__*/getDefaultExportFromCjs(decode_codepoint);
-
 var decode = createCommonjsModule(function (module, exports) {
-"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5212,10 +5175,7 @@ function getReplacer(map) {
 }
 });
 
-const decode$1 = /*@__PURE__*/getDefaultExportFromCjs(decode);
-
 var encode = createCommonjsModule(function (module, exports) {
-"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5290,10 +5250,7 @@ function escape(data) {
 exports.escape = escape;
 });
 
-const encode$1 = /*@__PURE__*/getDefaultExportFromCjs(encode);
-
 var lib = createCommonjsModule(function (module, exports) {
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.encode = exports.decodeStrict = exports.decode = void 0;
 
@@ -5346,10 +5303,6 @@ Object.defineProperty(exports, "decodeHTML4Strict", { enumerable: true, get: fun
 Object.defineProperty(exports, "decodeHTML5Strict", { enumerable: true, get: function () { return decode_2.decodeHTMLStrict; } });
 Object.defineProperty(exports, "decodeXMLStrict", { enumerable: true, get: function () { return decode_2.decodeXML; } });
 });
-
-const index = /*@__PURE__*/getDefaultExportFromCjs(lib);
-
-"use strict";
 
 var C_BACKSLASH$1 = 92;
 
@@ -5450,8 +5403,6 @@ var escapeXml = function(s) {
     }
 };
 
-"use strict";
-
 // derived from https://github.com/mathiasbynens/String.fromCodePoint
 /*! http://mths.be/fromcodepoint v0.2.1 by @mathias */
 
@@ -5519,7 +5470,6 @@ if (String.fromCodePoint) {
 /*! http://mths.be/repeat v0.2.0 by @mathias */
 if (!String.prototype.repeat) {
 	(function() {
-		'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
 		var defineProperty = (function() {
 			// IE 8 only supports `Object.defineProperty` on DOM elements
 			try {
@@ -5566,8 +5516,6 @@ if (!String.prototype.repeat) {
 		}
 	}());
 }
-
-"use strict";
 
 var normalizeURI = normalizeURI$1;
 var unescapeString = unescapeString$1;
@@ -6588,8 +6536,6 @@ function InlineParser(options) {
     };
 }
 
-"use strict";
-
 var CODE_INDENT = 4;
 
 var C_TAB = 9;
@@ -7593,8 +7539,6 @@ function Parser(options) {
     };
 }
 
-"use strict";
-
 function Renderer() {}
 
 /**
@@ -7666,8 +7610,6 @@ Renderer.prototype.out = out$2;
 Renderer.prototype.lit = lit;
 Renderer.prototype.cr = cr$1;
 Renderer.prototype.esc = esc;
-
-"use strict";
 
 var reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
 var reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
@@ -7961,8 +7903,6 @@ HtmlRenderer.prototype.out = out$1;
 HtmlRenderer.prototype.tag = tag$1;
 HtmlRenderer.prototype.attrs = attrs;
 
-"use strict";
-
 var reXMLTag = /\<[^>]*\>/;
 
 function toTagName(s) {
@@ -8068,8 +8008,6 @@ function render(ast) {
                     attrs.push(["on_enter", node.onEnter]);
                     attrs.push(["on_exit", node.onExit]);
                     break;
-                default:
-                    break;
             }
             if (options.sourcepos) {
                 var pos = node.sourcepos;
@@ -8156,8 +8094,6 @@ XmlRenderer.prototype.out = out;
 XmlRenderer.prototype.cr = cr;
 XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
-
-"use strict";
 
 const EstimtestLogo = () => {
   return (h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' },
