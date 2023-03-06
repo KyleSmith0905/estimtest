@@ -23,7 +23,7 @@ export const config: Config = {
 		}),
 		{
 			type: 'dist-custom-elements',
-			dir: 'components'
+			dir: 'components',
 		},
 		{
 			type: 'dist',
@@ -37,10 +37,10 @@ export const config: Config = {
 			serviceWorker: null,
 		},
 	],
-	buildEs5: 'prod',
 	extras: {
 		initializeNextTick: true,
-		scriptDataOpts: true
+		scriptDataOpts: true,
+		experimentalImportInjection: false,
 	},
 	devServer: {
 		reloadStrategy: 'pageReload',

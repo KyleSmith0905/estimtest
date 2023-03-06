@@ -8,7 +8,8 @@ import { Components } from 'estimtest-core';
 
 
 @ProxyCmp({
-  inputs: ['active', 'tests']
+  inputs: ['active', 'tests'],
+  methods: ['startTests']
 })
 @Component({
   selector: 'estimtest-core',

@@ -1,7 +1,7 @@
 import { h, proxyCustomElement, HTMLElement as HTMLElement$1, Fragment, Host } from '@stencil/core/internal/client';
 
 const defaultEstimtestConfig = {
-  tests: [
+  experiments: [
     {
       name: 'Large Font Size',
       description: 'Many users have difficulty reading text at the default size. Users often solve this issue by increasing the browser\'s font size. To accommodate these users, it is suggested to use `rem` instead of `px` for `font-size`.',
@@ -42,8 +42,10 @@ const autoResizeTextarea = async (element) => {
     // Wait an event loop until it's hydrated fully
     if (element.scrollHeight === 0)
       await sleep();
+    // Account for padding on the textarea
     const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
     const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom.replace(/\p\x/g, ''));
+    // Resets scroll height to zero to have text dictate it
     element.style.setProperty('height', '0px');
     element.style.setProperty('height', `${element.scrollHeight - paddingTop - paddingBottom}px`);
   }
@@ -117,11 +119,12 @@ const resetTest = (hostElement) => {
   let container = parent.querySelector(':scope > #estimtest-container');
   let content = parent.querySelector(':scope > #estimtest-container > #estimtest-content');
   if (content) {
-    transferChildren(content, hostElement.parentElement, (node) => node.id.startsWith('estimtest'));
+    transferChildren(content, hostElement.parentElement, (node) => { var _a; return (_a = node.id) === null || _a === void 0 ? void 0 : _a.startsWith('estimtest'); });
     container.remove();
   }
 };
 const performTest = (hostElement, test) => {
+  console.log('perform test');
   resetTest(hostElement);
   // Create wrapper element
   const container = document.createElement('div');
@@ -130,27 +133,20 @@ const performTest = (hostElement, test) => {
   const content = document.createElement('div');
   content.id = 'estimtest-content';
   container.appendChild(content);
-  // Add svg filters too
-  const svgFilters = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svgFilters.id = 'estimtest-svg-filters';
-  svgFilters.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  svgFilters.setAttribute('height', '0');
-  svgFilters.setAttribute('width', '0');
-  container.appendChild(svgFilters);
-  transferChildren(hostElement.parentElement, content, (node) => node.id.startsWith('estimtest') || node.tagName === 'ESTIMTEST-CORE');
+  transferChildren(hostElement.parentElement, content, (node) => { var _a; return ((_a = node.id) === null || _a === void 0 ? void 0 : _a.startsWith('estimtest')) || node.tagName === 'ESTIMTEST-CORE'; });
   const elements = {
     container: container,
     content: content,
-    svgFilters: svgFilters,
   };
-  console.log(test);
   if (test.fontSize !== undefined)
     activateFontSize(elements, test);
   if (test.keyboardOnly === true)
-    activateKeyboardOnly(elements);
+    activateKeyboardOnly(elements, test);
   if (test.colorBlind !== undefined)
     activateColorBlind(elements, test);
 };
+
+"use strict";
 
 function isContainer(node) {
     switch (node._type) {
@@ -479,6 +475,9 @@ Node.prototype.walker = function() {
 
  */
 
+'use strict';
+
+
 var encodeCache = {};
 
 
@@ -517,14 +516,14 @@ function getEncodeCache(exclude) {
 //  - exclude      - list of characters to ignore (in addition to a-zA-Z0-9)
 //  - keepEscaped  - don't encode '%' in a correct escape sequence (default: true)
 //
-function encode$1(string, exclude, keepEscaped) {
+function encode$2(string, exclude, keepEscaped) {
   var i, l, code, nextCode, cache,
       result = '';
 
   if (typeof exclude !== 'string') {
     // encode(string, keepEscaped)
     keepEscaped  = exclude;
-    exclude = encode$1.defaultChars;
+    exclude = encode$2.defaultChars;
   }
 
   if (typeof keepEscaped === 'undefined') {
@@ -568,22 +567,49 @@ function encode$1(string, exclude, keepEscaped) {
   return result;
 }
 
-encode$1.defaultChars   = ";/?:@&=+$,-_.!~*'()#";
-encode$1.componentChars = "-_.!~*'()";
+encode$2.defaultChars   = ";/?:@&=+$,-_.!~*'()#";
+encode$2.componentChars = "-_.!~*'()";
 
 
-var encode_1 = encode$1;
+var encode_1 = encode$2;
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
 
 function createCommonjsModule(fn, basedir, module) {
 	return module = {
 		path: basedir,
 		exports: {},
 		require: function (path, base) {
-			return commonjsRequire();
+			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
 		}
 	}, fn(module, module.exports), module.exports;
+}
+
+function getDefaultExportFromNamespaceIfPresent (n) {
+	return n && Object.prototype.hasOwnProperty.call(n, 'default') ? n['default'] : n;
+}
+
+function getDefaultExportFromNamespaceIfNotNamed (n) {
+	return n && Object.prototype.hasOwnProperty.call(n, 'default') && Object.keys(n).length === 1 ? n['default'] : n;
+}
+
+function getAugmentedNamespace(n) {
+	if (n.__esModule) return n;
+	var a = Object.defineProperty({}, '__esModule', {value: true});
+	Object.keys(n).forEach(function (k) {
+		var d = Object.getOwnPropertyDescriptor(n, k);
+		Object.defineProperty(a, k, d.get ? d : {
+			enumerable: true,
+			get: function () {
+				return n[k];
+			}
+		});
+	});
+	return a;
 }
 
 function commonjsRequire () {
@@ -5101,6 +5127,7 @@ const require$$0 = {
 };
 
 var decode_codepoint = createCommonjsModule(function (module, exports) {
+"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5126,7 +5153,10 @@ function decodeCodePoint(codePoint) {
 exports.default = decodeCodePoint;
 });
 
+const decode_codepoint$1 = /*@__PURE__*/getDefaultExportFromCjs(decode_codepoint);
+
 var decode = createCommonjsModule(function (module, exports) {
+"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5182,7 +5212,10 @@ function getReplacer(map) {
 }
 });
 
+const decode$1 = /*@__PURE__*/getDefaultExportFromCjs(decode);
+
 var encode = createCommonjsModule(function (module, exports) {
+"use strict";
 var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -5257,7 +5290,10 @@ function escape(data) {
 exports.escape = escape;
 });
 
+const encode$1 = /*@__PURE__*/getDefaultExportFromCjs(encode);
+
 var lib = createCommonjsModule(function (module, exports) {
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.encode = exports.decodeStrict = exports.decode = void 0;
 
@@ -5310,6 +5346,10 @@ Object.defineProperty(exports, "decodeHTML4Strict", { enumerable: true, get: fun
 Object.defineProperty(exports, "decodeHTML5Strict", { enumerable: true, get: function () { return decode_2.decodeHTMLStrict; } });
 Object.defineProperty(exports, "decodeXMLStrict", { enumerable: true, get: function () { return decode_2.decodeXML; } });
 });
+
+const index = /*@__PURE__*/getDefaultExportFromCjs(lib);
+
+"use strict";
 
 var C_BACKSLASH$1 = 92;
 
@@ -5410,6 +5450,8 @@ var escapeXml = function(s) {
     }
 };
 
+"use strict";
+
 // derived from https://github.com/mathiasbynens/String.fromCodePoint
 /*! http://mths.be/fromcodepoint v0.2.1 by @mathias */
 
@@ -5477,6 +5519,7 @@ if (String.fromCodePoint) {
 /*! http://mths.be/repeat v0.2.0 by @mathias */
 if (!String.prototype.repeat) {
 	(function() {
+		'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
 		var defineProperty = (function() {
 			// IE 8 only supports `Object.defineProperty` on DOM elements
 			try {
@@ -5523,6 +5566,8 @@ if (!String.prototype.repeat) {
 		}
 	}());
 }
+
+"use strict";
 
 var normalizeURI = normalizeURI$1;
 var unescapeString = unescapeString$1;
@@ -6543,6 +6588,8 @@ function InlineParser(options) {
     };
 }
 
+"use strict";
+
 var CODE_INDENT = 4;
 
 var C_TAB = 9;
@@ -7546,6 +7593,8 @@ function Parser(options) {
     };
 }
 
+"use strict";
+
 function Renderer() {}
 
 /**
@@ -7617,6 +7666,8 @@ Renderer.prototype.out = out$2;
 Renderer.prototype.lit = lit;
 Renderer.prototype.cr = cr$1;
 Renderer.prototype.esc = esc;
+
+"use strict";
 
 var reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
 var reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
@@ -7910,6 +7961,8 @@ HtmlRenderer.prototype.out = out$1;
 HtmlRenderer.prototype.tag = tag$1;
 HtmlRenderer.prototype.attrs = attrs;
 
+"use strict";
+
 var reXMLTag = /\<[^>]*\>/;
 
 function toTagName(s) {
@@ -8015,6 +8068,8 @@ function render(ast) {
                     attrs.push(["on_enter", node.onEnter]);
                     attrs.push(["on_exit", node.onExit]);
                     break;
+                default:
+                    break;
             }
             if (options.sourcepos) {
                 var pos = node.sourcepos;
@@ -8102,6 +8157,8 @@ XmlRenderer.prototype.cr = cr;
 XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
 
+"use strict";
+
 const EstimtestLogo = () => {
   return (h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' },
     h("title", null, "Estimtest, a manual testing library"),
@@ -8120,19 +8177,18 @@ const ChevronIcon = ({ direction }) => {
     h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })));
 };
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;-webkit-transform:translateX(-50%) translateY(-50%);transform:translateX(-50%) translateY(-50%)}.flex-row{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;gap:0.8rem}.flex-column{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;gap:0.8rem}.upside-down{-webkit-transform:rotateZ(180deg);transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;-webkit-filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));-webkit-transition:-webkit-filter ease 250ms;transition:-webkit-filter ease 250ms;transition:filter ease 250ms;transition:filter ease 250ms, -webkit-filter ease 250ms}.clickable:hover{-webkit-filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem);filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;-webkit-filter:blur(16px);filter:blur(16px);pointer-events:none !important;-webkit-transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:opacity ease 300ms, -webkit-filter ease 300ms;transition:filter ease 300ms, opacity ease 300ms;transition:filter ease 300ms, opacity ease 300ms, -webkit-filter ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;-webkit-filter:blur(0px);filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem;z-index:1000}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:-webkit-fit-content;width:-moz-fit-content;width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));color:hsl(0, 0%, 100%);-webkit-box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:-ms-flexbox;display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);color:hsl(0, 0%, 100%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;transform:translateX(-50%) translateY(-50%)}.flex-row{display:flex;align-items:center;gap:0.8rem}.flex-column{display:flex;flex-direction:column;align-items:center;gap:0.8rem}.upside-down{transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));transition:filter ease 250ms}.clickable:hover{filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;filter:blur(16px);pointer-events:none !important;transition:filter ease 300ms, opacity ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem;z-index:1000}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));color:hsl(0, 0%, 100%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);color:hsl(0, 0%, 100%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
 
 const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   constructor() {
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.tests = undefined;
+    this.experiments = undefined;
     this.active = true;
     this.status = 'inactive';
     this.activeConfig = defaultEstimtestConfig;
     this.activeTest = undefined;
-    this.testFeedbackElement = undefined;
     this.expandedTestActive = undefined;
     this.expandedTest = undefined;
     this.testDetailsDescription = undefined;
@@ -8147,47 +8203,63 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   watchActiveTestHandler() {
     autoResizeTextarea(this.testFeedbackElement);
   }
-  componentDidUpdate() {
-  }
-  componentDidLoad() {
+  componentWillLoad() {
     if (this.active) {
-      this.promptBeginTests();
+      this.promptBeginExperiments();
     }
   }
-  promptBeginTests() {
+  /**
+   * Provides the prompt to begin or restart experiments. This activates and resets the experiments
+   * as well.
+   */
+  async promptBeginExperiments() {
+    resetTest(this.hostElement);
     this.status = 'prompted';
   }
-  startTests() {
+  /**
+   * Starts the experiments using the config sent to this method.
+   * This does not need to be manually implemented, the UI elements perform the same event.
+   */
+  async startExperiments(config) {
     this.testResults = [];
-    this.updateConfig();
-    this.activeTest = Object.assign({ index: 0 }, this.activeConfig.tests[0]);
+    this.updateConfig(config);
+    this.activeTest = Object.assign({ index: 0 }, this.activeConfig.experiments[0]);
     this.status = 'active';
     performTest(this.hostElement, this.activeTest);
   }
-  nextTest(results) {
+  /**
+   * Progress to the next test in the config.
+   * This does not need to be manually implemented, the UI elements perform the same event.
+   */
+  async nextExperiment(results) {
     this.testResults.push(Object.assign({ results: results, notes: this.activeTest.notes }, this.activeTest));
     this.activeTest.notes = '';
     const nextIndex = this.activeTest.index + 1;
-    if (nextIndex >= this.activeConfig.tests.length) {
-      this.finishTests();
+    if (nextIndex >= this.activeConfig.experiments.length) {
+      this.finishExperiments();
     }
-    this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.tests[nextIndex]);
+    this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.experiments[nextIndex]);
     performTest(this.hostElement, this.activeTest);
   }
-  finishTests() {
+  finishExperiments() {
     this.status = 'finished';
     resetTest(this.hostElement);
   }
-  updateConfig() {
+  updateConfig(config) {
     // Warn user that the estimtest config could not be changed during testing.
     if (this.status === 'active') {
       this.errorHandler('The configuration file could not be changed during active testing.');
     }
-    this.activeConfig = defaultEstimtestConfig;
-    if (this.tests !== undefined)
-      this.activeConfig.tests = this.tests;
+    else if (config) {
+      this.activeConfig = config;
+    }
+    else {
+      this.activeConfig = defaultEstimtestConfig;
+      if (this.experiments !== undefined)
+        this.activeConfig.experiments = this.experiments;
+    }
   }
-  toggleTestDetails(test) {
+  async toggleTestDetails(test) {
     this.expandedTestActive = !this.expandedTestActive;
     if (this.expandedTestActive) {
       this.expandedTest = test !== null && test !== void 0 ? test : this.activeTest;
@@ -8198,7 +8270,6 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     }
   }
   exportResults() {
-    console.log(this.testResults);
     this.exportedResultsActive = true;
     this.exportedResults = JSON.stringify(this.testResults, null, 2);
   }
@@ -8221,21 +8292,21 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
       return h(Fragment, null);
     else if (this.status === 'inactive')
       return h(Fragment, null);
-    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element, i) => (h("div", { key: i, class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), h("div", { class: {
+    return (h(Host, null, h("div", { class: 'full-screen' }, h("div", null, Object.values(this.errors).map((element, i) => (h("div", { key: i, class: 'absolute-top box' }, h("h2", { class: 'title' }, "Error"), h("p", null, element.message))))), h("div", { "data-test": "prompt-box", class: {
         'absolute-bottom box will-animate-blur': true,
         'animate-blur': this.status === 'prompted',
-      }, ref: conditionallySetInert(this.status === 'prompted') }, h("div", { class: 'flex-row' }, h(EstimtestLogo, null), h("button", { class: 'button', onClick: () => this.startTests() }, "Start Testing"))), h("div", { class: {
+      }, ref: conditionallySetInert(this.status === 'prompted') }, h("div", { class: 'flex-row' }, h(EstimtestLogo, null), h("button", { class: 'button', onClick: () => this.startExperiments() }, "Start Testing"))), h("div", { "data-test": "test-box", class: {
         'absolute-bottom box will-animate-blur': true,
         'animate-blur': this.status === 'active',
       }, ref: conditionallySetInert(this.status === 'active') }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("p", { class: 'title' }, (_b = (_a = this.activeTest) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : ''), h("p", { class: 'caption' }, ((_c = this.activeTest) === null || _c === void 0 ? void 0 : _c.index) + 1, "/", (_d = this.activeConfig) === null || _d === void 0 ? void 0 :
-      _d.tests.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h(ChevronIcon, { direction: this.expandedTestActive ? 'down' : 'up' }))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', value: (_e = this.activeTest) === null || _e === void 0 ? void 0 : _e.notes, ref: (el) => (this.testFeedbackElement = el), onChange: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })), onInput: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })) }), h("button", { class: 'button', onClick: () => this.nextTest('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextTest('fail') }, "Fail")))), h("div", { class: {
+      _d.experiments.length), h("button", { onClick: () => this.toggleTestDetails(), class: 'button' }, h(ChevronIcon, { direction: this.expandedTestActive ? 'down' : 'up' }))), h("div", { class: 'flex-row' }, h("textarea", { class: 'auto-resize-textarea button', value: (_e = this.activeTest) === null || _e === void 0 ? void 0 : _e.notes, ref: (el) => this.testFeedbackElement = el, onChange: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })), onInput: (event) => (this.activeTest = Object.assign(Object.assign({}, this.activeTest), { notes: getEventValue(event) })) }), h("button", { class: 'button', onClick: () => this.nextExperiment('pass') }, "Pass"), h("button", { class: 'button', onClick: () => this.nextExperiment('fail') }, "Fail")))), h("div", { "data-test": "finish-box", class: {
         'absolute-center box will-animate-blur': true,
         'animate-blur': this.status === 'finished',
       }, ref: conditionallySetInert(this.status === 'finished') }, h("div", { class: 'flex-column' }, h("h2", { class: 'title' }, "Estimtest Finished"), h("div", { class: 'flex-column results-grid' }, this.testResults.map((result) => (h("div", { class: `flex-row full-width ${result.results}` }, h("h3", { onClick: () => this.toggleTestDetails(result), class: 'title clickable' }, result.name), h("p", { class: 'paragraph', style: {
         opacity: result.notes === undefined ? '0.5' : '0.9',
       } }, result.notes === undefined
       ? 'No notes added'
-      : result.notes))))), h("div", { class: 'flex-row' }, h("button", { onClick: () => this.exportResults(), class: 'button' }, "Export Results"), h("button", { onClick: () => this.promptBeginTests(), class: 'button' }, "Start Another Test")))), h("div", { class: {
+      : result.notes))))), h("div", { class: 'flex-row' }, h("button", { onClick: () => this.exportResults(), class: 'button' }, "Export Results"), h("button", { onClick: () => this.promptBeginExperiments(), class: 'button' }, "Start Another Test")))), h("div", { "data-test": "details-box", class: {
         'absolute-center box will-animate-blur': true,
         'animate-blur': this.expandedTestActive,
       }, ref: conditionallySetInert(this.expandedTestActive) }, h("div", { class: 'flex-column' }, h("div", { class: 'flex-row' }, h("h2", { class: 'title' }, (_f = this.expandedTest) === null || _f === void 0 ? void 0 : _f.name), h("button", { class: 'button', onClick: () => this.toggleTestDetails() }, h(CloseIcon, null))), h("div", { class: 'paragraph', innerHTML: this.testDetailsDescription }))), h("div", { class: {
@@ -8245,25 +8316,26 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   }
   get hostElement() { return this; }
   static get watchers() { return {
-    "tests": ["watchConfigHandler"],
-    "activeTest": ["watchActiveTestHandler"],
-    "testFeedbackElement": ["watchActiveTestHandler"]
+    "experiments": ["watchConfigHandler"],
+    "activeTest": ["watchActiveTestHandler"]
   }; }
   static get style() { return coreCss; }
 }, [1, "estimtest-core", {
-    "tests": [16],
+    "experiments": [16],
     "active": [4],
     "status": [32],
     "activeConfig": [32],
     "activeTest": [32],
-    "testFeedbackElement": [32],
     "expandedTestActive": [32],
     "expandedTest": [32],
     "testDetailsDescription": [32],
     "testResults": [32],
     "exportedResultsActive": [32],
     "exportedResults": [32],
-    "errors": [32]
+    "errors": [32],
+    "promptBeginExperiments": [64],
+    "startExperiments": [64],
+    "nextExperiment": [64]
   }]);
 function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
