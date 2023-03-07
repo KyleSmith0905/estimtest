@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@rushstack/eslint-patch': ^1.2.0
   '@types/jsdom': ^21.1.0
-  '@types/node': ^18.14.2
+  '@types/node': ^18.14.6
   '@vitejs/plugin-vue': ^4.0.0
   '@vitejs/plugin-vue-jsx': ^3.0.0
   '@vue/eslint-config-prettier': ^7.1.0
