@@ -9,7 +9,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "lib": ["dom", "es2020"],
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
     "target": "es2017",
     "skipLibCheck": true

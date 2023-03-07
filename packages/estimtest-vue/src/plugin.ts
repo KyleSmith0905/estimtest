@@ -1,8 +1,8 @@
 import { Plugin } from 'vue';
-import { applyPolyfills, defineCustomElements } from 'estimtest-core/loader';
 
 export const EstimtestLibrary: Plugin = {
   async install() {
+    const { applyPolyfills, defineCustomElements } = await import('estimtest-core/loader');
     applyPolyfills().then(() => {
       defineCustomElements();
     });
