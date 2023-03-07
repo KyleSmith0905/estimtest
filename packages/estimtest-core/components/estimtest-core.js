@@ -66,7 +66,9 @@ const conditionallySetInert = (condition) => {
   };
 };
 const transferChildren = (oldParent, newParent, filter) => {
-  oldParent === null || oldParent === void 0 ? void 0 : oldParent.childNodes.forEach((node) => {
+  const nodes = [];
+  oldParent === null || oldParent === void 0 ? void 0 : oldParent.childNodes.forEach((e) => nodes.push(e));
+  nodes.forEach((node) => {
     if (filter(node))
       return;
     node.parentNode.removeChild(node);

@@ -42,7 +42,10 @@ const transferChildren = (
 	newParent: HTMLElement | ShadowRoot,
 	filter: (element: HTMLElement) => boolean
 ) => {
-	oldParent?.childNodes.forEach((node: HTMLElement) => {
+	const nodes: ChildNode[] = [];
+	oldParent?.childNodes.forEach((e) => nodes.push(e));
+
+	nodes.forEach((node: HTMLElement) => {
 		if (filter(node)) return;
 		node.parentNode.removeChild(node);
 		newParent.appendChild(node);
