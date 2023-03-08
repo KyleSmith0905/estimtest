@@ -5,8 +5,7 @@ All examples should have minimal editing applied from the default "getting start
 | Tools | Before Estimtest[^1] | After Estimtest[^1] |
 |---|---|
 | Angular | n/a |
-| Next JS | n/a |
 | Vite React | 53040B | 53545B |
-| Vite Vue | 112 Bytes | 109316B |
+| Vite Vue | 41200B | 41286B |
 
 [^1]: Size of application is measured by using Chrome's dev tools and see the amount of bytes transferred. Both builds were production. `Before Estimtest` sizes were measured by entirely removing estimtest from the project.
