@@ -31,15 +31,14 @@ export const config: Config = {
 			dir: 'components',
 		},
 		{
+			type: 'dist-hydrate-script',
+		},
+		{
 			type: 'dist',
 			esmLoaderPath: '../loader',
 		},
 		{
 			type: 'docs-readme',
-		},
-		{
-			type: 'www',
-			serviceWorker: null,
 		},
 	],
 	extras: {
