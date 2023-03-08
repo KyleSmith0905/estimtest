@@ -8142,7 +8142,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     autoResizeTextarea(this.testFeedbackElement);
   }
   componentWillLoad() {
-    if (this.active) {
+    if (this.active.toString() === 'true') {
       this.promptBeginExperiments();
     }
   }
@@ -8193,8 +8193,14 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     }
     else {
       this.activeConfig = defaultEstimtestConfig;
-      if (this.experiments !== undefined)
-        this.activeConfig.experiments = this.experiments;
+      if (this.experiments !== undefined) {
+        if (typeof this.experiments === 'string') {
+          this.activeConfig.experiments = JSON.parse(this.experiments);
+        }
+        else {
+          this.activeConfig.experiments = this.experiments;
+        }
+      }
     }
   }
   async toggleTestDetails(test) {
@@ -8226,7 +8232,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   }
   render() {
     var _a, _b, _c, _d, _e, _f;
-    if (!this.active)
+    if (this.active.toString() !== 'true')
       return h(Fragment, null);
     else if (this.status === 'inactive')
       return h(Fragment, null);
@@ -8259,8 +8265,8 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   }; }
   static get style() { return coreCss; }
 }, [1, "estimtest-core", {
-    "experiments": [16],
-    "active": [4],
+    "experiments": [1],
+    "active": [8],
     "status": [32],
     "activeConfig": [32],
     "activeTest": [32],

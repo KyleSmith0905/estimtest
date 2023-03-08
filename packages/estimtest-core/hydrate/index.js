@@ -4943,7 +4943,7 @@ function hydrateFactory($stencilWindow, $stencilHydrateOpts, $stencilHydrateResu
 
 
 const NAMESPACE = 'estimtest-core';
-const BUILD = /* estimtest-core */ { allRenderFn: true, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: false, cmpDidRender: false, cmpDidUnload: false, cmpDidUpdate: false, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: false, cmpWillUpdate: false, connectedCallback: false, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: false, dynamicImportShim: false, element: false, event: false, hasRenderFn: true, hostListener: false, hostListenerTarget: false, hostListenerTargetBody: false, hostListenerTargetDocument: false, hostListenerTargetParent: false, hostListenerTargetWindow: false, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: false, observeAttribute: true, profile: false, prop: true, propBoolean: true, propMutable: false, propNumber: false, propString: false, reflect: false, safari10: false, scoped: false, scriptDataOpts: false, shadowDelegatesFocus: false, shadowDom: true, shadowDomShim: true, slot: false, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: false, watchCallback: true };
+const BUILD = /* estimtest-core */ { allRenderFn: true, appendChildSlotFix: false, asyncLoading: true, attachStyles: true, cloneNodeFix: false, cmpDidLoad: false, cmpDidRender: false, cmpDidUnload: false, cmpDidUpdate: false, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: false, cmpWillUpdate: false, connectedCallback: false, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: false, disconnectedCallback: false, dynamicImportShim: false, element: false, event: false, hasRenderFn: true, hostListener: false, hostListenerTarget: false, hostListenerTargetBody: false, hostListenerTargetDocument: false, hostListenerTargetParent: false, hostListenerTargetWindow: false, hotModuleReplacement: false, hydrateClientSide: true, hydrateServerSide: true, hydratedAttribute: false, hydratedClass: true, isDebug: false, isDev: false, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: true, mode: false, observeAttribute: true, profile: false, prop: true, propBoolean: false, propMutable: false, propNumber: false, propString: true, reflect: false, safari10: false, scoped: false, scriptDataOpts: false, shadowDelegatesFocus: false, shadowDom: true, shadowDomShim: true, slot: false, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: true, taskQueue: true, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: false, watchCallback: true };
 
 function queryNonceMetaTagContent(e) {
  var t, o, n;
@@ -5230,7 +5230,7 @@ const createTime = (e, t = "") => {
   const o = e.nodeValue.split(".");
   "o" === o[0] && (t.set(o[1] + "." + o[2], e), e.nodeValue = "", e["s-en"] = o[3]);
  }
-}, parsePropertyValue = (e, t) => null == e || isComplexType(e) ? e : 4 & t ? "false" !== e && ("" === e || !!e) : e, getElement = e => getHostRef(e).$hostElement$ , emitEvent = (e, t, o) => {
+}, parsePropertyValue = (e, t) => null == e || isComplexType(e) ? e : 1 & t ? String(e) : e, getElement = e => getHostRef(e).$hostElement$ , emitEvent = (e, t, o) => {
  const n = plt.ce(t, o);
  return e.dispatchEvent(n), n;
 }, rootAppliedStyles = new WeakMap, registerStyle = (e, t, o) => {
@@ -13867,7 +13867,7 @@ class Estimtest {
     autoResizeTextarea(this.testFeedbackElement);
   }
   componentWillLoad() {
-    if (this.active) {
+    if (this.active.toString() === 'true') {
       this.promptBeginExperiments();
     }
   }
@@ -13918,8 +13918,14 @@ class Estimtest {
     }
     else {
       this.activeConfig = defaultEstimtestConfig;
-      if (this.experiments !== undefined)
-        this.activeConfig.experiments = this.experiments;
+      if (this.experiments !== undefined) {
+        if (typeof this.experiments === 'string') {
+          this.activeConfig.experiments = JSON.parse(this.experiments);
+        }
+        else {
+          this.activeConfig.experiments = this.experiments;
+        }
+      }
     }
   }
   async toggleTestDetails(test) {
@@ -13951,7 +13957,7 @@ class Estimtest {
   }
   render() {
     var _a, _b, _c, _d, _e, _f;
-    if (!this.active)
+    if (this.active.toString() !== 'true')
       return hAsync(Fragment, null);
     else if (this.status === 'inactive')
       return hAsync(Fragment, null);
@@ -13987,8 +13993,8 @@ class Estimtest {
     "$flags$": 9,
     "$tagName$": "estimtest-core",
     "$members$": {
-      "experiments": [16],
-      "active": [4],
+      "experiments": [1],
+      "active": [8],
       "status": [32],
       "activeConfig": [32],
       "activeTest": [32],

@@ -22,8 +22,8 @@ import { ChevronIcon, CloseIcon, EstimtestLogo } from '../icons';
 })
 export class Estimtest {
 	/**
-	 * The experiments to be performed on the app. This is set by default to perform a
-	 * `Large Font Size` and `Mobile Screen Size` test. This field accepts an array of objects each
+	 * The experiments to be performed on the app. This is set by default to perform multiple
+	 * standard tests. This field could also be a string. This field accepts an array of objects each
 	 * with the properties:
 	 *
 	 * `name` A quick ~15 letters title summarizing the test\
@@ -32,13 +32,13 @@ export class Estimtest {
 	 * `width` The width to set the page.\
 	 * `height` The height to set the page.
 	 */
-	@Prop() experiments?: EstimtestConfig['experiments'];
+	@Prop() experiments?: string | EstimtestConfig['experiments'];
 
 	/**
 	 * Whether to show the testing prompt on the bottom of the screen. Set this value to `false` to
 	 * no longer see the estimtest bar.
 	 */
-	@Prop() active?: boolean = true;
+	@Prop() active?: string | boolean = true;
 
 	@State() status: 'inactive' | 'prompted' | 'active' | 'finished' = 'inactive';
 
@@ -76,7 +76,7 @@ export class Estimtest {
 	}
 
 	componentWillLoad() {
-		if (this.active) {
+		if (this.active.toString() === 'true') {
 			this.promptBeginExperiments();
 		}
 	}
@@ -154,7 +154,14 @@ export class Estimtest {
 		else {
 			this.activeConfig = defaultEstimtestConfig;
 	
-			if (this.experiments !== undefined) this.activeConfig.experiments = this.experiments;
+			if (this.experiments !== undefined) {
+				if (typeof this.experiments === 'string') {
+					this.activeConfig.experiments = JSON.parse(this.experiments);
+				}
+				else {
+					this.activeConfig.experiments = this.experiments;
+				}
+			}
 		}
 	}
 
@@ -192,7 +199,7 @@ export class Estimtest {
 	}
 
 	render() {
-		if (!this.active) return <Fragment />;
+		if (this.active.toString() !== 'true') return <Fragment />;
 		else if (this.status === 'inactive') return <Fragment />;
 
 		return (
