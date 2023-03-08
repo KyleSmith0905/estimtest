@@ -6,11 +6,13 @@ import router from './router'
 
 import './assets/main.css'
 
-const app = createApp(App)
+const app = createApp(App);
 
+app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('estimtest')
 if (import.meta.env.VITE_ESTIMTEST === 'true') {
-  const { EstimtestLibrary } = require('estimtest-vue');
-  app.use(EstimtestLibrary);
+  import('estimtest-vue').then(({EstimtestLibrary}) => {
+    app.use(EstimtestLibrary);
+  });
 }
 app.use(createPinia())
 app.use(router)

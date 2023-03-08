@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-
 </script>
 
 <template>
@@ -19,7 +18,11 @@ import HelloWorld from './components/HelloWorld.vue'
   </header>
 
   <RouterView />
-  <estimtest-core class="full-screen" :active="true"/>
+  <estimtest-core
+    class="full-screen"
+    :active="true"
+    :experiments="JSON.stringify([{name: 'Hello World', description: 'hello', fontSize: 32}])"
+  />
 </template>
 
 <style scoped>
