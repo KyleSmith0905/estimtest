@@ -1,11 +1,24 @@
 {
   "name": "estimtest-angular",
-  "description": "Manually test your website under a variety of conditions.",
-  "version": "0.0.0",
-  "scripts": {
-    "build": "ng build estimtest-angular"
+  "description": "Manually experiment Angular websites under a variety of conditions. Easily correct accessibility issues by simulating common disorders.",
+  "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "angular", "angular component"],
+  "version": "1.0.0",
+  "bugs": {
+    "url": "https://github.com/KyleSmith0905/estimtest/issues",
+    "email": "me@yskkyle.com"
   },
-  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Kyle Smith",
+    "email": "me@yskkyle.com",
+    "url": "https://yskkyle.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleSmith0905/estimtest.git",
+    "directory": "packages/estimtest-angular"
+  },
+
   "es2020": "dist/fesm2020/estimtest-angular.mjs",
   "esm2020": "dist/esm2020/estimtest-angular.mjs",
   "fesm2020": "dist/fesm2020/estimtest-angular.mjs",
@@ -14,6 +27,11 @@
   "files": [
     "dist/"
   ],
+
+  "scripts": {
+    "build": "ng build estimtest-angular"
+  },
+
   "dependencies": {
     "estimtest-core": "link:..\\estimtest-core",
     "tslib": "^2.3.0"

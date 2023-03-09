@@ -1,19 +1,33 @@
 {
   "name": "estimtest-vue",
-  "description": "Manually test your website under a variety of conditions.",
+  "description": "Manually experiment Vue websites under a variety of conditions. Easily correct accessibility issues by simulating common disorders.",
+  "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "vue", "vue component"],
   "version": "1.0.0",
-  "author": "KyleSmith0905",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KyleSmith0905/estimtest/issues",
+    "email": "me@yskkyle.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kyle Smith",
+    "email": "me@yskkyle.com",
+    "url": "https://yskkyle.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleSmith0905/estimtest.git",
+    "directory": "packages/estimtest-vue"
+  },
+
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "npm run tsc",
     "tsc": "tsc -p ."
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  
   "dependencies": {
     "estimtest-core": "link:..\\estimtest-core"
   },

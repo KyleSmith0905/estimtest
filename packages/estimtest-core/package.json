@@ -1,9 +1,24 @@
 {
   "name": "estimtest-core",
-  "description": "Manually test your website under a variety of conditions.",
+  "description": "Manually experiment most websites under a variety of conditions. Easily correct accessibility issues by simulating common disorders.",
+  "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "component", "web component"],
   "version": "1.0.0",
-  "author": "KyleSmith0905",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KyleSmith0905/estimtest/issues",
+    "email": "me@yskkyle.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kyle Smith",
+    "email": "me@yskkyle.com",
+    "url": "https://yskkyle.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleSmith0905/estimtest.git",
+    "directory": "packages/estimtest-core"
+  },
+
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/components.d.ts",
@@ -14,6 +29,7 @@
     "dist/",
     "loader/"
   ],
+
   "scripts": {
     "lint": "eslint src/**/*{.ts,.tsx}",
     "build": "stencil build",
@@ -22,6 +38,7 @@
     "test:spec": "stencil test --spec",
     "test:e2e": "stencil test --e2e"
   },
+  
   "dependencies": {
     "@stencil/sass": "3.0.0-0",
     "@types/commonmark": "^0.27.5",
