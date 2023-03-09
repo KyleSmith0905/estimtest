@@ -1,6 +1,6 @@
 ## Examples
 
-All examples should have minimal editing applied from the default "getting started" app; the only thing changed should be related to adding Estimtest to the app. Unless specified the all scrips will not have Estimtest active.
+All examples should have minimal editing applied from the default "getting started" app; the only thing changed should be related to adding Estimtest to the app. Unless specified scrips will not have Estimtest active.
 
 `npm run dev` runs the dev server with Estimtest disabled.
 `npm run dev:estimtest` runs the dev server with Estimtest enabled.
