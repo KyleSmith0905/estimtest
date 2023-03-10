@@ -1,5 +1,3 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { AppRoutingModule } from "src/app/app-routing.module";
 import { EstimtestModule } from "estimtest-angular";
 
 /**
@@ -7,9 +5,9 @@ import { EstimtestModule } from "estimtest-angular";
  * imported on some environments. We will be warned whether the module is in use or not, therefore
  * you could add kinda fake component.
  */
-const environment = {
+const environment: {estimtest: boolean, appImports: any[]} = {
   estimtest: false,
-  imports: [BrowserModule, AppRoutingModule, EstimtestModule],
+  appImports: [EstimtestModule],
 }
 
 export default environment;
