@@ -1,7 +1,7 @@
-import { EstimtestTest } from './experiments';
+import { EstimtestExperiments } from './experiments';
 
 interface EstimtestConfig {
-	experiments: Pick<EstimtestTest, 'name' | 'description' | 'fontSize' | 'colorBlind' | 'keyboardOnly'>[];
+	experiments: EstimtestExperiments[];
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {

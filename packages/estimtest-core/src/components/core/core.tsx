@@ -10,7 +10,7 @@ import {
 	Method,
 } from '@stencil/core';
 import { defaultEstimtestConfig, EstimtestConfig } from '../../lib/config';
-import { EstimtestTest, performTest, resetTest } from '../../lib/experiments';
+import { EstimtestExperiments, EstimtestExperimentsInternal, performTest, resetTest } from '../../lib/experiments';
 import { HtmlRenderer, Parser } from 'commonmark';
 import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../../lib/dom';
 import { ChevronIcon, CloseIcon, EstimtestLogo } from '../icons';
@@ -32,7 +32,7 @@ export class Estimtest {
 	 * `colorBlind` A change of colors on the page reflecting what colorblind users may see.
 	 * `keyboardOnly` Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.
 	 */
-	@Prop() experiments?: string | EstimtestConfig['experiments'];
+	@Prop() experiments?: string | EstimtestExperiments[];
 
 	/**
 	 * Whether to show the testing prompt on the bottom of the screen. Having this as false still
@@ -46,15 +46,15 @@ export class Estimtest {
 	// The config that is currently in effect
 	@State() activeConfig?: EstimtestConfig = defaultEstimtestConfig;
 
-	@State() activeTest?: EstimtestTest;
+	@State() activeTest?: EstimtestExperimentsInternal;
 
 	@State() expandedTestActive?: boolean;
 
-	@State() expandedTest?: EstimtestTest;
+	@State() expandedTest?: EstimtestExperiments;
 
 	@State() testDetailsDescription?: string;
 
-	@State() testResults?: EstimtestTest[] = [];
+	@State() testResults?: EstimtestExperimentsInternal[] = [];
 	
 	@State() exportedResultsActive?: boolean;
 
@@ -166,7 +166,7 @@ export class Estimtest {
 		}
 	}
 
-	private async toggleTestDetails(test?: EstimtestTest) {
+	private async toggleTestDetails(test?: EstimtestExperiments) {
 		this.expandedTestActive = !this.expandedTestActive;
 		if (this.expandedTestActive) {
 			this.expandedTest = test ?? this.activeTest;

@@ -1,6 +1,6 @@
-import { EstimtestTest, EstimtestWrapper } from '.';
+import { EstimtestExperiments, EstimtestWrapper } from '.';
 
-const activateFontSize = (wrapper: EstimtestWrapper, test: EstimtestTest) => {
+const activateFontSize = (wrapper: EstimtestWrapper, test: EstimtestExperiments) => {
 	wrapper.content.style.setProperty('font-size', `${test.fontSize}px`);
 };
 

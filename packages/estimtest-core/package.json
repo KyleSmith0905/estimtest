@@ -21,7 +21,7 @@
 
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
-  "types": "dist/types/components.d.ts",
+  "types": "dist/types/types/entry.d.ts",
   "unpkg": "dist/estimtest-core/estimtest-core.esm.js",
   "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",

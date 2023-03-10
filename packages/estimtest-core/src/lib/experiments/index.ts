@@ -10,16 +10,19 @@ type ColorBlind = (
 	| ColorBlindMatrix
 )
 
-interface EstimtestTest {
+interface EstimtestExperiments {
   name: string,
-  index: number,
   description: string,
-  results?: 'pass' | 'fail',
-  notes?: string,
   // Test options
   fontSize?: number,
   colorBlind?: ColorBlind,
   keyboardOnly?: boolean,
+}
+
+interface EstimtestExperimentsInternal extends EstimtestExperiments {
+  index: number,
+  results?: 'pass' | 'fail',
+  notes?: string,
 }
 
 interface EstimtestWrapper {
@@ -43,7 +46,7 @@ const resetTest = (hostElement: HTMLElement) => {
 	}
 };
 
-const performTest = (hostElement: HTMLElement, test: EstimtestTest) => {
+const performTest = (hostElement: HTMLElement, test: EstimtestExperiments) => {
 	resetTest(hostElement);
 
 	// Create wrapper element
@@ -70,5 +73,5 @@ const performTest = (hostElement: HTMLElement, test: EstimtestTest) => {
 	if (test.colorBlind !== undefined) activateColorBlind(elements, test);
 };
 
-export type { EstimtestTest, EstimtestWrapper, ColorBlind, ColorBlindMatrix };
+export type { EstimtestExperiments, EstimtestExperimentsInternal, EstimtestWrapper, ColorBlind, ColorBlindMatrix };
 export { resetTest, performTest };

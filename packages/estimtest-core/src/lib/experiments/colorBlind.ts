@@ -1,9 +1,9 @@
-import { ColorBlindMatrix, EstimtestTest, EstimtestWrapper } from '.';
+import { ColorBlindMatrix, EstimtestExperiments, EstimtestWrapper } from '.';
 
 /**
  * Idea and colorblindness values come from {@link https://github.com/hail2u/color-blindness-emulation}
  */
-const activateColorBlind = (wrapper: EstimtestWrapper, test: EstimtestTest) => {
+const activateColorBlind = (wrapper: EstimtestWrapper, test: EstimtestExperiments) => {
 	const commonColorblindness: Record<string, ColorBlindMatrix> = {
 		protanopia:    [[0.567, 0.433, 0    ], [0.558, 0.442, 0    ], [0    , 0.242, 0.758]],
 		protanomaly:   [[0.817, 0.183, 0    ], [0.333, 0.667, 0    ], [0    , 0.125, 0.875]],

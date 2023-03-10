@@ -1,5 +1,8 @@
+// TYPES
+export * from 'estimtest-core/dist/types/types/types';
+
 // DIRECTIVES
-export * from './directives/components';
+export { EstimtestCore } from './directives/components';
 export { DIRECTIVES } from './directives';
 
 // PACKAGE MODULE
