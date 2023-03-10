@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vanilla Demo</title>
+    <script type="module">
+      // Must deploy on CDN to implement this.
+      import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/estimtest-core/loader/index.es2017.js';
+      defineCustomElements();
+    </script>
+    <style>
+      body {
+        background-color: #222;
+        color: #fff;
+      }
+
+      .icon {
+        width: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lorem ipsum dolor sit.</h1>
+    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae quia veniam incidunt, pariatur esse ut dolorum possimus repudiandae porro eligendi voluptas ad sit aspernatur numquam in! Nulla temporibus quo repellat.</p>
+    <img class="icon" src="./estimtest.svg"/>
+    <estimtest-core active="true" experiments='[{"name": "Hello World", "description": "hello", "fontSize": 32}]'></estimtest-core>
+  </body>
+</html>
