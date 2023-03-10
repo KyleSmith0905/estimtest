@@ -28,15 +28,16 @@ export class Estimtest {
 	 *
 	 * `name` A quick ~15 letters title summarizing the test\
 	 * `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\
-	 * `fontSize` The font size to set the page.\
-	 * `width` The width to set the page.\
-	 * `height` The height to set the page.
+	 * `fontSize` The font size to set the page. Many users have difficulty reading text at the default font size, users fix this by increasing the default font size.
+	 * `colorBlind` A change of colors on the page reflecting what colorblind users may see.
+	 * `keyboardOnly` Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.
 	 */
 	@Prop() experiments?: string | EstimtestConfig['experiments'];
 
 	/**
-	 * Whether to show the testing prompt on the bottom of the screen. Set this value to `false` to
-	 * no longer see the estimtest bar.
+	 * Whether to show the testing prompt on the bottom of the screen. Having this as false still
+	 * imports the library but does not use it. Look at the [examples](examples) for sloppy
+	 * implementations of fully removing Estimtest in production.
 	 */
 	@Prop() active?: string | boolean = true;
 
