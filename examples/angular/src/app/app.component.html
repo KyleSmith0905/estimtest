@@ -485,10 +485,8 @@
   <router-outlet></router-outlet>
 
 </div>
-<ng-container *ngIf="estimtestEnabled">
-  <estimtest-core
-    class="full-screen"
-    [active]="true"
-    [experiments]="[{name: 'Hello World', description: 'hello', fontSize: 32}]"
-  />
-</ng-container>
+<estimtest-core
+  class="full-screen"
+  active="true"
+  experiments='[{"name": "Hello World", "description": "hello", "fontSize": 32}]'
+/>
