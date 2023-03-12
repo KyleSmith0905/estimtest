@@ -2,7 +2,7 @@
   "name": "estimtest-angular",
   "description": "Manually experiment Angular websites under a variety of conditions. Easily correct accessibility issues by simulating common disorders.",
   "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "angular", "angular component"],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "bugs": {
     "url": "https://github.com/KyleSmith0905/estimtest/issues",
     "email": "me@yskkyle.com"
