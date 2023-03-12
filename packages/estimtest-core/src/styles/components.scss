@@ -1,19 +1,19 @@
 .title {
-  font-size: 1.2rem;
+  font-size: 1.2em;
   font-weight: bold;
-  margin: 0rem;
+  margin: 0em;
   z-index: 1000;
 }
 
 .caption {
-  font-size: 1.1rem;
+  font-size: 1.1em;
   opacity: 0.6;
-  margin: 0rem;
+  margin: 0em;
 }
 
 .paragraph {
-  margin: 0rem;
-  font-size: 1.1rem;
+  margin: 0em;
+  font-size: 1.1em;
   opacity: 0.9;
   text-align: left;
 }
@@ -21,29 +21,29 @@
 .box {
   width: fit-content;
   max-width: 90%;
-  max-height: calc(100% - 3rem);
-  padding: 0.7rem 1.4rem;
+  max-height: calc(100% - 3em);
+  padding: 0.7em 1.4em;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: 1em;
   border-style: solid;
   border-width: 1px;
   border-color: hsl(0deg, 0%, 30%);
   background: linear-gradient(45deg, hsl(0deg, 0%, 0%), hsl(0deg, 0%, 10%));
   color: hsl(0deg, 0%, 100%);
-  box-shadow: 0rem 0rem 1rem 0rem hsl(0deg 0% 15%);
+  box-shadow: 0em 0em 1em 0em hsl(0deg 0% 15%);
   pointer-events: all;
 }
 
 .button {
   display: flex;
-  padding: 0.5rem 1rem;
+  padding: 0.5em 1em;
   border-style: solid;
   border-color: hsl(0deg, 0%, 20%);
   border-width: 1px;
-  border-radius: 1rem;
+  border-radius: 1em;
   background: hsl(0deg, 0%, 10%);
   color: hsl(0deg, 0%, 100%);
-  font-size: 0.9rem;
+  font-size: 0.9em;
   cursor: pointer;
   
   &:hover {

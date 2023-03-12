@@ -29,6 +29,7 @@ interface EstimtestExperimentsInternal extends EstimtestExperiments {
 interface EstimtestWrapper {
   container: HTMLDivElement,
   content: HTMLDivElement,
+	host: HTMLElement,
 }
 
 const resetTest = (hostElement: HTMLElement) => {
@@ -81,6 +82,7 @@ const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, confi
 	const elements: EstimtestWrapper = {
 		container: container,
 		content: content,
+		host: hostElement,
 	};
 
 	if (test.fontSize !== undefined) activateFontSize(elements, test);

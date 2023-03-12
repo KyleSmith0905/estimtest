@@ -4,7 +4,7 @@ const EstimtestLogo: FunctionalComponent = () => {
 	return (
 		<svg
 			class='square'
-			style={{ '--size': '1.7rem' }}
+			style={{ '--size': '1.7em' }}
 			viewBox='0 0 110.07 135.47'
 		>
 			<title>Estimtest, a manual testing library</title>
@@ -21,7 +21,7 @@ const CloseIcon: FunctionalComponent = () => {
 	return (
 		<svg
 			class='square'
-			style={{ '--size': '1rem' }}
+			style={{ '--size': '1em' }}
 			xmlns='http://www.w3.org/2000/svg'
 			viewBox='0 0 67.7 67.7'
 		>
@@ -41,7 +41,7 @@ const CloseIcon: FunctionalComponent = () => {
 const ChevronIcon: FunctionalComponent<{direction: 'up' | 'down'}> = ({direction}) => {
 	return (
 		<svg
-			style={{ '--size': '1rem' }}
+			style={{ '--size': '1em' }}
 			class={{
 				'upside-down': direction === 'down',
 				square: true,
