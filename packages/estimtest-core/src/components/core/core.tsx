@@ -35,6 +35,12 @@ export class Estimtest {
 	@Prop() experiments?: string | EstimtestExperiments[];
 
 	/**
+	 * An element selector containing the parent of where the element should be at. You could use
+	 * this property in the event that your code does not permit you to place the element there.
+	 */
+	@Prop() moveSelector: string;
+
+	/**
 	 * Whether to show the testing prompt on the bottom of the screen. Having this as false still
 	 * imports the library but does not use it. Look at the [examples](examples) for sloppy
 	 * implementations of fully removing Estimtest in production.
@@ -106,7 +112,7 @@ export class Estimtest {
 		};
 		this.status = 'active';
 
-		performTest(this.hostElement, this.activeTest);
+		performTest(this.hostElement, this.activeTest, this.activeConfig);
 	}
 
 	/**
@@ -134,7 +140,7 @@ export class Estimtest {
 			...this.activeConfig.experiments[nextIndex],
 		};
 
-		performTest(this.hostElement, this.activeTest);
+		performTest(this.hostElement, this.activeTest, this.activeConfig);
 	}
 
 	private finishExperiments() {
@@ -156,6 +162,8 @@ export class Estimtest {
 			this.activeConfig = defaultEstimtestConfig;
 	
 			if (this.experiments !== undefined) {
+				this.activeConfig.moveSelector = this.moveSelector;
+
 				if (typeof this.experiments === 'string') {
 					this.activeConfig.experiments = JSON.parse(this.experiments);
 				}

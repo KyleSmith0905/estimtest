@@ -20,6 +20,7 @@ import HelloWorld from './components/HelloWorld.vue'
   <RouterView />
   <estimtest-core
     class="full-screen"
+    move-selector="body"
     :active="true"
     :experiments="JSON.stringify([{name: 'Hello World', description: 'hello', fontSize: 32}])"
   />

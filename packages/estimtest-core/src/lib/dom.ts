@@ -52,4 +52,12 @@ const transferChildren = (
 	});
 };
 
-export {getEventValue, autoResizeTextarea, conditionallySetInert, transferChildren};
+const transferElement = (
+	moveElement: HTMLElement | ShadowRoot,
+	newParent: HTMLElement | ShadowRoot,
+) => {
+	moveElement.parentNode.removeChild(moveElement);
+	newParent.appendChild(moveElement);
+};
+
+export {getEventValue, autoResizeTextarea, conditionallySetInert, transferChildren, transferElement};

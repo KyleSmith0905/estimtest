@@ -1,4 +1,5 @@
-import { transferChildren } from '../dom';
+import { EstimtestConfig } from '../config';
+import { transferChildren, transferElement } from '../dom';
 import { activateColorBlind } from './colorBlind';
 import { activateFontSize } from './fontSize';
 import { activateKeyboardOnly } from './keyboardOnly';
@@ -51,8 +52,17 @@ const resetTest = (hostElement: HTMLElement) => {
 	document.documentElement.removeAttribute('data-before-font-size');
 };
 
-const performTest = (hostElement: HTMLElement, test: EstimtestExperiments) => {
+const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, config: EstimtestConfig) => {
 	resetTest(hostElement);
+
+	// Move estimtest-core component to user-specified location
+	if (typeof config.moveSelector === 'string') {
+		const newParent = document.querySelector<HTMLElement>(config.moveSelector);
+		transferElement(
+			hostElement,
+			newParent,
+		);
+	}
 
 	// Create wrapper element
 	const container = document.createElement('div');

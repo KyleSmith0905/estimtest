@@ -2,6 +2,7 @@ import { EstimtestExperiments } from './experiments';
 
 interface EstimtestConfig {
 	experiments: EstimtestExperiments[];
+	moveSelector?: string;
 }
 
 const defaultEstimtestConfig: EstimtestConfig = {
