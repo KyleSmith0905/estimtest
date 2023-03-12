@@ -1,0 +1,1 @@
+Open up the webpage by navigating to the path of the HTML file.
