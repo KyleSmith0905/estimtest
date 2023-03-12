@@ -29,6 +29,7 @@ interface EstimtestExperimentsInternal extends EstimtestExperiments {
 interface EstimtestWrapper {
   container: HTMLDivElement,
   content: HTMLDivElement,
+  foreground: HTMLDivElement,
 	host: HTMLElement,
 }
 
@@ -72,6 +73,13 @@ const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, confi
 	const content = document.createElement('div');
 	content.id = 'estimtest-content';
 	container.appendChild(content);
+	const foreground = document.createElement('div');
+	foreground.id = 'foreground-content';
+	foreground.style.setProperty('position', 'fixed');
+	foreground.style.setProperty('inset', '0rem');
+	foreground.style.setProperty('z-index', '1000');
+	foreground.style.setProperty('pointer-events', 'none');
+	container.appendChild(foreground);
 
 	transferChildren(
 		hostElement.parentElement,
@@ -82,6 +90,7 @@ const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, confi
 	const elements: EstimtestWrapper = {
 		container: container,
 		content: content,
+		foreground: foreground,
 		host: hostElement,
 	};
 

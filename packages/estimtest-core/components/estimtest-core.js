@@ -109,7 +109,7 @@ const activateColorBlind = (wrapper, test) => {
 			</filter>\
 		</svg>\
 	`;
-  wrapper.content.style.setProperty('filter', `url("data:image/svg+xml,${colorBlindFilter}#estimtest-filter-color-blind")`);
+  wrapper.foreground.style.setProperty('backdrop-filter', `url("data:image/svg+xml,${colorBlindFilter}#estimtest-filter-color-blind")`);
 };
 
 const activateFontSize = (wrapper, test) => {
@@ -153,10 +153,18 @@ const performTest = (hostElement, test, config) => {
   const content = document.createElement('div');
   content.id = 'estimtest-content';
   container.appendChild(content);
+  const foreground = document.createElement('div');
+  foreground.id = 'foreground-content';
+  foreground.style.setProperty('position', 'fixed');
+  foreground.style.setProperty('inset', '0rem');
+  foreground.style.setProperty('z-index', '1000');
+  foreground.style.setProperty('pointer-events', 'none');
+  container.appendChild(foreground);
   transferChildren(hostElement.parentElement, content, (node) => { var _a; return ((_a = node.id) === null || _a === void 0 ? void 0 : _a.startsWith('estimtest')) || node.tagName === 'ESTIMTEST-CORE'; });
   const elements = {
     container: container,
     content: content,
+    foreground: foreground,
     host: hostElement,
   };
   if (test.fontSize !== undefined)

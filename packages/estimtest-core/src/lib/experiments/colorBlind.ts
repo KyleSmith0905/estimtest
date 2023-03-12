@@ -32,7 +32,7 @@ const activateColorBlind = (wrapper: EstimtestWrapper, test: EstimtestExperiment
 		</svg>\
 	`;
 	
-	wrapper.content.style.setProperty('filter', `url("data:image/svg+xml,${colorBlindFilter}#estimtest-filter-color-blind")`);
+	wrapper.foreground.style.setProperty('backdrop-filter', `url("data:image/svg+xml,${colorBlindFilter}#estimtest-filter-color-blind")`);
 };
 
 export { activateColorBlind };
