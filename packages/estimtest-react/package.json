@@ -2,7 +2,7 @@
   "name": "estimtest-react",
   "description": "Manually experiment React websites under a variety of conditions. Easily correct accessibility issues by simulating common disorders.",
   "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "react", "react component"],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "bugs": {
     "url": "https://github.com/KyleSmith0905/estimtest/issues",
     "email": "me@yskkyle.com"
