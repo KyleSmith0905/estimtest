@@ -172,11 +172,15 @@ export class Estimtest {
 		else if (config) {
 			this.activeConfig = config;
 		}
+		// Build together a config from the multiple props.
 		else {
 			this.activeConfig = defaultEstimtestConfig;
 	
-			if (this.experiments !== undefined) {
+			if (typeof this.moveSelector === 'string') {
 				this.activeConfig.moveSelector = this.moveSelector;
+			}
+
+			if (this.experiments !== undefined) {
 
 				if (typeof this.experiments === 'string') {
 					this.activeConfig.experiments = JSON.parse(this.experiments);
