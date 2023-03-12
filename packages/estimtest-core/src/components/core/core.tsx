@@ -88,6 +88,20 @@ export class Estimtest {
 		}
 	}
 
+	componentDidLoad() {
+		// Add custom font to page DOM since font-face doesn't work within Shadow DOM.
+		const fontCssUrl = 'https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300&display=swap';
+		let element = document.querySelector(`link[href="${fontCssUrl}"]`);
+
+		// Only inject the element if it's not yet present
+		if (!element) {
+			element = document.createElement('link');
+			element.setAttribute('rel', 'stylesheet');
+			element.setAttribute('href', fontCssUrl);
+			document.head.appendChild(element);
+		}
+	}
+
 	/**
 	 * Provides the prompt to begin or restart experiments. This activates and resets the experiments
 	 * as well.
