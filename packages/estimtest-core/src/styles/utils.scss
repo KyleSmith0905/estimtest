@@ -50,6 +50,10 @@
   transform: rotateZ(180deg);
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .square {
   width: var(--size);
   height: var(--size);

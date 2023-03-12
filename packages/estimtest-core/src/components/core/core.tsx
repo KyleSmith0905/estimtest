@@ -317,12 +317,12 @@ export class Estimtest {
 							<div class='flex-column results-grid'>
 								{this.testResults.map((result) => (
 									<div class={`flex-row full-width ${result.results}`}>
-										<h3
+										<p
 											onClick={() => this.toggleTestDetails(result)}
-											class='title clickable'
+											class='paragraph clickable bold'
 										>
 											{result.name}
-										</h3>
+										</p>
 										<p
 											class='paragraph'
 											style={{
