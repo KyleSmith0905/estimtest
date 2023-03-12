@@ -27,6 +27,7 @@ Add the component
 ```html
 <!-- app.component.html -->
 <estimtest-core
+  move-selector='body'
   [active]="true"
   [experiments]="[{name: 'Hello World', description: 'hello', fontSize: 32}]"
 />
@@ -50,3 +51,5 @@ Use HTML attributes to modify props.
 - `fontSize` The font size to set the page. Many users have difficulty reading text at the default font size, users fix this by increasing the default font size.
 - `colorBlind` A change of colors on the page reflecting what colorblind users may see.
 - `keyboardOnly` Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.
+
+**moveSelector** `string` - An element selector containing the parent of where the element should be at. You could use this property in the event that your code does not permit you to place the element there.
