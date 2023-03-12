@@ -75,6 +75,10 @@ const transferChildren = (oldParent, newParent, filter) => {
     newParent.appendChild(node);
   });
 };
+const transferElement = (moveElement, newParent) => {
+  moveElement.parentNode.removeChild(moveElement);
+  newParent.appendChild(moveElement);
+};
 
 /**
  * Idea and colorblindness values come from {@link https://github.com/hail2u/color-blindness-emulation}
@@ -109,7 +113,13 @@ const activateColorBlind = (wrapper, test) => {
 };
 
 const activateFontSize = (wrapper, test) => {
-  wrapper.content.style.setProperty('font-size', `${test.fontSize}px`);
+  const fontSizeBefore = getComputedStyle(document.documentElement).getPropertyValue('font-size');
+  // Ensure that the estimtest components are not effected by the font size changes.
+  wrapper.host.style.setProperty('font-size', fontSizeBefore);
+  // Save the font size style property for when it resets.
+  document.documentElement.dataset.beforeFontSize = fontSizeBefore;
+  // Change the font size of the root element.
+  document.documentElement.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
 const activateKeyboardOnly = (wrapper, _) => {
@@ -120,13 +130,22 @@ const resetTest = (hostElement) => {
   const parent = hostElement.parentElement;
   let container = parent.querySelector(':scope > #estimtest-container');
   let content = parent.querySelector(':scope > #estimtest-container > #estimtest-content');
+  // Revert back the estimtest container structure
   if (content) {
     transferChildren(content, hostElement.parentElement, (node) => { var _a; return (_a = node.id) === null || _a === void 0 ? void 0 : _a.startsWith('estimtest'); });
     container.remove();
   }
+  // Revert changes in font-size
+  document.documentElement.style.setProperty('font-size', document.documentElement.dataset.beforeFontSize);
+  document.documentElement.removeAttribute('data-before-font-size');
 };
-const performTest = (hostElement, test) => {
+const performTest = (hostElement, test, config) => {
   resetTest(hostElement);
+  // Move estimtest-core component to user-specified location
+  if (typeof config.moveSelector === 'string') {
+    const newParent = document.querySelector(config.moveSelector);
+    transferElement(hostElement, newParent);
+  }
   // Create wrapper element
   const container = document.createElement('div');
   container.id = 'estimtest-container';
@@ -138,6 +157,7 @@ const performTest = (hostElement, test) => {
   const elements = {
     container: container,
     content: content,
+    host: hostElement,
   };
   if (test.fontSize !== undefined)
     activateFontSize(elements, test);
@@ -8098,24 +8118,24 @@ XmlRenderer.prototype.tag = tag;
 XmlRenderer.prototype.esc = escapeXml;
 
 const EstimtestLogo = () => {
-  return (h("svg", { class: 'square', style: { '--size': '1.7rem' }, viewBox: '0 0 110.07 135.47' },
+  return (h("svg", { class: 'square', style: { '--size': '1.7em' }, viewBox: '0 0 110.07 135.47' },
     h("title", null, "Estimtest, a manual testing library"),
     h("path", { fill: '#fff', d: 'M23.95 84.67H0v23.94l26.85 26.86h74.75V101.6H40.88ZM26.85 0 0 26.85V50.8h23.95l16.93-16.93h60.72V0Zm-2.9 50.8v33.87h86.12V50.8Z', color: '#000' })));
 };
 const CloseIcon = () => {
-  return (h("svg", { class: 'square', style: { '--size': '1rem' }, xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 67.7 67.7' },
+  return (h("svg", { class: 'square', style: { '--size': '1em' }, xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 67.7 67.7' },
     h("title", null, "Close"),
     h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 8.5 50.8 50.8m-50.8 0L59.3 8.5' })));
 };
 const ChevronIcon = ({ direction }) => {
-  return (h("svg", { style: { '--size': '1rem' }, class: {
+  return (h("svg", { style: { '--size': '1em' }, class: {
       'upside-down': direction === 'down',
       square: true,
     }, viewBox: '0 0 67.7 36' },
     h("path", { fill: 'none', stroke: '#fff', "stroke-linecap": 'round', "stroke-linejoin": 'round', "stroke-width": '16.9', d: 'm8.5 27.5 25.4-19 25.4 19' })));
 };
 
-const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0rem;pointer-events:none}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5rem;left:50%;transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5rem;left:50%;transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5rem;left:50%;top:50%;transform:translateX(-50%) translateY(-50%)}.flex-row{display:flex;align-items:center;gap:0.8rem}.flex-column{display:flex;flex-direction:column;align-items:center;gap:0.8rem}.upside-down{transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;filter:drop-shadow(0rem 0rem 0rem hsla(0, 0%, 100%, 0.7));transition:filter ease 250ms}.clickable:hover{filter:drop-shadow(rgba(255, 255, 255, 0.7) 0rem 0rem 1rem)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;filter:blur(16px);pointer-events:none !important;transition:filter ease 300ms, opacity ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;filter:blur(0px)}.title{font-size:1.2rem;font-weight:bold;margin:0rem;z-index:1000}.caption{font-size:1.1rem;opacity:0.6;margin:0rem}.paragraph{margin:0rem;font-size:1.1rem;opacity:0.9;text-align:left}.box{width:fit-content;max-width:90%;max-height:calc(100% - 3rem);padding:0.7rem 1.4rem;overflow:hidden;border-radius:1rem;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));color:hsl(0, 0%, 100%);box-shadow:0rem 0rem 1rem 0rem hsl(0, 0%, 15%);pointer-events:all}.button{display:flex;padding:0.5rem 1rem;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1rem;background:hsl(0, 0%, 10%);color:hsl(0, 0%, 100%);font-size:0.9rem;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2rem;text-align:left}.results-grid>*{padding:0.3rem 1rem;border-radius:0.5rem;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12rem;min-width:12rem}";
+const coreCss = ".full-screen{position:fixed;width:100%;height:100%;top:0em;pointer-events:none;z-index:1000}.full-width{width:100%}.absolute-bottom{position:absolute;bottom:0.5em;left:50%;transform:translateX(-50%)}.absolute-top{position:absolute;top:0.5em;left:50%;transform:translateX(-50%)}.absolute-center{position:absolute;top:0.5em;left:50%;top:50%;transform:translateX(-50%) translateY(-50%)}.flex-row{display:flex;align-items:center;gap:0.8em}.flex-column{display:flex;flex-direction:column;align-items:center;gap:0.8em}.upside-down{transform:rotateZ(180deg)}.square{width:var(--size);height:var(--size)}.clickable{cursor:pointer;filter:drop-shadow(0em 0em 0em hsla(0, 0%, 100%, 0.7));transition:filter ease 250ms}.clickable:hover{filter:drop-shadow(rgba(255, 255, 255, 0.7) 0em 0em 1em)}.auto-resize-textarea{resize:none;overflow:hidden;height:18px}.will-animate-blur{opacity:0;filter:blur(16px);pointer-events:none !important;transition:filter ease 300ms, opacity ease 300ms}.will-animate-blur.animate-blur{pointer-events:all !important;opacity:1;filter:blur(0px)}.title{font-size:1.2em;font-weight:bold;margin:0em;z-index:1000}.caption{font-size:1.1em;opacity:0.6;margin:0em}.paragraph{margin:0em;font-size:1.1em;opacity:0.9;text-align:left}.box{width:fit-content;max-width:90%;max-height:calc(100% - 3em);padding:0.7em 1.4em;overflow:hidden;border-radius:1em;border-style:solid;border-width:1px;border-color:hsl(0, 0%, 30%);background:linear-gradient(45deg, hsl(0, 0%, 0%), hsl(0, 0%, 10%));color:hsl(0, 0%, 100%);box-shadow:0em 0em 1em 0em hsl(0, 0%, 15%);pointer-events:all}.button{display:flex;padding:0.5em 1em;border-style:solid;border-color:hsl(0, 0%, 20%);border-width:1px;border-radius:1em;background:hsl(0, 0%, 10%);color:hsl(0, 0%, 100%);font-size:0.9em;cursor:pointer}.button:hover{border-color:hsl(0, 0%, 40%)}.results-grid{gap:0.2em;text-align:left}.results-grid>*{padding:0.3em 1em;border-radius:0.5em;border-style:solid;border-width:1px}.results-grid>.fail{background-color:hsla(0, 100%, 50%, 0.1);border-color:hsl(0, 100%, 50%)}.results-grid>.pass{background-color:hsla(120, 100%, 30%, 0.1);border-color:hsl(120, 100%, 30%)}.results-grid .title{max-width:12em;min-width:12em}";
 
 const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   constructor() {
@@ -8123,6 +8143,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.__registerHost();
     this.__attachShadow();
     this.experiments = undefined;
+    this.moveSelector = undefined;
     this.active = true;
     this.status = 'inactive';
     this.activeConfig = defaultEstimtestConfig;
@@ -8163,7 +8184,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.updateConfig(config);
     this.activeTest = Object.assign({ index: 0 }, this.activeConfig.experiments[0]);
     this.status = 'active';
-    performTest(this.hostElement, this.activeTest);
+    performTest(this.hostElement, this.activeTest, this.activeConfig);
   }
   /**
    * Progress to the next test in the config.
@@ -8177,7 +8198,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
       this.finishExperiments();
     }
     this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.experiments[nextIndex]);
-    performTest(this.hostElement, this.activeTest);
+    performTest(this.hostElement, this.activeTest, this.activeConfig);
   }
   finishExperiments() {
     this.status = 'finished';
@@ -8194,6 +8215,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     else {
       this.activeConfig = defaultEstimtestConfig;
       if (this.experiments !== undefined) {
+        this.activeConfig.moveSelector = this.moveSelector;
         if (typeof this.experiments === 'string') {
           this.activeConfig.experiments = JSON.parse(this.experiments);
         }
@@ -8216,6 +8238,8 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   exportResults() {
     this.exportedResultsActive = true;
     this.exportedResults = JSON.stringify(this.testResults, null, 2);
+    // Print the exported results to the console.
+    console.log(this.testResults);
   }
   errorHandler(message) {
     const errorId = Math.random().toString(16).slice(2);
@@ -8266,6 +8290,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
   static get style() { return coreCss; }
 }, [1, "estimtest-core", {
     "experiments": [1],
+    "moveSelector": [1, "move-selector"],
     "active": [8],
     "status": [32],
     "activeConfig": [32],

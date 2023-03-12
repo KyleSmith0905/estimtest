@@ -10,6 +10,7 @@ import type { JSX } from 'estimtest-core';
 
 export const EstimtestCore = /*@__PURE__*/ defineContainer<JSX.EstimtestCore>('estimtest-core', undefined, [
   'experiments',
+  'moveSelector',
   'active'
 ]);
 

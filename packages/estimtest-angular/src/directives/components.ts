@@ -8,7 +8,7 @@ import { Components } from 'estimtest-core';
 
 
 @ProxyCmp({
-  inputs: ['active', 'experiments'],
+  inputs: ['active', 'experiments', 'moveSelector'],
   methods: ['promptBeginExperiments', 'startExperiments', 'nextExperiment']
 })
 @Component({
@@ -16,7 +16,7 @@ import { Components } from 'estimtest-core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['active', 'experiments'],
+  inputs: ['active', 'experiments', 'moveSelector'],
 })
 export class EstimtestCore {
   protected el: HTMLElement;

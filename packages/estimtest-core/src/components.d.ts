@@ -18,6 +18,10 @@ export namespace Components {
          */
         "experiments"?: string | EstimtestExperiments[];
         /**
+          * An element selector containing the parent of where the element should be at. You could use this property in the event that your code does not permit you to place the element there.
+         */
+        "moveSelector": string;
+        /**
           * Progress to the next test in the config. This does not need to be manually implemented, the UI elements perform the same event.
          */
         "nextExperiment": (results: 'fail' | 'pass') => Promise<void>;
@@ -52,6 +56,10 @@ declare namespace LocalJSX {
           * The experiments to be performed on the app. This is set by default to perform multiple standard tests. This field could also be a string. This field accepts an array of objects each with the properties:  `name` A quick ~15 letters title summarizing the test\ `description` A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant).\ `fontSize` The font size to set the page. Many users have difficulty reading text at the default font size, users fix this by increasing the default font size. `colorBlind` A change of colors on the page reflecting what colorblind users may see. `keyboardOnly` Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.
          */
         "experiments"?: string | EstimtestExperiments[];
+        /**
+          * An element selector containing the parent of where the element should be at. You could use this property in the event that your code does not permit you to place the element there.
+         */
+        "moveSelector"?: string;
     }
     interface IntrinsicElements {
         "estimtest-core": EstimtestCore;
