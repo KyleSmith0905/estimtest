@@ -189,6 +189,9 @@ export class Estimtest {
 	private exportResults() {
 		this.exportedResultsActive = true;
 		this.exportedResults = JSON.stringify(this.testResults, null, 2);
+
+		// Print the exported results to the console.
+		console.log(this.testResults);
 	}
 
 	private errorHandler(message: string) {
