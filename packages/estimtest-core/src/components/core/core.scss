@@ -7,20 +7,21 @@
     border-radius: 0.5em;
     border-style: solid;
     border-width: 1px;
-  }
 
-  > .fail {
-    background-color: hsl(0deg, 100%, 50%, 0.1);
-    border-color: hsl(0deg, 100%, 50%)
-  }
-  
-  > .pass {
-    background-color: hsl(120deg, 100%, 30%, 0.1);
-    border-color: hsl(120deg, 100%, 30%)
-  }
+    &.fail {
+      background-color: hsl(0deg, 100%, 50%, 0.1);
+      border-color: hsl(0deg, 100%, 50%)
+    }
 
-  .title {
-    max-width: 12em;
-    min-width: 12em;
+    &.pass {
+      background-color: hsl(120deg, 100%, 30%, 0.1);
+      border-color: hsl(120deg, 100%, 30%)
+    }
+
+    /* Ensure the title width are the same length */
+    > *:first-child {
+      max-width: 12em;
+      min-width: 12em;
+    }
   }
 }

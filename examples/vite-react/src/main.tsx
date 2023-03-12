@@ -22,9 +22,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Suspense>
       <LazyEstimtest
         active={true}
-        experiments={[
-          {name: "Hello World", description: "hello", fontSize: 32}
-        ]}
         moveSelector="#root"
         // full-screen is a css class defined in `index.css`
         className='full-screen'
