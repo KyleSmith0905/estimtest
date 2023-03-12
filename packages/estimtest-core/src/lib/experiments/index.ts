@@ -35,6 +35,7 @@ const resetTest = (hostElement: HTMLElement) => {
 	let container = parent.querySelector(':scope > #estimtest-container');
 	let content = parent.querySelector<HTMLElement>(':scope > #estimtest-container > #estimtest-content');
 
+	// Revert back the estimtest container structure
 	if (content) {
 		transferChildren(
 			content,
@@ -44,6 +45,10 @@ const resetTest = (hostElement: HTMLElement) => {
     
 		container.remove();
 	}
+
+	// Revert changes in font-size
+	document.documentElement.style.setProperty('font-size', document.documentElement.dataset.beforeFontSize);
+	document.documentElement.removeAttribute('data-before-font-size');
 };
 
 const performTest = (hostElement: HTMLElement, test: EstimtestExperiments) => {

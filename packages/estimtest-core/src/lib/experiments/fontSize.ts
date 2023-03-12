@@ -1,7 +1,8 @@
 import { EstimtestExperiments, EstimtestWrapper } from '.';
 
-const activateFontSize = (wrapper: EstimtestWrapper, test: EstimtestExperiments) => {
-	wrapper.content.style.setProperty('font-size', `${test.fontSize}px`);
+const activateFontSize = (_wrapper: EstimtestWrapper, test: EstimtestExperiments) => {
+	document.documentElement.dataset.beforeFontSize = document.documentElement.style.getPropertyValue('font-size');
+	document.documentElement.style.setProperty('font-size', `${test.fontSize}px`);
 };
 
 export { activateFontSize };
