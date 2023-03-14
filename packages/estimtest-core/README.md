@@ -14,7 +14,6 @@ Feel free to checkout the [examples](examples), or open an [issue](https://githu
 Load the component by importing it
 ```html
 <script type="module">
-  // Must deploy on CDN to implement this.
   import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/estimtest-core/loader/index.es2017.js';
   defineCustomElements();
 </script>
