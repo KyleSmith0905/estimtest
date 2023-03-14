@@ -22,7 +22,6 @@
   max-width: 90%;
   max-height: calc(100% - 3em);
   padding: 0.7em 1.4em;
-  overflow: hidden;
   border-radius: 1em;
   border-style: solid;
   border-width: 1px;
@@ -31,6 +30,8 @@
   color: hsl(0deg, 0%, 100%);
   box-shadow: 0em 0em 1em 0em hsl(0deg 0% 15%);
   pointer-events: all;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .button {
