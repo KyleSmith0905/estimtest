@@ -22,7 +22,7 @@ import HelloWorld from './components/HelloWorld.vue'
     class="full-screen"
     move-selector="body"
     :active="true"
-    :experiments="JSON.stringify([{name: 'Hello World', description: 'hello', fontSize: 32}])"
+    :experiments="[{name: 'Hello World', description: 'hello', fontSize: 32}]"
   />
 </template>
 
