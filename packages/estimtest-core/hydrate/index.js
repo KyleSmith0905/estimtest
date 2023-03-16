@@ -13938,10 +13938,10 @@ class Estimtest {
    */
   async nextExperiment(results) {
     this.testResults.push(Object.assign({ results: results, notes: this.activeTest.notes }, this.activeTest));
-    this.activeTest.notes = '';
     const nextIndex = this.activeTest.index + 1;
     if (nextIndex >= this.activeConfig.experiments.length) {
       this.finishExperiments();
+      return;
     }
     this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.experiments[nextIndex]);
     performTest(this.hostElement, this.activeTest, this.activeConfig);

@@ -140,15 +140,14 @@ export class Estimtest {
 			notes: this.activeTest.notes,
 			...this.activeTest,
 		});
-
-		this.activeTest.notes = '';
-
-
+		
+		
 		const nextIndex = this.activeTest.index + 1;
 		if (nextIndex >= this.activeConfig.experiments.length) {
 			this.finishExperiments();
+			return;
 		}
-
+		
 		this.activeTest = {
 			index: nextIndex,
 			...this.activeConfig.experiments[nextIndex],
