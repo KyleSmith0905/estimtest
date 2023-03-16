@@ -6,12 +6,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Estimtest',
+  title: 'Estimtest - Experiment Your Website\'s Accessibility',
   tagline: 'Experiment Your Website\'s Accessibility',
   favicon: 'config/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://estimtest.vercel.app/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -31,6 +31,23 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:description',
+        content: 'Experiment your site\'s accessibility with minimal configuration and maximum customization.'
+      }
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:description',
+        content: 'Experiment your site\'s accessibility with minimal configuration and maximum customization.'
+      }
+    },
+  ],
 
   presets: [
     [
@@ -60,6 +77,10 @@ const config = {
       colorMode: {
         defaultMode: 'dark',
       },
+      metadata: [
+        {name: 'twitter:description', content: 'Experiment your site\'s accessibility with minimal configuration and maximum customization.'},
+        {name: 'og:description', content: 'Experiment your site\'s accessibility with minimal configuration and maximum customization.'},
+      ],
       // Replace with your project's social card
       image: 'config/social-card.png',
       navbar: {

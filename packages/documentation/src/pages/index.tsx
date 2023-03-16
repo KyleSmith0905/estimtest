@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
 import styles from './index.module.css';
@@ -9,12 +8,11 @@ import ExampleCode from '../components/example-code';
 import OptionsGrid from '../components/options-grid';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <h1 className="hero__title">Estimtest</h1>
+        <p className="hero__subtitle">Experiment Your Website's Accessibility</p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -41,7 +39,7 @@ export default function Home(): JSX.Element {
           </div>
           <ExampleCode/>
         </div>
-        <h2 className={clsx('text--center', styles.header)}>Unlimited Customization</h2>
+        <h2 className={clsx('text--center', styles.header)}>Accessibility Experiments</h2>
         <OptionsGrid/>
       </main>
     </Layout>
