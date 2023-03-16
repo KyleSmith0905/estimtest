@@ -5773,7 +5773,6 @@ const autoResizeTextarea = async (element) => {
     // Account for padding on the textarea
     const paddingTop = parseFloat(getComputedStyle(element).paddingTop.replace(/\p\x/g, ''));
     const paddingBottom = parseFloat(getComputedStyle(element).paddingBottom.replace(/\p\x/g, ''));
-    console.log(element.scrollHeight, paddingTop, paddingBottom);
     // Resets scroll height to zero to have text dictate it
     element.style.setProperty('height', '0px');
     element.style.setProperty('height', `${element.scrollHeight - paddingTop - paddingBottom}px`);
@@ -13945,6 +13944,7 @@ class Estimtest {
       return;
     }
     this.activeTest = Object.assign({ index: nextIndex }, this.activeConfig.experiments[nextIndex]);
+    // Delay the auto resize to ensure text is removed during resize
     setTimeout(() => {
       autoResizeTextarea(this.testFeedbackElement);
     });
