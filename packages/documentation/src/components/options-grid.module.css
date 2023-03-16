@@ -1,0 +1,26 @@
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1.5rem;
+  max-width: 60rem;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.optionsBox {
+  border: var(--ifm-color-primary) 1px solid;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  height: stretch;
+  min-height: 15rem;
+}
+
+.optionsImage {
+  display: block;
+  height: 4rem;
+  margin-left: auto;
+  margin-right: auto;
+}

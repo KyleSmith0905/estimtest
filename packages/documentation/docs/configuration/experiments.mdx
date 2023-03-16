@@ -1,0 +1,96 @@
+---
+description: Change the experiments Estimtest will test.
+sidebar_position: 1
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Experiments
+
+To allow an infinite range of customization, you can alter the experiments performed when doing Estimtest experiments. By default Estimtest will test common settings like large font size, deuteranomaly color blindness, and keyboard navigation.
+
+## Example
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```html title="/index.html"
+<estimtest-core 
+  experiments='[{"name": "Hello World", "description": "hello", "fontSize": 32}]'
+></estimtest-core>
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```html title="/src/app/app.component.html"
+<estimtest-core
+  [experiments]='[{name: "Hello World", description: "hello", fontSize: 32}]'
+/>
+```
+  </TabItem>
+  <TabItem value="react">
+
+```tsx title="/src/index.tsx"
+<EstimtestCore
+  experiments={[{name: "Hello World", description: "hello", fontSize: 32}]}
+/>
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```html title="/src/App.vue"
+<estimtest-core
+  :experiments="[{name: 'Hello World', description: 'hello', fontSize: 32}]"
+/>
+```
+  </TabItem>
+</Tabs>
+
+## Options
+
+### Metadata
+| Attribute Name | Description |
+| :--- | :--- |
+| name | A quick ~15 letters title summarizing the experiment. |
+| description | A description explaining the test and why it's important. Supports Markdown (Commonmark-compliant). |
+
+### Font Size
+Many users have difficulty reading text at the default font size, users fix this by increasing the default font size.
+
+The `fontSize` attribute sets the font size of the root element. As expected, this will change the root font size which will effect `em` and `rem` CSS values throughout the app. This attribute accepts a number.
+
+All the text on your app is expected to grow or shrink (depending on whether it's above or below 16). If the text does not change size, this is a problem. It could be that the `font-size` is being defined as a `px` value on the element, or any one of it's parents.
+
+### Color blind
+8% of men have colorblindness according to some sources. The most common colorblindness is deuteranomaly which makes green look more like red. Other types of colorblindness are much worse, including monochromacy in which it is difficult to compare colors across different hues.
+
+The `colorBlind` attribute applies a color matrix filter over the page using values from [this GitHub on colorblindness](https://github.com/hail2u/color-blindness-emulation). This attribute accepts a string for the name of the colorblindness, and the field accepts a double 3 by 3 array matrix.
+
+| Attribute Value | Description |
+| :-- | :-- |
+| protanopia | Red is missing from their vision, they will only see blue and green. |
+| protanomaly | Red is less prominent. |
+| deuteranopia | Green is missing from their vision, they will only see blue and red. |
+| deuteranomaly | Green is are less prominent. |
+| tritanopia | Blue is missing from their vision, they will only see green and red |
+| tritanomaly | Blue is less prominent. |
+| achromatopsia | Hue is entirely missing from their vision, they only see shades of gray. |
+| achromatomaly | All colors become less prominent; however, they are all present. |
+
+The color combination on your page should be visible and maintain their emphasis. Possibly reduce the reliance on color for certain elements and images.
+
+### Keyboard Only
+Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more. Recall how often you may use hotkeys to copy text, the alternative would be to drag your mouse around the screen. Although being accessible friendly does not always consist of creating hotkeys for everything, being able to smoothly tab through all the elements can save the user valuable time.
+
+The `keyboardOnly` attribute blocks all mouse input on the page. This field accepts a boolean.
+
+The page should be entirely accessible by keyboard. If a popup appears, ensure the user can easily access it and close it. Ensure all intractable elements are accessible.

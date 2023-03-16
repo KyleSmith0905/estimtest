@@ -21,3 +21,34 @@
   align-items: center;
   justify-content: center;
 }
+
+.codeAndCaption {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.codeAndCaption > * {
+  max-width: 35rem;
+  width: 50%;
+}
+
+.undraw {
+  width: 12rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.optionsGrid {
+  display: grid;
+}
+
+.header {
+  margin-top: 3rem;
+  margin-bottom: 0rem;
+}

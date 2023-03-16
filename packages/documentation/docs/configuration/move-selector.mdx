@@ -1,0 +1,80 @@
+---
+description: Allow the Estimtest element to move before testing.
+sidebar_position: 2
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Move Selector
+
+Sometimes you may have an issue where your framework does not allow you to modifying HTML in optimal places for Estimtest. A good example of this is the [`vite-vue` example](https://github.com/KyleSmith0905/estimtest/tree/main/examples/vite-vue).
+
+Estimtest (and all of it's helpers) is able to transfer itself to a better location if the property `move-selector` is provided. The Estimtest component will move itself when the user accepts the prompt to begin testing.
+
+## Example
+
+In this example, pretend we do not have access to write HTML outside of `main`. We can specify our component to move up by setting the `move-selector` attribute to be the parent of where you want to move the component. For instance, the example provided will move the Estimtest component one level up.
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```html title="/index.html"
+<body>
+  <main>
+    <estimtest-core move-selector="body"></estimtest-core>
+  </main>
+  <footer></footer>
+  <!-- MOVES HERE -->
+</body>
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```html title="/src/app/app.component.html"
+<body>
+  <main>
+    <estimtest-core move-selector="body"/>
+  </main>
+  <footer/>
+  <!-- MOVES HERE -->
+</body>
+```
+  </TabItem>
+  <TabItem value="react">
+
+```tsx title="/src/index.tsx"
+<body>
+  <main>
+    <EstimtestCore moveSelector="body"/>
+  </main>
+  <footer/>
+  {/* MOVES HERE */}
+</body>
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```html title="/src/App.vue"
+<body>
+  <main>
+    <estimtest-core move-selector="body"/>
+  </main>
+  <footer/>
+  <!-- MOVES HERE -->
+</body>
+```
+  </TabItem>
+</Tabs>
+
+:::tip
+It is very likely that moving the Estimtest component with to the `body` will work.
+:::

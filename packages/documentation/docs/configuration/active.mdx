@@ -1,0 +1,56 @@
+---
+description: Conditionally render and activate Estimtest.
+sidebar_position: 3
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Active
+
+Sometimes you may need to silence Estimtest. For example, you may only need the element active when experimenting. Setting `active` to `false` as a string or boolean will hide the Estimtest menus.
+
+:::caution
+This will not remove the element declaration from the source code; therefore, this does not decrease the payload size. If you need to remove the component entirely you may try looking at the solutions presented in [the examples](https://github.com/KyleSmith0905/estimtest/tree/main/examples).
+:::
+
+## Example
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```html title="/index.html"
+<estimtest-core active="false"></estimtest-core>
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```html title="/src/app/app.component.html"
+<estimtest-core active="false"/>
+```
+  </TabItem>
+  <TabItem value="react">
+
+```tsx title="/src/index.tsx"
+<EstimtestCore active="false"/>
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```html title="/src/App.vue"
+<estimtest-core :active="false"></estimtest-core>
+```
+  </TabItem>
+</Tabs>
+
+:::tip
+It is very likely that moving the Estimtest component with to the `body` will work.
+:::

@@ -1,0 +1,175 @@
+---
+description: A good starting point for using Estimtest.
+sidebar_position: 1
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Getting Started
+
+Estimtest is designed to be used with minimal effort. There are multiple ways to use Estimtest, with Angular, React, Vue, and vanilla HTML.
+
+## Installation
+
+Install the library into your project. The example uses `npm`; however, other package managers work as well. 
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```bash
+npm install estimtest-core
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```bash
+npm install estimtest-angular
+```
+  </TabItem>
+  <TabItem value="react">
+
+```bash
+npm install estimtest-react
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```bash
+npm install estimtest-vue
+```
+  </TabItem>
+</Tabs>
+
+:::note Framework not listed?
+If your framework is not listed, it may be possible to follow along with the HTML solution. The magic behind web components is that they are framework agnostic. As long as the element is registered, any elements named `estimtest-core` will be automatically hydrated and active.
+:::
+
+## Registering Custom Elements
+
+Behind the hood Estimtest uses web components with [Stencil](https://stenciljs.com/). Therefore, we need to register the custom elements.
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```html title="/index.html"
+<script type="module">
+  import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/estimtest-core/loader/index.es2017.js';
+  defineCustomElements();
+</script>
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```ts title="/src/app/app.module.ts"
+import { EstimtestModule } from "estimtest-angular";
+
+@NgModule({
+  ...
+  imports: [..., EstimtestModule],
+  ...
+})
+export class AppModule { }
+```
+  </TabItem>
+  <TabItem value="react">
+
+```tsx title="/src/index.tsx"
+import { EstimtestCore, defineCustomElements } from 'estimtest-react'
+
+defineCustomElements();
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```ts title="/src/main.ts"
+import { EstimtestLibrary } from 'estimtest-vue';
+
+...
+app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('estimtest');
+app.use(EstimtestLibrary);
+...
+```
+  </TabItem>
+</Tabs>
+
+## Adding The Element
+
+Add the element to the page. The element should be the sibling of the page content, for example:
+```html
+<body>
+  <div id="App">
+    <h1>Lorem ipsum<h1>
+    <p>Lorem ipsum dolor sit amet<p>
+    <!-- POSSIBLE LOCATION -->
+  <div>
+  <!-- POSSIBLE LOCATION -->
+<body>
+```
+The component should work nicely with the default configuration.
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="vanilla">
+
+```html title="/index.html"
+<estimtest-core></estimtest-core>
+```
+  </TabItem>
+  <TabItem value="angular">
+
+```html title="/src/app/app.component.html"
+<estimtest-core/>
+```
+  </TabItem>
+  <TabItem value="react">
+
+```tsx title="/src/index.tsx"
+<EstimtestCore/>
+```
+  </TabItem>
+  <TabItem value="vue">
+
+```html title="/src/App.vue"
+<estimtest-core/>
+```
+  </TabItem>
+</Tabs>
+
+:::tip Element off-centered?
+The component should naturally work, however you should ensure the element covers up the screen. If this becomes a problem, usually adding the following CSS class to the element is good enough:
+```css
+.full-screen {
+  position: absolute;
+  left: 0rem;
+}
+```
+:::
+:::caution Massive changes to dom structure
+When the experimenter accepts the prompt to begin testing, the DOM structure will change massively. All siblings of the Estimtest component will be encompassed in 2 elements.
+:::
