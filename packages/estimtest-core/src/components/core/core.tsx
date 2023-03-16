@@ -153,6 +153,11 @@ export class Estimtest {
 			...this.activeConfig.experiments[nextIndex],
 		};
 
+		// Delay the auto resize to ensure text is removed during resize
+		setTimeout(() => {
+			autoResizeTextarea(this.testFeedbackElement);
+		});
+
 		performTest(this.hostElement, this.activeTest, this.activeConfig);
 	}
 
