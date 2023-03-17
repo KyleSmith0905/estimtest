@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { EstimtestExperiments } from "./lib/experiments";
-import { EstimtestConfig } from "./lib/config";
+import { EstimtestAttributes } from "./lib/config";
 export namespace Components {
     interface EstimtestCore {
         /**
@@ -32,7 +32,7 @@ export namespace Components {
         /**
           * Starts the experiments using the config sent to this method. This does not need to be manually implemented, the UI elements perform the same event.
          */
-        "startExperiments": (config?: EstimtestConfig) => Promise<void>;
+        "startExperiments": (config?: EstimtestAttributes) => Promise<void>;
     }
 }
 declare global {

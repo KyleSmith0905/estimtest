@@ -1,5 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
-import { EstimtestConfig } from '../../lib/config';
+import { EstimtestAttributes } from '../../lib/config';
 
 /**
  * Note, I have an issue with manually clicking buttons. Doing `E2EElement.click()` might not work.
@@ -18,7 +18,7 @@ describe('estimtest-core', () => {
 	it('simulate beginning to end process', async () => {
 		const page = await newE2EPage();
 
-		const experiments: EstimtestConfig['experiments'] = [
+		const experiments: EstimtestAttributes['experiments'] = [
 			{
 				name: 'Lorem, ipsum dolor.',
 				description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, nihil.',

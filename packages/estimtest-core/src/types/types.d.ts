@@ -6,3 +6,7 @@ export {
 	ColorBlind as EstimtestColorBlind,
 	ColorBlindMatrix as EstimtestColorBlindMatrix,
 } from '../lib/experiments/index';
+
+export {
+	EstimtestAttributes,
+} from '../lib/config';

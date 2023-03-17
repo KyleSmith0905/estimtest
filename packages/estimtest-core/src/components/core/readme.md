@@ -38,7 +38,7 @@ Type: `Promise<void>`
 
 
 
-### `startExperiments(config?: EstimtestConfig) => Promise<void>`
+### `startExperiments(config?: EstimtestAttributes) => Promise<void>`
 
 Starts the experiments using the config sent to this method.
 This does not need to be manually implemented, the UI elements perform the same event.

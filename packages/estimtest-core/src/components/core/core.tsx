@@ -9,7 +9,7 @@ import {
 	Element,
 	Method,
 } from '@stencil/core';
-import { defaultEstimtestConfig, EstimtestConfig } from '../../lib/config';
+import { defaultEstimtestConfig, EstimtestAttributes } from '../../lib/config';
 import { EstimtestExperiments, EstimtestExperimentsInternal, performTest, resetTest } from '../../lib/experiments';
 import { HtmlRenderer, Parser } from 'commonmark';
 import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../../lib/dom';
@@ -50,7 +50,7 @@ export class Estimtest {
 	@State() status: 'inactive' | 'prompted' | 'active' | 'finished' = 'inactive';
 
 	// The config that is currently in effect
-	@State() activeConfig?: EstimtestConfig = defaultEstimtestConfig;
+	@State() activeConfig?: EstimtestAttributes = defaultEstimtestConfig;
 
 	@State() activeTest?: EstimtestExperimentsInternal;
 
@@ -117,7 +117,7 @@ export class Estimtest {
 	 * This does not need to be manually implemented, the UI elements perform the same event.
 	 */
 	@Method()
-	public async startExperiments(config?: EstimtestConfig) {
+	public async startExperiments(config?: EstimtestAttributes) {
 		this.testResults = [];
 		this.updateConfig(config);
 		this.activeTest = {
@@ -166,7 +166,7 @@ export class Estimtest {
 		resetTest(this.hostElement);
 	}
 
-	private updateConfig(config?: EstimtestConfig) {
+	private updateConfig(config?: EstimtestAttributes) {
 		// Warn user that the estimtest config could not be changed during testing.
 		if (this.status === 'active') {
 			this.errorHandler(

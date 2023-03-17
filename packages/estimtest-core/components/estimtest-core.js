@@ -149,6 +149,7 @@ const performTest = (hostElement, test, config) => {
   // Create wrapper element
   const container = document.createElement('div');
   container.id = 'estimtest-container';
+  container.style.setProperty('width', '100%');
   hostElement.before(container);
   const content = document.createElement('div');
   content.id = 'estimtest-content';

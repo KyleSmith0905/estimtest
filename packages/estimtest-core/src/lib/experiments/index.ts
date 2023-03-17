@@ -1,4 +1,4 @@
-import { EstimtestConfig } from '../config';
+import { EstimtestAttributes } from '../config';
 import { transferChildren, transferElement } from '../dom';
 import { activateColorBlind } from './colorBlind';
 import { activateFontSize } from './fontSize';
@@ -54,7 +54,7 @@ const resetTest = (hostElement: HTMLElement) => {
 	document.documentElement.removeAttribute('data-before-font-size');
 };
 
-const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, config: EstimtestConfig) => {
+const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, config: EstimtestAttributes) => {
 	resetTest(hostElement);
 
 	// Move estimtest-core component to user-specified location

@@ -1,11 +1,11 @@
 import { EstimtestExperiments } from './experiments';
 
-interface EstimtestConfig {
+interface EstimtestAttributes {
 	experiments: EstimtestExperiments[];
 	moveSelector?: string;
 }
 
-const defaultEstimtestConfig: EstimtestConfig = {
+const defaultEstimtestConfig: EstimtestAttributes = {
 	experiments: [
 		{
 			name: 'Large Font Size',
@@ -39,5 +39,5 @@ Here is a list of useful shortcuts for Chromium.
 	],
 };
 
-export type { EstimtestConfig };
+export type { EstimtestAttributes };
 export { defaultEstimtestConfig };
