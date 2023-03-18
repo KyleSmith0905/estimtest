@@ -1,7 +1,17 @@
 {
   "name": "estimtest-cli",
   "description": "Manually experiment most websites under a variety of conditions using a CLI command. Easily correct accessibility issues by simulating common disorders.",
-  "keywords": ["disorder", "disability", "accessibility", "a11y", "experiment", "analysis", "tool", "cli", "command"],
+  "keywords": [
+    "disorder",
+    "disability",
+    "accessibility",
+    "a11y",
+    "experiment",
+    "analysis",
+    "tool",
+    "cli",
+    "command"
+  ],
   "version": "1.0.2",
   "bugs": {
     "url": "https://github.com/KyleSmith0905/estimtest/issues",
@@ -18,17 +28,23 @@
     "url": "https://github.com/KyleSmith0905/estimtest.git",
     "directory": "packages/estimtest-cli"
   },
-
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts start",
     "build": "npm run tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1",
     "tsc": "tsc -p ."
   },
-  
   "dependencies": {
-    "estimtest-core": "link:..\\estimtest-core"
+    "chalk": "^5.2.0",
+    "estimtest-core": "link:..\\estimtest-core",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17"
   }
 }

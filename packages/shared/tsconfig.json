@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["node"],
+    "outDir": "./dist",
+    "rootDir": "./",
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "isolatedModules": true,
+    "incremental": true,
+    "baseUrl": "./dist",
+    "declaration": true
+  },
+  "exclude": ["./node_modules", "./dist/**/*"]
+}

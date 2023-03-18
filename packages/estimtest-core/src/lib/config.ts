@@ -5,7 +5,7 @@ interface EstimtestAttributes {
 	moveSelector?: string;
 }
 
-const defaultEstimtestConfig: EstimtestAttributes = {
+const defaultEstimtestAttributes: EstimtestAttributes = {
 	experiments: [
 		{
 			name: 'Large Font Size',
@@ -40,4 +40,4 @@ Here is a list of useful shortcuts for Chromium.
 };
 
 export type { EstimtestAttributes };
-export { defaultEstimtestConfig };
+export { defaultEstimtestAttributes };

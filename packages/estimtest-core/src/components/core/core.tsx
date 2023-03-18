@@ -9,7 +9,7 @@ import {
 	Element,
 	Method,
 } from '@stencil/core';
-import { defaultEstimtestConfig, EstimtestAttributes } from '../../lib/config';
+import { defaultEstimtestAttributes, EstimtestAttributes } from '../../lib/config';
 import { EstimtestExperiments, EstimtestExperimentsInternal, performTest, resetTest } from '../../lib/experiments';
 import { HtmlRenderer, Parser } from 'commonmark';
 import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../../lib/dom';
@@ -50,7 +50,7 @@ export class Estimtest {
 	@State() status: 'inactive' | 'prompted' | 'active' | 'finished' = 'inactive';
 
 	// The config that is currently in effect
-	@State() activeConfig?: EstimtestAttributes = defaultEstimtestConfig;
+	@State() activeConfig?: EstimtestAttributes = defaultEstimtestAttributes;
 
 	@State() activeTest?: EstimtestExperimentsInternal;
 
@@ -178,7 +178,7 @@ export class Estimtest {
 		}
 		// Build together a config from the multiple props.
 		else {
-			this.activeConfig = defaultEstimtestConfig;
+			this.activeConfig = defaultEstimtestAttributes;
 	
 			if (typeof this.moveSelector === 'string') {
 				this.activeConfig.moveSelector = this.moveSelector;

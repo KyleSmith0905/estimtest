@@ -3,22 +3,7 @@ import { transferChildren, transferElement } from '../dom';
 import { activateColorBlind } from './colorBlind';
 import { activateFontSize } from './fontSize';
 import { activateKeyboardOnly } from './keyboardOnly';
-
-type ColorBlindMatrix = [[number, number, number], [number, number, number], [number, number, number]];
-type ColorBlind = (
-	'protanopia' | 'protanomaly' |	'deuteranopia' | 'deuteranomaly'
-	| 'tritanopia' |	'tritanomaly' | 'achromatopsia' | 'achromatomaly'
-	| ColorBlindMatrix
-)
-
-interface EstimtestExperiments {
-  name: string,
-  description: string,
-  // Test options
-  fontSize?: number,
-  colorBlind?: ColorBlind,
-  keyboardOnly?: boolean,
-}
+import { EstimtestExperiments } from 'shared';
 
 interface EstimtestExperimentsInternal extends EstimtestExperiments {
   index: number,
@@ -69,10 +54,13 @@ const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, confi
 	// Create wrapper element
 	const container = document.createElement('div');
 	container.id = 'estimtest-container';
+	container.style.setProperty('width', '100%');
 	hostElement.before(container);
+
 	const content = document.createElement('div');
 	content.id = 'estimtest-content';
 	container.appendChild(content);
+	
 	const foreground = document.createElement('div');
 	foreground.id = 'foreground-content';
 	foreground.style.setProperty('position', 'fixed');

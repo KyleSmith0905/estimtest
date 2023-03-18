@@ -1,0 +1,46 @@
+{
+  "name": "shared",
+  "description": "A utility file used for Estimtest website accessibility tools.",
+  "keywords": [
+    "disorder",
+    "disability",
+    "accessibility",
+    "a11y",
+    "experiment",
+    "analysis",
+    "tool",
+    "shared"
+  ],
+  "version": "1.0.4",
+  "bugs": {
+    "url": "https://github.com/KyleSmith0905/estimtest/issues",
+    "email": "me@yskkyle.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kyle Smith",
+    "email": "me@yskkyle.com",
+    "url": "https://yskkyle.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleSmith0905/estimtest.git",
+    "directory": "packages/shared"
+  },
+
+  "type": "module",
+  "exports": {
+    "./*": "./dist/*.js"
+  },
+  "files": [
+    "dist/"
+  ],
+
+  "scripts": {
+    "build": "del-cli ./dist && tsc"
+  },
+  "devDependencies": {
+    "del-cli": "^5.0.0",
+    "typescript": "^4.9.5"
+  }
+}
