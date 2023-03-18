@@ -3,19 +3,25 @@ import { createProxyMiddleware, responseInterceptor } from 'http-proxy-middlewar
 import { logInfo } from './lib/console';
 import { splice } from './lib/string';
 import chalk from 'chalk';
-import { getConfigFile } from './config';
+import { getConfigFile, getConfigFileDefined } from './config';
 import { objectToAttributes } from './lib/dom';
 
-const startProxyServer = () => {
+const startProxyServer = async () => {
+  const startConfig = await getConfigFileDefined();
+
   const app = express()
-  const port = 3571;
+  const port = startConfig.estimtestPort;
 
   const apiProxy = createProxyMiddleware({
-    target: 'http://localhost:5173/',
+    target: `http://localhost:${startConfig.webPort}/`,
     selfHandleResponse: true,
     logLevel: 'silent',
     onProxyRes: responseInterceptor(async (responseBuffer, _proxyRes, _req, _res) => {
       let body: string = responseBuffer.toString('utf8');
+
+      /**
+       * Add estimtest components into the html.
+       */
       if (body.startsWith('<!DOCTYPE html>')) {
         const config = await getConfigFile();
         

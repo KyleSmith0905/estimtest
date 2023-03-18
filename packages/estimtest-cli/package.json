@@ -32,10 +32,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts start",
-    "build": "npm run tsc",
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "tsc": "tsc -p ."
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts start"
   },
   "dependencies": {
     "chalk": "^5.2.0",

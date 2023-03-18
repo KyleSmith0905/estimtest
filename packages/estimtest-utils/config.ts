@@ -29,7 +29,7 @@ interface EstimtestConfig extends EstimtestAttributes {
 	experiments: EstimtestExperiments[];
 	moveSelector?: string;
   estimtestPort?: number,
-  copyPort: number,
+  webPort: number,
 }
 
 const defaultEstimtestAttributes: EstimtestAttributes = {

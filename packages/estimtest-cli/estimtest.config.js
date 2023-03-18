@@ -7,6 +7,7 @@ const config = {
       fontSize: 24,
     }
   ],
+  webPort: 5173,
 }
 
 export default config;
