@@ -1,14 +1,5 @@
-import { EstimtestExperiments, EstimtestAttributes } from 'estimtest-core';
+import { EstimtestConfig } from 'estimtest-utils/config';
 import { findUp } from 'find-up';
-
-interface EstimtestConfig extends EstimtestAttributes {
-	experiments: EstimtestExperiments[];
-	moveSelector?: string;
-  estimtestPort?: number,
-  copyPort: number,
-}
-
-const defaultConfig = defaultEstimtestAttributes
 
 const getConfigFile = async (): Promise<Partial<EstimtestConfig> | undefined> => {
   const configPath = await findUp('estimtest.config.js');

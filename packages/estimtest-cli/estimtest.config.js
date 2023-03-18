@@ -1,4 +1,4 @@
-/** @type {import('estimtest-core').EstimtestConfig} */
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
 const config = {
   experiments: [
     {

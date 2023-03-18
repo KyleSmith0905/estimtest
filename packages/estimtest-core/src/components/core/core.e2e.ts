@@ -1,5 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
-import { EstimtestAttributes } from '../../lib/config';
+import { EstimtestAttributes } from 'estimtest-utils/config';
 
 /**
  * Note, I have an issue with manually clicking buttons. Doing `E2EElement.click()` might not work.

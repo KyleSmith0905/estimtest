@@ -15,11 +15,11 @@ specifiers:
   commonmark: ^0.30.0
   eslint: ^8.35.0
   eslint-plugin-react: ^7.32.2
+  estimtest-utils: link:..\estimtest-utils
   jest: 27.5.1
   jest-cli: 27.5.1
   puppeteer: 19.5.2
   react: ^18.2.0
-  shared: link:..\shared
   typescript: ^4.9.5
 
 dependencies:
@@ -28,8 +28,8 @@ dependencies:
   '@types/react': 18.0.28
   '@typescript-eslint/parser': 5.54.0_ycpbpc6yetojsgtrx3mwntkhsu
   commonmark: 0.30.0
+  estimtest-utils: link:../estimtest-utils
   react: 18.2.0
-  shared: link:../shared
 
 devDependencies:
   '@stencil-community/eslint-plugin': 0.5.0_wg5d6rgz5wjvbilhpfxe5fr2x4

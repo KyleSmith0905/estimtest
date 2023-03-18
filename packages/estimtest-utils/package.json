@@ -1,6 +1,6 @@
 {
-  "name": "shared",
-  "description": "A utility file used for Estimtest website accessibility tools.",
+  "name": "estimtest-utils",
+  "description": "A utility file used for Estimtest website accessibility tools. These contain helpful types and other development features.",
   "keywords": [
     "disorder",
     "disability",

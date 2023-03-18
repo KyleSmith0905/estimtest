@@ -1,8 +1,35 @@
-import { EstimtestExperiments } from './experiments';
+type ColorBlindMatrix = [[number, number, number], [number, number, number], [number, number, number]];
+type ColorBlind = (
+	'protanopia' | 'protanomaly' |	'deuteranopia' | 'deuteranomaly'
+	| 'tritanopia' |	'tritanomaly' | 'achromatopsia' | 'achromatomaly'
+	| ColorBlindMatrix
+)
 
+interface EstimtestExperiments {
+  name: string,
+  description: string,
+  // Test options
+  fontSize?: number,
+  colorBlind?: ColorBlind,
+  keyboardOnly?: boolean,
+}
+
+/**
+ * Configuration properties if the experimenter is using a component library.
+ */
 interface EstimtestAttributes {
 	experiments: EstimtestExperiments[];
 	moveSelector?: string;
+}
+
+/**
+ * Configuration properties if the experimenter is using CLI commands.
+ */
+interface EstimtestConfig extends EstimtestAttributes {
+	experiments: EstimtestExperiments[];
+	moveSelector?: string;
+  estimtestPort?: number,
+  copyPort: number,
 }
 
 const defaultEstimtestAttributes: EstimtestAttributes = {
@@ -39,5 +66,5 @@ Here is a list of useful shortcuts for Chromium.
 	],
 };
 
-export type { EstimtestAttributes };
 export { defaultEstimtestAttributes };
+export type { ColorBlindMatrix, ColorBlind, EstimtestConfig, EstimtestExperiments, EstimtestAttributes };
