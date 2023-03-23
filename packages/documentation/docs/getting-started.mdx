@@ -6,12 +6,58 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Getting Started
+Estimtest is designed to be used with minimal effort. There are multiple ways to use Estimtest: With the minimal configuration CLI, or a component library such as `estimtest-core` *(for vanilla HTML)*, `estimtest-angular`, `estimtest-react`, and `estimtest-vue`.
 
-Estimtest is designed to be used with minimal effort. There are multiple ways to use Estimtest, with Angular, React, Vue, and vanilla HTML.
+## CLI Method
+The Estimtest CLI is the suggested way to use Estimtest. The Estimtest CLI starts up a proxy server that modifies your HTML to contain `estimtest-core`, a component library. This way automatically works with minimal configuration and only require a download and a script to run.
 
-## Installation
+### Installation
+Install the script to your project.
+```bash
+npm install --save-dev estimtest-cli
+```
 
-Install the library into your project. The example uses `npm`; however, other package managers work as well. 
+### Run the script
+Run the script to start up the server.
+```bash
+estimtest-cli start
+```
+
+:::tip
+Want to concurrently run both your server and Estimtest CLI's proxy server? Use [`concurrently`](https://www.npmjs.com/package/concurrently), `concurrently` could run multiple scripts at the same time under one terminal.
+
+```json title="/package.json"
+{
+  "scripts": {
+    "dev:estimtest": "concurrently --kill-others \"npm run dev\" \"estimtest-cli start\"",
+  }
+}
+```
+And call that script using `npm run dev:estimtest`.
+:::
+
+### configuration
+Create an `estimtest.config.js` at the root of your project. Paste the following code into the configuration file.
+```js title="/estimtest.config.js"
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
+const config = {
+  // Change this to whichever server your application uses in development
+  webPort: 5173,
+}
+
+export default config;
+```
+Read more about the configuration in the [configuration documentation](/docs/category/configuration).
+
+## Component Method
+The component library offers customization that are especially useful to build third-party tools. For example, the Estimtest CLI is built on the `estimtest-core` library.
+
+:::caution
+Using the Estimtest component libraries is not suggested unless you need control over the library. The biggest drawback to using Estimtest component libraries is that the component may increase bundle size in the production build.
+:::
+
+### Installation
+Install the library into your project.
 
 <Tabs
   defaultValue='vanilla'
@@ -53,8 +99,7 @@ npm install estimtest-vue
 If your framework is not listed, it may be possible to follow along with the HTML solution. The magic behind web components is that they are framework agnostic. As long as the element is registered, any elements named `estimtest-core` will be automatically hydrated and active.
 :::
 
-## Registering Custom Elements
-
+### Registering Custom Elements
 Behind the hood Estimtest uses web components with [Stencil](https://stenciljs.com/). Therefore, we need to register the custom elements.
 
 <Tabs
@@ -110,8 +155,7 @@ app.use(EstimtestLibrary);
   </TabItem>
 </Tabs>
 
-## Adding The Element
-
+### Adding The Element
 Add the element to the page. The element should be the sibling of the page content, for example:
 ```html
 <body>

@@ -13,24 +13,36 @@ Estimtest (and all of it's helpers) is able to transfer itself to a better locat
 
 ## Example
 
-In this example, pretend we do not have access to write HTML outside of `main`. We can specify our component to move up by setting the `move-selector` attribute to be the parent of where you want to move the component. For instance, the example provided will move the Estimtest component one level up.
+In this example, pretend the component is placed under `main` while it needs to be placed under a div with the id of `App`. We can specify our component to move down by setting the `move-selector` attribute to be the parent of where you want to move the component. For instance, the example provided will move the Estimtest component one level up.
 
 <Tabs
   defaultValue='vanilla'
   groupId='framework'
   values={[
+    { label: 'CLI', value: 'cli', },
     { label: 'Vanilla HTML', value: 'vanilla', },
     { label: 'Angular', value: 'angular', },
     { label: 'React', value: 'react', },
     { label: 'Vue', value: 'vue', },
   ]}
 >
+  <TabItem value="cli">
+
+```js title="/estimtest.config.js"
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
+const config = {
+  moveSelector: "#App"
+}
+
+export default config;
+```
+  </TabItem>
   <TabItem value="vanilla">
 
 ```html title="/index.html"
 <body>
   <main>
-    <estimtest-core move-selector="body"></estimtest-core>
+    <estimtest-core move-selector="#App"></estimtest-core>
   </main>
   <footer></footer>
   <!-- MOVES HERE -->
@@ -42,7 +54,7 @@ In this example, pretend we do not have access to write HTML outside of `main`. 
 ```html title="/src/app/app.component.html"
 <body>
   <main>
-    <estimtest-core move-selector="body"/>
+    <estimtest-core move-selector="#App"/>
   </main>
   <footer/>
   <!-- MOVES HERE -->
@@ -54,7 +66,7 @@ In this example, pretend we do not have access to write HTML outside of `main`. 
 ```tsx title="/src/index.tsx"
 <body>
   <main>
-    <EstimtestCore moveSelector="body"/>
+    <EstimtestCore moveSelector="#App"/>
   </main>
   <footer/>
   {/* MOVES HERE */}
@@ -66,7 +78,7 @@ In this example, pretend we do not have access to write HTML outside of `main`. 
 ```html title="/src/App.vue"
 <body>
   <main>
-    <estimtest-core move-selector="body"/>
+    <estimtest-core move-selector="#App"/>
   </main>
   <footer/>
   <!-- MOVES HERE -->

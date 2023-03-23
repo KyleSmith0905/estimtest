@@ -1,0 +1,52 @@
+---
+description: The port of the estimtest server.
+sidebar_position: 3
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Estimtest Port
+The web port is the port that Estimtest CLI will consume for it's proxy server. This should be an unused port. This defaults to 3571, which is leetspeak for ESTI, the first four letters of estimtest.
+
+## Example
+In this example, we are changing our server port to something more aesthetically pleasing, such as 3500.
+
+<Tabs
+  defaultValue='vanilla'
+  groupId='framework'
+  values={[
+    { label: 'CLI', value: 'cli', },
+    { label: 'Vanilla HTML', value: 'vanilla', },
+    { label: 'Angular', value: 'angular', },
+    { label: 'React', value: 'react', },
+    { label: 'Vue', value: 'vue', },
+  ]}
+>
+  <TabItem value="cli">
+
+```js title="/estimtest.config.js"
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
+const config = {
+  webPort: 3500,
+}
+
+export default config;
+```
+  </TabItem>
+  <TabItem value="vanilla">
+
+The `estimtest-port` property is not supported by Estimtest component libraries. Component libraries do not start a proxy server as it's integrated off the webpage.
+  </TabItem>
+  <TabItem value="angular">
+
+The `estimtest-port` property is not supported by Estimtest component libraries. Component libraries do not start a proxy server as it's integrated off the webpage.
+  </TabItem>
+  <TabItem value="react">
+
+The `estimtest-port` property is not supported by Estimtest component libraries. Component libraries do not start a proxy server as it's integrated off the webpage.
+  </TabItem>
+  <TabItem value="vue">
+
+The `estimtest-port` property is not supported by Estimtest component libraries. Component libraries do not start a proxy server as it's integrated off the webpage.
+  </TabItem>
+</Tabs>

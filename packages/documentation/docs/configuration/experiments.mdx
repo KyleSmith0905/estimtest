@@ -15,12 +15,28 @@ To allow an infinite range of customization, you can alter the experiments perfo
   defaultValue='vanilla'
   groupId='framework'
   values={[
+    { label: 'CLI', value: 'cli', },
     { label: 'Vanilla HTML', value: 'vanilla', },
     { label: 'Angular', value: 'angular', },
     { label: 'React', value: 'react', },
     { label: 'Vue', value: 'vue', },
   ]}
 >
+  <TabItem value="cli">
+
+```js title="/estimtest.config.js"
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
+const config = {
+  experiments: [{
+    name: "Hello World",
+    description: "hello",
+    fontSize: 32,
+  }]
+}
+
+export default config;
+```
+  </TabItem>
   <TabItem value="vanilla">
 
 ```html title="/index.html"
