@@ -33,7 +33,7 @@
   },
   
   "dependencies": {
-    "estimtest-core": "^1.0.0"
+    "estimtest-core": "*"
   },
   "devDependencies": {
     "@types/node": "^18.14.0",

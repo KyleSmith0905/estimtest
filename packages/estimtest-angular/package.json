@@ -33,7 +33,7 @@
   },
 
   "dependencies": {
-    "estimtest-core": "link:..\\estimtest-core",
+    "estimtest-core": "*",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

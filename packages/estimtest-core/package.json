@@ -30,7 +30,7 @@
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
-  "types": "dist/types/types/entry.d.ts",
+  "types": "dist/types/components.d.ts",
   "unpkg": "dist/estimtest-core/estimtest-core.esm.js",
   "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",
@@ -52,7 +52,7 @@
     "@types/react": "^18.0.28",
     "@typescript-eslint/parser": "^5.54.0",
     "commonmark": "^0.30.0",
-    "estimtest-utils": "link:..\\estimtest-utils",
+    "estimtest-utils": "*",
     "react": "^18.2.0"
   },
   "devDependencies": {
