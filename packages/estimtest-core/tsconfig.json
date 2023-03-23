@@ -15,10 +15,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
   },
   "include": [
-    "src"
+    "src",
+    "../estimtest-utils"
   ],
   "exclude": [
     "node_modules"

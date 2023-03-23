@@ -1,4 +1,4 @@
-import { camelToKebab } from "./string";
+import { camelToKebab } from "./string.js";
 
 const objectToAttributes = (object: Record<string, any>) => {
   const segmentedObject = Object.entries(object);

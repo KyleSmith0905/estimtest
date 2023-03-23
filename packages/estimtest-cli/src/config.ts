@@ -1,5 +1,5 @@
 import { defaultEstimtestAttributes, EstimtestConfig } from 'estimtest-utils/config';
-import { findUp } from 'find-up';
+import findUp from 'find-up';
 
 const defaultEstimtestConfiguration: EstimtestConfig = {
   ...defaultEstimtestAttributes,
@@ -28,7 +28,7 @@ const getConfigFileDefined = async (): Promise<EstimtestConfig> => {
  * Retrieves the configuration file as is and does not handle undefined values.
  */
 const getConfigFile = async (): Promise<Partial<EstimtestConfig> | undefined> => {
-  const configPath = await findUp('estimtest.config.js');
+  const configPath = await findUp.findUp('estimtest.config.js');
 
   if (!configPath) return undefined;
 

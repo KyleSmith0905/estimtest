@@ -1,10 +1,10 @@
 import express from 'express';
 import { createProxyMiddleware, responseInterceptor } from 'http-proxy-middleware';
-import { logInfo } from './lib/console';
-import { splice } from './lib/string';
+import { logInfo } from './lib/console.js';
+import { splice } from './lib/string.js';
 import chalk from 'chalk';
-import { getConfigFile, getConfigFileDefined } from './config';
-import { objectToAttributes } from './lib/dom';
+import { getConfigFile, getConfigFileDefined } from './config.js';
+import { objectToAttributes } from './lib/dom.js';
 
 const startProxyServer = async () => {
   const startConfig = await getConfigFileDefined();

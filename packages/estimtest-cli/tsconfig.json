@@ -9,6 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
     "strict": true,
+    "declaration": true,
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true

@@ -9,7 +9,7 @@ import {
 	Element,
 	Method,
 } from '@stencil/core';
-import { defaultEstimtestAttributes, EstimtestAttributes } from '../../lib/config';
+import { defaultEstimtestAttributes, EstimtestAttributes } from 'estimtest-utils/config';
 import { EstimtestExperiments, EstimtestExperimentsInternal, performTest, resetTest } from '../../lib/experiments';
 import { HtmlRenderer, Parser } from 'commonmark';
 import { autoResizeTextarea, conditionallySetInert, getEventValue } from '../../lib/dom';

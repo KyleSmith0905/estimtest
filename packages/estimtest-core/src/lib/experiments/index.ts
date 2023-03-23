@@ -1,9 +1,8 @@
-import { EstimtestAttributes } from '../config';
 import { transferChildren, transferElement } from '../dom';
 import { activateColorBlind } from './colorBlind';
 import { activateFontSize } from './fontSize';
 import { activateKeyboardOnly } from './keyboardOnly';
-import { EstimtestExperiments } from 'shared';
+import { EstimtestExperiments, EstimtestAttributes } from 'estimtest-utils/config';
 
 interface EstimtestExperimentsInternal extends EstimtestExperiments {
   index: number,
@@ -87,5 +86,5 @@ const performTest = (hostElement: HTMLElement, test: EstimtestExperiments, confi
 	if (test.colorBlind !== undefined) activateColorBlind(elements, test);
 };
 
-export type { EstimtestExperiments, EstimtestExperimentsInternal, EstimtestWrapper, ColorBlind, ColorBlindMatrix };
+export type { EstimtestExperiments, EstimtestExperimentsInternal, EstimtestWrapper };
 export { resetTest, performTest };

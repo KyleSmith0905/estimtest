@@ -1,5 +1,7 @@
-import { logInfo } from "./lib/console";
-import { startProxyServer } from "./server";
+#!/usr/bin/env node
+
+import { logInfo } from "./lib/console.js";
+import { startProxyServer } from "./server.js";
 
 const start = () => {
   logInfo('Starting Estimtest Proxy Server');

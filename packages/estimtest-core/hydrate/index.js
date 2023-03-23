@@ -5728,7 +5728,7 @@ const cmpModules = new Map, getModule = e => {
  e["s-p"] = [], e["s-rc"] = [], hostRefs.set(e, o);
 }, styles = new Map;
 
-const defaultEstimtestConfig = {
+const defaultEstimtestAttributes = {
   experiments: [
     {
       name: 'Large Font Size',
@@ -13881,7 +13881,7 @@ class Estimtest {
     this.moveSelector = undefined;
     this.active = true;
     this.status = 'inactive';
-    this.activeConfig = defaultEstimtestConfig;
+    this.activeConfig = defaultEstimtestAttributes;
     this.activeTest = undefined;
     this.expandedTestActive = undefined;
     this.expandedTest = undefined;
@@ -13965,7 +13965,7 @@ class Estimtest {
     }
     // Build together a config from the multiple props.
     else {
-      this.activeConfig = defaultEstimtestConfig;
+      this.activeConfig = defaultEstimtestAttributes;
       if (typeof this.moveSelector === 'string') {
         this.activeConfig.moveSelector = this.moveSelector;
       }

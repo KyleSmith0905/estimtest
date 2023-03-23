@@ -1,6 +1,6 @@
 import { h, proxyCustomElement, HTMLElement as HTMLElement$1, Fragment, Host } from '@stencil/core/internal/client';
 
-const defaultEstimtestConfig = {
+const defaultEstimtestAttributes = {
   experiments: [
     {
       name: 'Large Font Size',
@@ -8155,7 +8155,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     this.moveSelector = undefined;
     this.active = true;
     this.status = 'inactive';
-    this.activeConfig = defaultEstimtestConfig;
+    this.activeConfig = defaultEstimtestAttributes;
     this.activeTest = undefined;
     this.expandedTestActive = undefined;
     this.expandedTest = undefined;
@@ -8239,7 +8239,7 @@ const Estimtest = /*@__PURE__*/ proxyCustomElement(class extends HTMLElement$1 {
     }
     // Build together a config from the multiple props.
     else {
-      this.activeConfig = defaultEstimtestConfig;
+      this.activeConfig = defaultEstimtestAttributes;
       if (typeof this.moveSelector === 'string') {
         this.activeConfig.moveSelector = this.moveSelector;
       }

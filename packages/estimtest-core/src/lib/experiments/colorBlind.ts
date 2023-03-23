@@ -1,4 +1,5 @@
-import { ColorBlindMatrix, EstimtestExperiments, EstimtestWrapper } from '.';
+import { ColorBlindMatrix } from 'estimtest-utils/config';
+import { EstimtestExperiments, EstimtestWrapper } from '.';
 
 /**
  * Idea and colorblindness values come from {@link https://github.com/hail2u/color-blindness-emulation}

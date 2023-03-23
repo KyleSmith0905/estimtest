@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { EstimtestExperiments } from "./lib/experiments";
-import { EstimtestAttributes } from "./lib/config";
+import { EstimtestAttributes } from "estimtest-utils/config";
 export namespace Components {
     interface EstimtestCore {
         /**
