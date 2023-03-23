@@ -12,7 +12,7 @@
     "cli",
     "command"
   ],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "bugs": {
     "url": "https://github.com/KyleSmith0905/estimtest/issues",
     "email": "me@yskkyle.com"
@@ -40,7 +40,7 @@
   "dependencies": {
     "chalk": "^5.2.0",
     "estimtest-core": "*",
-    "estimtest-utils": "*",
+    "estimtest-utils": "link:..\\estimtest-utils",
     "express": "^4.18.2",
     "find-up": "^6.3.0",
     "http-proxy-middleware": "^2.0.6"

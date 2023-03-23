@@ -15,6 +15,7 @@ const startProxyServer = async () => {
   const apiProxy = createProxyMiddleware({
     target: `http://localhost:${startConfig.webPort}/`,
     selfHandleResponse: true,
+    
     logLevel: 'silent',
     onProxyRes: responseInterceptor(async (responseBuffer, _proxyRes, _req, _res) => {
       let body: string = responseBuffer.toString('utf8');
@@ -44,7 +45,7 @@ const startProxyServer = async () => {
         return body;
       }
       else {
-        return body;
+        return responseBuffer;
       }
     }),
   });
