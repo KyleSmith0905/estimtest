@@ -5,6 +5,16 @@ import React from 'react';
 
 const exampleCode = [
   {
+    name: 'CLI',
+    id: 'cli',
+    codes: [
+      {
+        language: 'bash',
+        code: 'npx estimtest-cli start'
+      },
+    ],
+  },
+  {
     name: 'Vanilla HTML',
     id: 'vanilla',
     codes: [
@@ -107,7 +117,7 @@ const ExampleCode = () => {
   return (
     <div>
       <Tabs
-        defaultValue='vanilla'
+        defaultValue='cli'
         groupId='framework'
       >
         {exampleCode.map((framework) => (
