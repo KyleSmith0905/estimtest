@@ -1,0 +1,17 @@
+---
+title: Introducing CLI Commands
+description: With the introduction of CLI commands, starting an Estimtest server became a single terminal command.
+slug: cli-commands
+authors: kylesmith0905
+tags: [cli, estimtest-cli, terminal, command line]
+image: /config/social-card.png
+---
+
+# What Is Estimtest CLI
+Estimtest CLI creates a proxy server that modifies your web server and automatically add the Estimtest web component. This method allows for **NO** increase in bundle size as the component is only added when traversing through the proxy.
+
+## Next Steps For Estimtest CLI
+Adding an `estimtest.config.js` file whenever you need to change Estimtest configuration removes the point of minimal configuration. I can brag about needing only one terminal command to experiment on the app; however, if you use anything other than 3000 port for your web server than you will need to add `estimtest.config.js`. This is a huge problem for my minimal configuration mission. My solution might be to have cli options, such as `estimtest-cli start --web-port=4200`.
+
+## Next Steps For Component Libraries
+The development of component libraries such as `estimtest-core`, `estimtest-angular`, `estimtest-react`, and `estimtest-vue` will continue. The Estimtest CLI relies on `estimtest-core`, and the demo component on the bottom of this documentation site uses `estimtest-react`. Those component libraries will be up-to-date with `estimtest-cli`.
