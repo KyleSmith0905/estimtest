@@ -21,92 +21,24 @@ Activate the server using the server provided by `estimtest-cli`
 estimtest-cli start
 ```
 
-### Vanilla
-Load the component by importing it
-```html
-<script type="module">
-  import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/estimtest-core/loader/index.es2017.js';
-  defineCustomElements();
-</script>
-```
-Add the component 
-```html
-<estimtest-core
-  active='true'
-  move-selector='body'
-  experiments='[{"name": "Hello World", "description": "hello", "fontSize": 32}]'
-></estimtest-core>
-```
-
-### React
-Load the component by importing it
-```jsx
-// index.tsx
-import { EstimtestCore, defineCustomElements } from 'estimtest-react'
-
-defineCustomElements();
-```
-Add the component
-```jsx
-// index.tsx
-<EstimtestCore
-  active={true}
-  experiments={[
-    {name: "Hello World", description: "hello", fontSize: 32}
-  ]}
-  moveSelector='body'
-  className='full-screen'
-/>
-```
-
-### Angular
-Load the component by adding the Estimtest module to the app module imports.
-```ts
-// app.module.ts
-import { EstimtestModule } from "estimtest-angular";
-
-@NgModule({
-  ...
-  imports: [..., EstimtestModule],
-  ...
-})
-export class AppModule { }
-```
-Add the component
-```html
-<!-- app.component.html -->
-<estimtest-core
-  move-selector="body"
-  [active]="true"
-  [experiments]="[{name: 'Hello World', description: 'hello', fontSize: 32}]"
-/>
-```
-
-### Vue
-Load the component by adding the Estimtest module to the app module imports.
-```ts
-// main.ts
-import { EstimtestLibrary } from 'estimtest-vue';
-
-...
-app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('estimtest');
-app.use(EstimtestLibrary);
-...
-```
-
-```vue
-<!-- App.vue -->
-<estimtest-core
-  class="full-screen"
-  move-selector="body"
-  :active="true"
-  :experiments="JSON.stringify([{name: 'Hello World', description: 'hello', fontSize: 32}])"
-/>
-```
-
 ## Configuration
+Use a file named `estimtest.config.js` to modify props.
 
-When using the CLI, Use a file named `estimtest.config.js` to modify props. When using components, use HTML attributes to modify props.
+```js
+/** @type {import('estimtest-utils/config').EstimtestConfig} */
+const config = {
+  experiments: [
+    {
+      name: 'Hello World',
+      description: 'Hello World This is a full description',
+      fontSize: 24,
+    }
+  ],
+  webPort: 5173,
+}
+
+export default config;
+```
 
 **active** `boolean` - Whether to activate the Estimtest prompt. Having this as false still imports the library but does not use it. Look at the [examples](examples) for sloppy implementations of fully removing Estimtest in production.
 
@@ -124,6 +56,10 @@ When using the CLI, Use a file named `estimtest.config.js` to modify props. When
 - `keyboardOnly` Many users may use keyboard navigation for a variety of reasons such as: Motor impairment, saving time, and more.
 
 **moveSelector** `string` - An element selector containing the parent of where the element should be at. You could use this property in the event that your code does not permit you to place the element there.
+
+**webPort** `string` - The port of the website you want to test with Estimtest. Estimtest will proxy this url, and add modify the HTML to support Estimtest.
+
+**estimtestPort** `string` - The port of that Estimtest will use to start the server.
 
 ## Contributing
 If you have suggestions, feedback, issues, or bugs, please open an issue.
