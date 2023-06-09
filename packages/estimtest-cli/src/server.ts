@@ -25,7 +25,7 @@ const startProxyServer = async () => {
        */
       if (body.startsWith('<!DOCTYPE html>')) {
         const config = await getConfigFile();
-        
+
         const bodyIndex = body.indexOf('</body');
         body = splice(body, `
           <estimtest-core 
