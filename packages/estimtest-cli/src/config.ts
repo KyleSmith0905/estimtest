@@ -33,8 +33,11 @@ const getConfigFile = async (): Promise<Partial<EstimtestConfig> | undefined> =>
   if (!configPath) return undefined;
 
   const config = await import(`file://${configPath}`)
-  
-  return config.default;
+
+  if ('default' in config) {
+    config.default;
+  }
+  return config;
 }
 
 export { getConfigFile, getConfigFileDefined };
